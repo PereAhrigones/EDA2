@@ -22,6 +22,9 @@ typedef struct {
 User_data* user_declaration();
 
 void registrar_usuario();
-void create_user() //Esto no va a ser void porque va a tener que devolver una estructura pero hasta que la creemos se queda así
+void buscar_usuario(int algo, int otro);// Tengo que mirar como estan declaradas las cosas en el otro proyecto
+void create_user(); //Esto no va a ser void porque va a tener que devolver una estructura pero hasta que la creemos se queda así
+
+void menu();
 
 #endif //EDA2_MENU_H

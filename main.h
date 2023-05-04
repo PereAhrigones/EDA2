@@ -5,6 +5,6 @@
 #ifndef EDA2_MAIN_H
 #define EDA2_MAIN_H
 
-void menu();
+
 
 #endif //EDA2_MAIN_H
