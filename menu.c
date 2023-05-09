@@ -4,6 +4,28 @@
 #include "main.c"
 #include "menu.h"
 
+void create_user(){
+    char usuario[MAX_USERNAME_LENGTH];
+    char password[MAX_PASSWORD_LENGTH];
+    printf("Introduzca un nombre de usuario (máximo 16 caracteres).\n");
+    scanf("%s", usuario);
+    printf("Introduzca una contraseña.\n");
+    scanf("%s", password);
+    if (buscar_usuario(usuario,password) == USER_DOES_NOT_EXIST){
+        FILE* fp;
+        fp = fopen("C:\\Users\\senyo\\CLionProjects\\EDA2\\Usuarios", "a"); //Yo lo abriría en modo append para no sobreescribir lo que ya hay.
+        fprintf(fp, "%s,%s\n", usuario, password); //Esto hay que retocarlo porque está medio meh.
+
+        fclose(fp);
+        printf("Enorabuena, ya has creado tu cuenta,¡Disfruta!\n");
+    }
+    if (buscar_usuario(usuario,password) == USERNAME_ALREADY_EXISTS){
+        printf("Lo sentimos, esté usuario ya existe\n");
+        return;
+    }
+
+}
+
 
 void buscar_usuario(int algo, int otro){
     User_data* user_search;
