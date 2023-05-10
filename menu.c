@@ -3,6 +3,9 @@
 //
 #include "main.c"
 #include "menu.h"
+#include <string.h>
+//hola
+
 
 void create_user(){
     char usuario[MAX_USERNAME_LENGTH];
@@ -27,18 +30,40 @@ void create_user(){
 }
 
 
-void buscar_usuario(int algo, int otro){
-    User_data* user_search;
-    FILE* fp;
-    fp = fopen("C:\\Users\\senyo\\CLionProjects\\EDA2\\Usuarios", "r"); //Si queréis escribir en el archivo no lo podéis abriren modo lectura
-    while (fp != EOF){
 
-
+int buscar_usuario(char username[MAX_USERNAME_LENGTH], char otro[MAX_PASSWORD_LENGTH]) {
+    User_data *user_search;
+    FILE *fp;
+    fp = fopen("C:\\Users\\senyo\\CLionProjects\\EDA2\\Usuarios", "r");
+    if (fp == NULL) {
+        printf("Error al abrir el archivo.\n");
+        return NO_FILE_FOUND;
     }
-
-    fscanf(fp, "%s,%s\n", user_search->username, user_search->password); //Esto hay que retocarlo porque está medio meh.
-    fclose(fp);
-}
+    int usuarioEncontrado = FALSE;
+    int contraseñaEncontrada = FALSE;
+    while (fscanf(fp, "%s,%s\n", user_search->username, user_search->password) == 2) { //Seguramente el archivo tenga más cosas así que scanf habrá que cambiarlo
+        if (strcmp(user_search->username, username) == 0) {
+            usuarioEncontrado = TRUE;
+            if(strcmp(user_search->password, otro) == 0){
+                contraseñaEncontrada = TRUE;
+            }
+            break;
+        }
+    }
+        fclose(fp);
+        if (usuarioEncontrado == TRUE) {
+            if (contraseñaEncontrada == TRUE){
+                printf("El usuario y la contraseña coinciden. Usuario encontrado.\n");
+                return USER_ALREADY_EXISTS;
+            } else {
+                printf("Contraseña incorrecta.\n");
+                return USERNAME_ALREADY_EXISTS;
+            }
+        } else {
+            printf("El usuario y/o la contraseña no coinciden. Usuario no encontrado.\n");
+            return USER_DOES_NOT_EXIST;
+        }
+    }
 
 
 void  menu() {
@@ -54,8 +79,7 @@ void  menu() {
     if (login == 1) create_user();
 
 
-
-    if(login == 2){
+    if (login == 2) {
 
         char nombre[MAX_PASSWORD_LENGTH];
         char contraseña[MAX_PASSWORD_LENGTH];
