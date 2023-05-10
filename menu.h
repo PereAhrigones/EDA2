@@ -16,6 +16,7 @@
 #define USER_ALREADY_EXISTS -2
 #define USER_DOES_NOT_EXIST -3
 #define NO_FILE_FOUND 500
+//hola
 
 typedef struct {
     char username[MAX_USERNAME_LENGTH];
