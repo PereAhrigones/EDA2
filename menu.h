@@ -34,6 +34,9 @@ typedef struct {
 int buscar_usuario(char algo[MAX_USERNAME_LENGTH], char otro[MAX_PASSWORD_LENGTH]);// Tengo que mirar como estan declaradas las cosas en el otro proyecto
 void create_user(); //Esto no va a ser void porque va a tener que devolver una estructura pero hasta que la creemos se queda así
 
+
+
+
 void menu();
 
 #endif //EDA2_MENU_H

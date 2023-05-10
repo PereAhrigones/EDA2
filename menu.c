@@ -11,10 +11,20 @@
 void create_user(){
     char usuario[MAX_USERNAME_LENGTH];
     char password[MAX_PASSWORD_LENGTH];
-    printf("Introduzca un nombre de usuario (máximo 16 caracteres).\n");
-    scanf("%s", usuario);
-    printf("Introduzca una contraseña.\n");
-    scanf("%s", password);
+    char email[MAX_EMAIL_LENGTH];
+    int año;
+    int flag = FALSE;
+    while (flag == FALSE){
+        printf("Introduzca un nombre de usuario (máximo", MAX_USERNAME_LENGTH, "caracteres y mínimo", MIN_USERNAME_LENGTH, ").\n");
+        scanf("%s", usuario);
+        if(strlen(usuario) > MIN_USERNAME_LENGTH && strlen(usuario) < MAX_USERNAME_LENGTH) flag = TRUE;
+    }
+    flag = FALSE;
+    while(flag == FALSE){
+        printf("\nIntroduzca una contraseña.\n");
+        scanf("%s", password);
+        if(strlen(password) > MIN_PASSWORD_LENGTH && strlen(password) < MAX_PASSWORD_LENGTH) flag = TRUE;
+    }
     if (buscar_usuario(usuario,password) == USER_DOES_NOT_EXIST){
         FILE* fp;
         fp = fopen("C:\\Users\\senyo\\CLionProjects\\EDA2\\Usuarios", "a");
@@ -123,7 +133,7 @@ void  menu() {
             }
             if (opcion == 1) {
                 printf("\n----- Perfil -----\n");
-                printf("1. Editar (1)\n");
+                printf("1. Editar (1)\n"); // En está parte tendremos que hacer una función que elimine la cuenta si no ve necesario.
                 printf("2. Ver valoraciones\n");
                 printf("0. Atrás (0) \n");
                 printf("Ingresa la opción deseada: ");
