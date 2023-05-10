@@ -1,3 +1,4 @@
+
 //
 // Created by senyo on 26/4/2023.
 //
@@ -25,11 +26,30 @@ char** cambiar_gustos(){
     return gustos;
 }
 
-User_data* guardar_en_struct(){
+void guardar_en_struct(User_data* guardar, const char* email, const char* password, const char* usuario, const char* ciudad , int año, const char* gustos[]){ // Función guarda en la estructura de datos User_data los valores de usuario,pasword,email....
+    strncpy(guardar->email, email, MAX_EMAIL_LENGTH);
+    strncpy(guardar->password, password, MAX_PASSWORD_LENGTH);
+    strncpy(guardar->username, usuario, MAX_USERNAME_LENGTH);
+    strncpy(guardar->city, ciudad, MAX_CITY_NAME);
+    guardar->birth = año;
+
+    for (int i = 0; i < MAX_LIKE_LENGTH; i++) {
+        strncpy(guardar->likes[i], gustos[i], MAX_LIKE_LENGTH);
+    }
+
+}
+void limpiar_User_data(User_data* guardar, const char* email, const char* password, const char* usuario, const char* ciudad , int año, const char* gustos[]){
+    free(guardar->email);
+    free(guardar->password);
+    free(guardar->username);
+    free(guardar->city);
+    guardar->birth = 0;
+    for (int i = 0; i < MAX_LIKE_LENGTH; i++) {
+        strncpy(guardar->likes[i], NULL, MAX_LIKE_LENGTH);
+    }
 
 
 }
-
 
 void create_user(){
     char usuario[MAX_USERNAME_LENGTH];
@@ -37,6 +57,7 @@ void create_user(){
     char email[MAX_EMAIL_LENGTH];
     int año;
     int flag = FALSE;
+    User_data guardar;
     while (flag == FALSE){
         printf("Introduzca un nombre de usuario (máximo", MAX_USERNAME_LENGTH, "caracteres y mínimo", MIN_USERNAME_LENGTH, ").\n");
         scanf("%s", usuario);
@@ -63,7 +84,7 @@ void create_user(){
             scanf("%s", año);
         }
         char** gustos = cambiar_gustos();
-        guardar_en_struct(email,ciudad,año,gustos);
+        guardar_en_struct (&guardar, email, password, usuario, ciudad,año ,gustos);
     }
 
     if (buscar_usuario(usuario,password) == USERNAME_ALREADY_EXISTS || buscar_usuario(usuario, password) == USER_ALREADY_EXISTS){
