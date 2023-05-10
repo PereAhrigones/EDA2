@@ -6,6 +6,29 @@
 #include <string.h>
 #include <stdlib.h>
 
+char* cambiar_ciudad(){
+    char ciudad[MAX_CITY_NAME];
+    while(strlen(ciudad) <= 1) {
+        printf("Introduce tu ciudad de residencia \n");
+        scanf("%s", ciudad);
+    }
+    return ciudad;
+}
+
+char** cambiar_gustos(){
+
+    char ** gustos = malloc(5 *sizeof (char*));
+    for (int i = 0; i < 5; i++) {
+        printf("Introduce el gusto numero %d\n", i+1);
+        scanf("%s", gustos[i] = malloc(MAX_LIKE_LENGTH * sizeof (char))); // Se tiene que repetir 5 veces.
+    }
+    return gustos;
+}
+
+User_data* guardar_en_struct(){
+
+
+}
 
 
 void create_user(){
