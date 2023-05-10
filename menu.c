@@ -4,6 +4,7 @@
 #include "main.c"
 #include "menu.h"
 #include <string.h>
+#include <stdlib.h>
 
 
 
@@ -16,13 +17,23 @@ void create_user(){
     scanf("%s", password);
     if (buscar_usuario(usuario,password) == USER_DOES_NOT_EXIST){
         FILE* fp;
-        fp = fopen("C:\\Users\\senyo\\CLionProjects\\EDA2\\Usuarios", "a"); //Yo lo abriría en modo append para no sobreescribir lo que ya hay.
-        fprintf(fp, "%s,%s\n", usuario, password); //Esto hay que retocarlo porque está medio meh.
+        fp = fopen("C:\\Users\\senyo\\CLionProjects\\EDA2\\Usuarios", "a");
 
-        fclose(fp);
-        printf("Enorabuena, ya has creado tu cuenta,¡Disfruta!\n");
+        while(strlen(email) <= 1) {
+            printf("Introduce tu email\n");
+            scanf("%s", email);
+        }
+        char *ciudad = cambiar_ciudad();
+
+        while( año <= 1920) {
+            printf("Introduce tu año de nacimiento\n");
+            scanf("%s", año);
+        }
+        char** gustos = cambiar_gustos();
+        guardar_en_struct(email,ciudad,año,gustos);
     }
-    if (buscar_usuario(usuario,password) == USERNAME_ALREADY_EXISTS){
+
+    if (buscar_usuario(usuario,password) == USERNAME_ALREADY_EXISTS || buscar_usuario(usuario, password) == USER_ALREADY_EXISTS){
         printf("Lo sentimos, esté usuario ya existe\n");
         return;
     }
