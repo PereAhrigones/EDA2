@@ -20,7 +20,8 @@
 #define NO_FILE_FOUND 500
 
 
-typedef struct {
+
+typedef struct _data{
     char username[MAX_USERNAME_LENGTH];
     char email[MAX_EMAIL_LENGTH];
     char password[MAX_PASSWORD_LENGTH];
@@ -28,8 +29,15 @@ typedef struct {
     int birth;
     int user_number;
     char likes[5][MAX_LIKE_LENGTH];
-
+    struct _data* next;
+    struct _data* prev;
 }User_data;
+
+typedef struct{
+    User_data* first;
+    User_data* last;
+    int size;
+}User_list;
 
 int buscar_usuario(char algo[MAX_USERNAME_LENGTH], char otro[MAX_PASSWORD_LENGTH]);// Tengo que mirar como estan declaradas las cosas en el otro proyecto
 void create_user(); //Esto no va a ser void porque va a tener que devolver una estructura pero hasta que la creemos se queda así
