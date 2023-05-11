@@ -154,7 +154,7 @@ void  menu() {
         scanf("%s", contraseña);
         buscar_usuario(nombre, contraseña);//Hay que juntar esto con lo de abajo y hacer un while por si se equivoca al iniciar sesión pueda volver a intentarlo
 
-        if (buscar_usuario(nombre, contraseña)) {
+        if (buscar_usuario(nombre, contraseña) == USER_ALREADY_EXISTS ) {
             printf("Inicio de sesión exitoso. ¡Bienvenido!\n");
 
             // Menú con opciones
