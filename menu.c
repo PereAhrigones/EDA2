@@ -7,6 +7,43 @@
 #include <string.h>
 #include <stdlib.h>
 
+
+int comparar_e_eliminar_gustos(char username[MAX_USERNAME_LENGTH],char gustos[MAX_LIKE_LENGTH]) { //Está función compara que los gustos introducidos sean correctos, si es así la función que la llama podra cambiarlos por otros gustos.
+    User_data *user_likes;
+    FILE* fp;
+    fp = fopen("C:\\Users\\senyo\\CLionProjects\\EDA2\\Usuarios", "r");
+    if (fp == NULL) {
+        printf("Error al abrir el archivo.\n");
+        return NO_FILE_FOUND;
+    }
+    int gusto_encontrado = FALSE;
+    while (fscanf(fp, "%s,%s\n", user_likes->username, user_likes->likes) == 2) {
+        if (strcmp(user_likes->username, username) == 0) { //Se supone que aprobecha para eliminar el gusto que ha encontrado para luego poder cambiarlo.
+            if(strcmp(user_likes->likes, gustos) == 0){
+                strncpy(user_likes -> likes ,NULL,MAX_LIKE_LENGTH);
+                fclose(fp);
+                return TRUE;
+            }
+            break;
+        }
+    }
+    fclose(fp);
+    if (gusto_encontrado == FALSE) return FALSE;
+}
+
+void guardar_gustos(char username[MAX_USERNAME_LENGTH],char gustos[MAX_LIKE_LENGTH]){ //No está revisado si esta función tiene sentido o.
+    User_data *user_likes;
+    FILE* fp;
+    fp = fopen("C:\\Users\\senyo\\CLionProjects\\EDA2\\Usuarios", "r");
+    while (fscanf(fp, "%s,%s\n", user_likes->username, user_likes->likes) == 2) {
+        if (strcmp(user_likes->username, username) == 0) { //Creo, no estoy seguro, pero esto creo que le falta cosa.
+            strncpy(user_likes -> likes ,gustos,MAX_LIKE_LENGTH);
+            fclose(fp);
+            return;
+        }
+    }
+}
+
 char* cambiar_ciudad(){
     char ciudad[MAX_CITY_NAME];
     while(strlen(ciudad) <= 1) {
@@ -16,14 +53,22 @@ char* cambiar_ciudad(){
     return ciudad;
 }
 
-char** cambiar_gustos(){
+char** cambiar_gustos(char nombre_usuario[MAX_USERNAME_LENGTH],int num_gustos){
 
-    char ** gustos = malloc(5 *sizeof (char*));
-    for (int i = 0; i < 5; i++) {
+    char ** gustos = malloc(num_gustos *sizeof (char*));
+    for (int i = 0; i <  num_gustos; i++) {
         printf("Introduce el gusto numero %d\n", i+1);
-        scanf("%s", gustos[i] = malloc(MAX_LIKE_LENGTH * sizeof (char))); // Se tiene que repetir 5 veces.
+        scanf("%s", gustos[i] = malloc(MAX_LIKE_LENGTH * sizeof (char))); // Se tiene que repetir de 1 a 5 veces.
+        if (comparar_e_eliminar_gustos(&nombre_usuario,&gustos[i]) == TRUE) guardar_gustos(&nombre_usuario,&gustos[i]);
     }
-    return gustos;
+}
+char* cambiar_nombre_de_usuario(){
+    char usuario[MAX_USERNAME_LENGTH];
+    while(strlen(usuario) <= 1) {
+    printf("Introduce tu ciudad de residencia \n");
+    scanf("%s", usuario);
+    }
+    return usuario;
 }
 
 void guardar_en_struct(User_data* guardar, const char* email, const char* password, const char* usuario, const char* ciudad , int año, const char* gustos[]){ // Función guarda en la estructura de datos User_data los valores de usuario,pasword,email....
@@ -38,6 +83,7 @@ void guardar_en_struct(User_data* guardar, const char* email, const char* passwo
     }
 
 }
+
 void limpiar_User_data(User_data* guardar, const char* email, const char* password, const char* usuario, const char* ciudad , int año, const char* gustos[]){
     free(guardar->email);
     free(guardar->password);
@@ -83,7 +129,7 @@ void create_user(){
             printf("Introduce tu año de nacimiento\n");
             scanf("%s", año);
         }
-        char** gustos = cambiar_gustos();
+        char** gustos = cambiar_gustos(usuario,5);
         guardar_en_struct (&guardar, email, password, usuario, ciudad,año ,gustos);
     }
 
@@ -130,7 +176,6 @@ int buscar_usuario(char username[MAX_USERNAME_LENGTH], char otro[MAX_PASSWORD_LE
         }
     }
 
-
 void  menu() {
 
     int login = -1;
@@ -152,18 +197,22 @@ void  menu() {
         scanf("%s", nombre);
         printf("Ingresa la contraseña:\n");
         scanf("%s", contraseña);
-        buscar_usuario(nombre, contraseña);//Hay que juntar esto con lo de abajo y hacer un while por si se equivoca al iniciar sesión pueda volver a intentarlo
+        buscar_usuario(nombre,
+                       contraseña);//Hay que juntar esto con lo de abajo y hacer un while por si se equivoca al iniciar sesión pueda volver a intentarlo
 
-        if (buscar_usuario(nombre, contraseña) == USER_ALREADY_EXISTS ) {
+        if (buscar_usuario(nombre, contraseña) == USER_ALREADY_EXISTS) {
             printf("Inicio de sesión exitoso. ¡Bienvenido!\n");
 
             // Menú con opciones
             int opcion;
             int opcion2;
-            int edad;
+            int opcion3;
+            int num_gustos;
             char nombre_usuario;
             char ubicacion;
             char descripcion;
+            char gustos[MAX_LIKE_LENGTH];
+
 
             printf("\n----- Menú -----\n");
             printf("1. Perfil (1)\n");
@@ -187,27 +236,38 @@ void  menu() {
 
                 }
                 if (opcion2 == 1) {
-                    printf("Introduce tu nombre de usuario: \n");
-                    scanf("%d", &nombre_usuario);
-                    printf("Introduce tu Edad: \n");
-                    scanf("%d", &edad);
-                    printf("Introduce tu ubicación: \n");
-                    scanf("%d", &ubicacion);
-                    printf("Introduce una descripción:\n");
-                    printf("\n");
-                    scanf("%d", &descripcion);
+                    printf("Introduce que dato quieres editar\n");
+                    printf("1. nombre del usuario: \n");
+                    printf("2. ubicación del usuario: \n");
+                    printf("3. descripción del usuario: \n");
+                    printf("4. gustos del usuario: \n");
+
+                    scanf("%d", &opcion3);// pregunta que quiere cambiar
+                    if (opcion3 == 1) {
+                        cambiar_nombre_de_usuario();
+                    } else if (opcion3 == 2) {
+                        cambiar_ciudad();
+                    } else if (opcion3 == 3) {
+                        printf("Introduce una descripción:\n");
+                        scanf("%d", &descripcion);
+                    } else if (opcion3 == 4) {
+                        printf("Intoduzca cuantos gustos desea cambiar (1-5)");
+                        scanf("%d", num_gustos);
+                        cambiar_gustos(&nombre_usuario,
+                                       num_gustos); //Anecdota graciosa esta linea de codigo antes eran 53 lineas de if y for porque soy tontisimo.
+
+                        if (opcion2 == 2) {
+
+                        }
+
+                    }
+
+                    if (opcion == 2) {
+                    }
+
 
                 }
-                if (opcion2 == 2) {
-
-                }
-
             }
-
-            if (opcion == 2) {
-            }
-
-
         }
     }
 }
