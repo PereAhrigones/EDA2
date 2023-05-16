@@ -17,7 +17,7 @@ int comparar_e_eliminar_gustos(char username[MAX_USERNAME_LENGTH],char gustos[MA
         return NO_FILE_FOUND;
     }
     int gusto_encontrado = FALSE;
-    while (fscanf(fp, "%s,%s\n", user_likes->username, user_likes->likes) == 2) {
+    while (fscanf(fp, "%s,%s\n", user_likes->username, user_likes->likes) == 2) { //Yo esto no lo haría buscando en el fichero si no mejor buscando en la lista
         if (strcmp(user_likes->username, username) == 0) { //Se supone que aprobecha para eliminar el gusto que ha encontrado para luego poder cambiarlo.
             if(strcmp(user_likes->likes, gustos) == 0){
                 strncpy(user_likes -> likes ,NULL,MAX_LIKE_LENGTH);
@@ -30,7 +30,7 @@ int comparar_e_eliminar_gustos(char username[MAX_USERNAME_LENGTH],char gustos[MA
     fclose(fp);
     if (gusto_encontrado == FALSE) return FALSE;
 }
-
+//Con esta función también lo haría con la estructura y no con el archivo
 void guardar_gustos(char username[MAX_USERNAME_LENGTH],char gustos[MAX_LIKE_LENGTH]){ //No está revisado si esta función tiene sentido o.
     User_data *user_likes;
     FILE* fp;
@@ -52,7 +52,7 @@ char* cambiar_ciudad(){
     }
     return ciudad;
 }
-
+//Esto ahora mismo no sirve para nada
 char** cambiar_gustos(char nombre_usuario[MAX_USERNAME_LENGTH],int num_gustos){
 
     char ** gustos = malloc(num_gustos *sizeof (char*));
@@ -65,24 +65,12 @@ char** cambiar_gustos(char nombre_usuario[MAX_USERNAME_LENGTH],int num_gustos){
 char* cambiar_nombre_de_usuario(){
     char usuario[MAX_USERNAME_LENGTH];
     while(strlen(usuario) <= 1) {
-    printf("Introduce tu ciudad de residencia \n");
+    printf("Introduce tu ciudad de residencia \n");//What
     scanf("%s", usuario);
     }
     return usuario;
 }
 
-void guardar_en_struct(User_data* guardar, const char* email, const char* password, const char* usuario, const char* ciudad , int año, const char* gustos[]){ // Función guarda en la estructura de datos User_data los valores de usuario,pasword,email....
-    strncpy(guardar->email, email, MAX_EMAIL_LENGTH);
-    strncpy(guardar->password, password, MAX_PASSWORD_LENGTH);
-    strncpy(guardar->username, usuario, MAX_USERNAME_LENGTH);
-    strncpy(guardar->city, ciudad, MAX_CITY_NAME);
-    guardar->birth = año;
-
-    for (int i = 0; i < MAX_LIKE_LENGTH; i++) {
-        strncpy(guardar->likes[i], gustos[i], MAX_LIKE_LENGTH);
-    }
-
-}
 
 void limpiar_User_data(User_data* guardar, const char* email, const char* password, const char* usuario, const char* ciudad , int año, const char* gustos[]){
     free(guardar->email);
@@ -97,13 +85,18 @@ void limpiar_User_data(User_data* guardar, const char* email, const char* passwo
 
 }
 
-void create_user(){
+void create_user(User_list* lista){
     char usuario[MAX_USERNAME_LENGTH];
     char password[MAX_PASSWORD_LENGTH];
     char email[MAX_EMAIL_LENGTH];
-    int año;
+    int año = 0;
+    int num_usuario = 0;//Esto hay que hacerlo, solo he dejado la variable aquí para poder hacer el código
+    char gusto1[MAX_LIKE_LENGTH];
+    char gusto2[MAX_LIKE_LENGTH];
+    char gusto3[MAX_LIKE_LENGTH];
+    char gusto4[MAX_LIKE_LENGTH];
+    char gusto5[MAX_LIKE_LENGTH];
     int flag = FALSE;
-    User_data guardar;
     while (flag == FALSE){
         printf("Introduzca un nombre de usuario (máximo", MAX_USERNAME_LENGTH, "caracteres y mínimo", MIN_USERNAME_LENGTH, ").\n");
         scanf("%s", usuario);
@@ -111,13 +104,12 @@ void create_user(){
     }
     flag = FALSE;
     while(flag == FALSE){
-        printf("\nIntroduzca una contraseña.\n");
+        printf("\nIntroduzca una contraseña (máximo", MAX_PASSWORD_LENGTH, "caracteres y mínimo", MIN_PASSWORD_LENGTH, ").\n");
         scanf("%s", password);
         if(strlen(password) > MIN_PASSWORD_LENGTH && strlen(password) < MAX_PASSWORD_LENGTH) flag = TRUE;
     }
     if (buscar_usuario(usuario,password) == USER_DOES_NOT_EXIST){
-        FILE* fp;
-        fp = fopen("C:\\Users\\senyo\\CLionProjects\\EDA2\\Usuarios", "a");
+
 
         while(strlen(email) <= 1) {
             printf("Introduce tu email\n");
@@ -125,12 +117,35 @@ void create_user(){
         }
         char *ciudad = cambiar_ciudad();
 
-        while( año <= 1920) {
+        while( año <= 1920 || año > 2023) {
             printf("Introduce tu año de nacimiento\n");
-            scanf("%s", año);
+            scanf("%d", &año);
         }
-        char** gustos = cambiar_gustos(usuario,5);
-        guardar_en_struct (&guardar, email, password, usuario, ciudad,año ,gustos);
+
+        while(strlen(gusto1) <= 1) {
+            printf("Dinos algo que te guste:\n");
+            scanf("%s", gusto1);
+        }
+        while(strlen(gusto2) <= 1) {
+            printf("Dinos algo que te guste:\n");
+            scanf("%s", gusto2);
+        }
+        while(strlen(gusto3) <= 1) {
+            printf("Dinos algo que te guste:\n");
+            scanf("%s", gusto3);
+        }
+        while(strlen(gusto4) <= 1) {
+            printf("Dinos algo que te guste:\n");
+            scanf("%s", gusto4);
+        }
+        while(strlen(gusto5) <= 1) {
+            printf("Dinos algo que te guste:\n");
+            scanf("%s", gusto5);
+        }
+
+        push(lista, usuario, email, password, ciudad, año, num_usuario, gusto1, gusto2, gusto3, gusto4, gusto5);
+        datosfichero(lista);
+        return;
     }
 
     if (buscar_usuario(usuario,password) == USERNAME_ALREADY_EXISTS || buscar_usuario(usuario, password) == USER_ALREADY_EXISTS){
@@ -142,26 +157,31 @@ void create_user(){
 
 
 
-int buscar_usuario(char username[MAX_USERNAME_LENGTH], char otro[MAX_PASSWORD_LENGTH]) {
-    User_data *user_search;
-    FILE *fp;
-    fp = fopen("C:\\Users\\senyo\\CLionProjects\\EDA2\\Usuarios", "r");
-    if (fp == NULL) {
-        printf("Error al abrir el archivo.\n");
-        return NO_FILE_FOUND;
-    }
+int buscar_usuario(User_list *lista, char username[MAX_USERNAME_LENGTH], char otro[MAX_PASSWORD_LENGTH]) {
+
     int usuarioEncontrado = FALSE;
     int contraseñaEncontrada = FALSE;
-    while (fscanf(fp, "%s,%s\n", user_search->username, user_search->password) == 2) { //Seguramente el archivo tenga más cosas así que scanf habrá que cambiarlo
-        if (strcmp(user_search->username, username) == 0) {
-            usuarioEncontrado = TRUE;
-            if(strcmp(user_search->password, otro) == 0){
-                contraseñaEncontrada = TRUE;
-            }
-            break;
+    User_data *current = lista->first;
+    if (strcmp(username, current->username) == 0) {
+        usuarioEncontrado = TRUE;
+        if (strcmp(otro, current->password) == 0) {
+            contraseñaEncontrada = TRUE;
         }
     }
-        fclose(fp);
+    if (usuarioEncontrado == FALSE){
+        while (current->next != NULL){
+            if (strcmp(username, current->next->username) == 0){
+                usuarioEncontrado = TRUE;
+                if (strcmp(otro, current->next->password) == 0){
+                    contraseñaEncontrada = TRUE;
+                }
+                break;
+            }
+            current = current->next;
+        }
+    }
+
+
         if (usuarioEncontrado == TRUE) {
             if (contraseñaEncontrada == TRUE){
                 printf("El usuario y la contraseña coinciden. Usuario encontrado.\n");
@@ -171,12 +191,12 @@ int buscar_usuario(char username[MAX_USERNAME_LENGTH], char otro[MAX_PASSWORD_LE
                 return USERNAME_ALREADY_EXISTS;
             }
         } else {
-            printf("El usuario y/o la contraseña no coinciden. Usuario no encontrado.\n");
+            printf("El usuario no coincide. Usuario no encontrado.\n");
             return USER_DOES_NOT_EXIST;
         }
     }
 
-void  menu() {
+void  menu(User_list* lista) {
 
     int login = -1;
     printf("Hola, Buenos días!\n");
@@ -186,7 +206,7 @@ void  menu() {
         printf("\nPor favor seleccione 1 si es un nuevo usuario o 2 si ya tiene una cuenta.\n");
     }
 
-    if (login == 1) create_user();
+    if (login == 1) create_user(lista);
 
 
     if (login == 2) {
