@@ -72,18 +72,41 @@ char* cambiar_nombre_de_usuario(){
 }
 
 
-void limpiar_User_data(User_data* guardar, const char* email, const char* password, const char* usuario, const char* ciudad , int año, const char* gustos[]){
+void limpiar_User_data(User_data* guardar){
+
+    if(guardar == NULL){
+        return;
+    }
     free(guardar->email);
     free(guardar->password);
     free(guardar->username);
     free(guardar->city);
+    guardar->user_number = 0 ;
     guardar->birth = 0;
     for (int i = 0; i < MAX_LIKE_LENGTH; i++) {
-        strncpy(guardar->likes[i], NULL, MAX_LIKE_LENGTH);
+       free(guardar->likes[i]);
     }
 
-
+    free(guardar);
 }
+void borrar_lista_de_usuarios(User_list* lista) {
+
+    if (lista == NULL) {
+        return;
+    }
+    User_data* actual = lista->first;
+    User_data* siguiente = NULL;
+
+    while(actual!= NULL){
+        limpiar_User_data(actual);
+        actual = actual->next;
+
+    }
+    lista->first = NULL;
+    lista->last = NULL;
+    lista->size = 0 ;
+}
+
 
 void create_user(User_list* lista){
     char usuario[MAX_USERNAME_LENGTH];
