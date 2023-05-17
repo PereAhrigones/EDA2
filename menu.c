@@ -7,38 +7,25 @@
 #include <string.h>
 #include <stdlib.h>
 
-
-int comparar_e_eliminar_gustos(char username[MAX_USERNAME_LENGTH],char gustos[MAX_LIKE_LENGTH]) { //Está función compara que los gustos introducidos sean correctos, si es así la función que la llama podra cambiarlos por otros gustos.
-    User_data *user_likes;
-    FILE* fp;
-    fp = fopen("C:\\Users\\senyo\\CLionProjects\\EDA2\\Usuarios", "r");
-    if (fp == NULL) {
-        printf("Error al abrir el archivo.\n");
-        return NO_FILE_FOUND;
-    }
-    int gusto_encontrado = FALSE;
-    while (fscanf(fp, "%s,%s\n", user_likes->username, user_likes->likes) == 2) { //Yo esto no lo haría buscando en el fichero si no mejor buscando en la lista
-        if (strcmp(user_likes->username, username) == 0) { //Se supone que aprobecha para eliminar el gusto que ha encontrado para luego poder cambiarlo.
-            if(strcmp(user_likes->likes, gustos) == 0){
-                strncpy(user_likes -> likes ,NULL,MAX_LIKE_LENGTH);
-                fclose(fp);
-                return TRUE;
+int print_gustos(User_list* lista ,char username[MAX_USERNAME_LENGTH]){
+    User_data *user_likes = lista->first;
+    while (user_likes->next != NULL) {
+        if (strcmp(user_likes->username, username) == 0) {
+            for(int i =0; i < 5; i++){
+                printf("%d",i,user_likes->likes[i]);
             }
-            break;
         }
+        break;
     }
-    fclose(fp);
-    if (gusto_encontrado == FALSE) return FALSE;
 }
+
 //Con esta función también lo haría con la estructura y no con el archivo
-void guardar_gustos(char username[MAX_USERNAME_LENGTH],char gustos[MAX_LIKE_LENGTH]){ //No está revisado si esta función tiene sentido o.
-    User_data *user_likes;
-    FILE* fp;
-    fp = fopen("C:\\Users\\senyo\\CLionProjects\\EDA2\\Usuarios", "r");
-    while (fscanf(fp, "%s,%s\n", user_likes->username, user_likes->likes) == 2) {
-        if (strcmp(user_likes->username, username) == 0) { //Creo, no estoy seguro, pero esto creo que le falta cosa.
-            strncpy(user_likes -> likes ,gustos,MAX_LIKE_LENGTH);
-            fclose(fp);
+void guardar_gustos(User_list* lista,char username[MAX_USERNAME_LENGTH],char gustos[MAX_LIKE_LENGTH],int numero){ //No está revisado si esta función tiene sentido o.
+    User_data *user_likes = lista->first;
+    while (user_likes->next != NULL) { //Yo esto no lo haría buscando en el fichero si no mejor buscando en la lista
+        if (strcmp(user_likes->username, username) == 0) { //Creo, no estoy seguro, pero  a esto creo que le falta cosa.
+            strncpy(user_likes -> likes[numero] ,gustos,MAX_LIKE_LENGTH);
+            user_likes = user_likes->next;
             return;
         }
     }
@@ -53,15 +40,16 @@ char* cambiar_ciudad(){
     return ciudad;
 }
 //Esto ahora mismo no sirve para nada
-char** cambiar_gustos(char nombre_usuario[MAX_USERNAME_LENGTH],int num_gustos){
+/*char** cambiar_gustos(char nombre_usuario[MAX_USERNAME_LENGTH],int num_gustos){
 
     char ** gustos = malloc(num_gustos *sizeof (char*));
     for (int i = 0; i <  num_gustos; i++) {
         printf("Introduce el gusto numero %d\n", i+1);
         scanf("%s", gustos[i] = malloc(MAX_LIKE_LENGTH * sizeof (char))); // Se tiene que repetir de 1 a 5 veces.
-        if (comparar_e_eliminar_gustos(&nombre_usuario,&gustos[i]) == TRUE) guardar_gustos(&nombre_usuario,&gustos[i]);
+        if ((&nombre_usuario,&gustos[i]) == TRUE) guardar_gustos(&nombre_usuario,&gustos[i]);
     }
-}
+}*/
+
 char* cambiar_nombre_de_usuario(){
     char usuario[MAX_USERNAME_LENGTH];
     while(strlen(usuario) <= 1) {
@@ -255,6 +243,7 @@ void  menu(User_list* lista) {
             int opcion2;
             int opcion3;
             int num_gustos;
+            int gustos_cambio;
             char nombre_usuario;
             char ubicacion;
             char descripcion;
@@ -299,11 +288,17 @@ void  menu(User_list* lista) {
                         printf("Introduce una descripción:\n");
                         scanf("%d", &descripcion);
                     } else if (opcion3 == 4) {
+                        print_gustos(lista,&nombre_usuario);
                         printf("Intoduzca cuantos gustos desea cambiar (1-5)");
                         scanf("%d", num_gustos);
-                        cambiar_gustos(&nombre_usuario,
-                                       num_gustos); //Anecdota graciosa esta linea de codigo antes eran 53 lineas de if y for porque soy tontisimo.
-
+                        for (int i = 0;i < num_gustos;i ++){
+                            print_gustos(lista,&nombre_usuario);
+                            printf("Intoduzca que gusto desea cambiar (1-5)");
+                            scanf("%d",gustos_cambio);
+                            printf("Intoduzca su nuevo gusto %d",i);
+                            scanf("%s", gustos[gustos_cambio]);
+                            guardar_gustos(lista,&nombre_usuario, &gustos[gustos_cambio],gustos_cambio);
+                        }
                         if (opcion2 == 2) {
 
                         }

@@ -19,6 +19,7 @@
 #define USER_ALREADY_EXISTS -2
 #define USER_DOES_NOT_EXIST -3
 #define NO_FILE_FOUND 500
+#define MAX_POST_LENGHT 250
 
 typedef struct _data{
     char username[MAX_USERNAME_LENGTH];
@@ -39,6 +40,8 @@ typedef struct{
     int size;
 }User_list;
 
+int print_gustos(User_list* lista ,char username[MAX_USERNAME_LENGTH]);
+void guardar_gustos(User_list* lista,char username[MAX_USERNAME_LENGTH],char gustos[MAX_LIKE_LENGTH],int numero);
 int buscar_usuario(User_list* lista, char algo[MAX_USERNAME_LENGTH], char otro[MAX_PASSWORD_LENGTH]);// Tengo que mirar como estan declaradas las cosas en el otro proyecto
 void create_user(); //Esto no va a ser void porque va a tener que devolver una estructura pero hasta que la creemos se queda así
 void bubblesort(char arr[], int n);
