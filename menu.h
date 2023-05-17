@@ -40,6 +40,11 @@ typedef struct{
     int size;
 }User_list;
 
+typedef struct publicacion{
+    char contenido[MAX_POST_LENGHT];
+    char *usuario;
+};
+
 int print_gustos(User_list* lista ,char username[MAX_USERNAME_LENGTH]);
 void guardar_gustos(User_list* lista,char username[MAX_USERNAME_LENGTH],char gustos[MAX_LIKE_LENGTH],int numero);
 int buscar_usuario(User_list* lista, char algo[MAX_USERNAME_LENGTH], char otro[MAX_PASSWORD_LENGTH]);// Tengo que mirar como estan declaradas las cosas en el otro proyecto

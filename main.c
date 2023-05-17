@@ -34,16 +34,22 @@ void push(User_list* lista, char nombre_usuario[MAX_USERNAME_LENGTH], char corre
     lista->size++;
 }
 
-int datosfichero(User_list* lista) {//Aquí lo que sí hay que pasar como parametro es la estructura de la lista de usuarios
-    User_data *user_search;
-    FILE * fp = fopen("C:\\Users\\senyo\\CLionProjects\\EDA2\\Usuarios", "w");
-    if (fp == NULL) {
-        printf("Error al abrir el archivo.\n");
-        return NO_FILE_FOUND;
+int datosfichero(User_list* lista) {//Aquí lo que sí hay que pasar como parametro es la estructura de la lista de usuario
 
 
+        FILE * fp = fopen("C:\\Users\\senyo\\CLionProjects\\EDA2\\Usuarios", "w");
+        if (fp == NULL) {
+            printf("Error al abrir el archivo.\n");
+            return NO_FILE_FOUND;
+
+        }
+        User_data *usuario = lista->first;
+        while (usuario->next != NULL) {
+            usuario = usuario->next;
+            fprintf(fp, "%s %s %s %s %d %d %s %s %s %s %s %f\n", usuario->username, usuario->email, usuario->password, usuario->city, usuario->birth, usuario->user_number, usuario->likes[0],usuario->likes[1], usuario->likes[2], usuario->likes[3], usuario->likes[4], usuario->nota);
+        }
+        fclose(fp);
     }
-}
 
 User_list* ficherodatos() { //Esto me tengo que mirar bien como hacerlo
     FILE *fp;
