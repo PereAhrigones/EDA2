@@ -2,7 +2,9 @@
 #include "main.h"
 #include "menu.c"
 
-void insert(User_data* miembro, char nombre_usuario[MAX_USERNAME_LENGTH], char correo[MAX_EMAIL_LENGTH], char contraseña[MAX_PASSWORD_LENGTH], char ciudad[MAX_CITY_NAME], int año, int num_usuario, char gusto1[MAX_LIKE_LENGTH], char gusto2[MAX_LIKE_LENGTH], char gusto3[MAX_LIKE_LENGTH], char gusto4[MAX_LIKE_LENGTH], char gusto5[MAX_LIKE_LENGTH]){
+
+
+void insert(User_data* miembro, char nombre_usuario[MAX_USERNAME_LENGTH], char correo[MAX_EMAIL_LENGTH], char contraseña[MAX_PASSWORD_LENGTH], char ciudad[MAX_CITY_NAME], int año, int num_usuario, char gusto1[MAX_LIKE_LENGTH], char gusto2[MAX_LIKE_LENGTH], char gusto3[MAX_LIKE_LENGTH], char gusto4[MAX_LIKE_LENGTH], char gusto5[MAX_LIKE_LENGTH], float nota){
     strcpy(miembro->username, nombre_usuario);
     strcpy(miembro->email, correo);
     strcpy(miembro->password, contraseña);
@@ -14,10 +16,11 @@ void insert(User_data* miembro, char nombre_usuario[MAX_USERNAME_LENGTH], char c
     strcpy(miembro->likes[3], gusto3);
     strcpy(miembro->likes[4], gusto4);
     strcpy(miembro->likes[5], gusto5);
+    miembro->nota = nota;
     miembro->next = NULL;
 }
 
-void push(User_list* lista, char nombre_usuario[MAX_USERNAME_LENGTH], char correo[MAX_EMAIL_LENGTH], char contraseña[MAX_PASSWORD_LENGTH], char ciudad[MAX_CITY_NAME], int año, int num_usuario, char gusto1[MAX_LIKE_LENGTH], char gusto2[MAX_LIKE_LENGTH], char gusto3[MAX_LIKE_LENGTH], char gusto4[MAX_LIKE_LENGTH], char gusto5[MAX_LIKE_LENGTH]) {
+void push(User_list* lista, char nombre_usuario[MAX_USERNAME_LENGTH], char correo[MAX_EMAIL_LENGTH], char contraseña[MAX_PASSWORD_LENGTH], char ciudad[MAX_CITY_NAME], int año, int num_usuario, char gusto1[MAX_LIKE_LENGTH], char gusto2[MAX_LIKE_LENGTH], char gusto3[MAX_LIKE_LENGTH], char gusto4[MAX_LIKE_LENGTH], char gusto5[MAX_LIKE_LENGTH], float nota) {
     User_data *usuario = lista->first;
     while (usuario->next != NULL) {
         usuario = usuario->next;
@@ -25,7 +28,7 @@ void push(User_list* lista, char nombre_usuario[MAX_USERNAME_LENGTH], char corre
 
     usuario->next = (User_data *) malloc(sizeof(User_data));
     //Aquí van todos los datos
-    insert(usuario->next, nombre_usuario, correo, contraseña, ciudad, año, num_usuario, gusto1, gusto2, gusto3, gusto4, gusto5);
+    insert(usuario->next, nombre_usuario, correo, contraseña, ciudad, año, num_usuario, gusto1, gusto2, gusto3, gusto4, gusto5, nota);
     lista->last = usuario->next;
     usuario->next->prev = usuario;
     lista->size++;
@@ -61,8 +64,9 @@ User_list* ficherodatos() { //Esto me tengo que mirar bien como hacerlo
     char gusto3[MAX_LIKE_LENGTH];
     char gusto4[MAX_LIKE_LENGTH];
     char gusto5[MAX_LIKE_LENGTH];
-    if(fscanf(fp, "%s %s %s %s %d %d %s %s %s %s %s", nombre_usuario, correo, contraseña, ciudad, &año, &num_usuario, gusto1, gusto2, gusto3, gusto4, gusto5) == 11){
-        insert(lista->first, nombre_usuario, correo, contraseña, ciudad, año, num_usuario, gusto1, gusto2, gusto3, gusto4, gusto5);
+    float nota;
+    if(fscanf(fp, "%s %s %s %s %d %d %s %s %s %s %s %f", nombre_usuario, correo, contraseña, ciudad, &año, &num_usuario, gusto1, gusto2, gusto3, gusto4, gusto5, nota) == 12){
+        insert(lista->first, nombre_usuario, correo, contraseña, ciudad, año, num_usuario, gusto1, gusto2, gusto3, gusto4, gusto5, nota);
         lista->last = lista->first;
         lista->first->prev = NULL;
         lista->size = 1;//Esto es para el primer elemento de la lista
@@ -70,8 +74,8 @@ User_list* ficherodatos() { //Esto me tengo que mirar bien como hacerlo
         printf("\nSe ha producido un error al intentar leer el archivo.\n");
     }
     //El while es para el resto de elementos de la lista
-    while (fscanf(fp, "%s %s %s %s %d %d %s %s %s %s %s", nombre_usuario, correo, contraseña, ciudad, &año, &num_usuario, gusto1, gusto2, gusto3, gusto4, gusto5) == 11) {//Nombre de usuario, email, contraseña, ciudad, año, num usuario, gustos
-        push(lista, nombre_usuario, correo, contraseña, ciudad, año, num_usuario, gusto1, gusto2, gusto3, gusto4, gusto5);
+    while (fscanf(fp, "%s %s %s %s %d %d %s %s %s %s %s", nombre_usuario, correo, contraseña, ciudad, &año, &num_usuario, gusto1, gusto2, gusto3, gusto4, gusto5, nota) == 12) {//Nombre de usuario, email, contraseña, ciudad, año, num usuario, gustos
+        push(lista, nombre_usuario, correo, contraseña, ciudad, año, num_usuario, gusto1, gusto2, gusto3, gusto4, gusto5, nota);
     }
     return lista;
 }

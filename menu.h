@@ -28,6 +28,7 @@ typedef struct _data{
     int birth;
     int user_number;
     char likes[5][MAX_LIKE_LENGTH];
+    float nota;
     struct _data* next;
     struct _data* prev;
 }User_data;
@@ -40,7 +41,7 @@ typedef struct{
 
 int buscar_usuario(User_list* lista, char algo[MAX_USERNAME_LENGTH], char otro[MAX_PASSWORD_LENGTH]);// Tengo que mirar como estan declaradas las cosas en el otro proyecto
 void create_user(); //Esto no va a ser void porque va a tener que devolver una estructura pero hasta que la creemos se queda así
-
+void bubblesort(char arr[], int n);
 
 
 

@@ -90,13 +90,14 @@ void create_user(User_list* lista){
     char password[MAX_PASSWORD_LENGTH];
     char email[MAX_EMAIL_LENGTH];
     int año = 0;
-    int num_usuario = 0;//Esto hay que hacerlo, solo he dejado la variable aquí para poder hacer el código
+    int num_usuario = lista->size;//Esto hay que hacerlo, solo he dejado la variable aquí para poder hacer el código
     char gusto1[MAX_LIKE_LENGTH];
     char gusto2[MAX_LIKE_LENGTH];
     char gusto3[MAX_LIKE_LENGTH];
     char gusto4[MAX_LIKE_LENGTH];
     char gusto5[MAX_LIKE_LENGTH];
     int flag = FALSE;
+    float nota = 0.0;
     while (flag == FALSE){
         printf("Introduzca un nombre de usuario (máximo", MAX_USERNAME_LENGTH, "caracteres y mínimo", MIN_USERNAME_LENGTH, ").\n");
         scanf("%s", usuario);
@@ -108,7 +109,7 @@ void create_user(User_list* lista){
         scanf("%s", password);
         if(strlen(password) > MIN_PASSWORD_LENGTH && strlen(password) < MAX_PASSWORD_LENGTH) flag = TRUE;
     }
-    if (buscar_usuario(usuario,password) == USER_DOES_NOT_EXIST){
+    if (buscar_usuario(lista, usuario,password) == USER_DOES_NOT_EXIST){
 
 
         while(strlen(email) <= 1) {
@@ -143,13 +144,13 @@ void create_user(User_list* lista){
             scanf("%s", gusto5);
         }
 
-        push(lista, usuario, email, password, ciudad, año, num_usuario, gusto1, gusto2, gusto3, gusto4, gusto5);
+        push(lista, usuario, email, password, ciudad, año, num_usuario, gusto1, gusto2, gusto3, gusto4, gusto5, nota);
         datosfichero(lista);
         return;
     }
 
-    if (buscar_usuario(usuario,password) == USERNAME_ALREADY_EXISTS || buscar_usuario(usuario, password) == USER_ALREADY_EXISTS){
-        printf("Lo sentimos, esté usuario ya existe\n");
+    if (buscar_usuario(lista, usuario,password) == USERNAME_ALREADY_EXISTS || buscar_usuario(lista, usuario, password) == USER_ALREADY_EXISTS){
+        printf("Lo sentimos, este usuario ya existe\n");
         return;
     }
 
@@ -194,7 +195,11 @@ int buscar_usuario(User_list *lista, char username[MAX_USERNAME_LENGTH], char ot
             printf("El usuario no coincide. Usuario no encontrado.\n");
             return USER_DOES_NOT_EXIST;
         }
-    }
+}
+
+void bubblesort(char arr[], int n){
+
+}
 
 void  menu(User_list* lista) {
 
@@ -217,10 +222,9 @@ void  menu(User_list* lista) {
         scanf("%s", nombre);
         printf("Ingresa la contraseña:\n");
         scanf("%s", contraseña);
-        buscar_usuario(nombre,
-                       contraseña);//Hay que juntar esto con lo de abajo y hacer un while por si se equivoca al iniciar sesión pueda volver a intentarlo
+        buscar_usuario(lista, nombre, contraseña);//Hay que juntar esto con lo de abajo y hacer un while por si se equivoca al iniciar sesión pueda volver a intentarlo
 
-        if (buscar_usuario(nombre, contraseña) == USER_ALREADY_EXISTS) {
+        if (buscar_usuario(lista, nombre, contraseña) == USER_ALREADY_EXISTS) {
             printf("Inicio de sesión exitoso. ¡Bienvenido!\n");
 
             // Menú con opciones
@@ -232,11 +236,12 @@ void  menu(User_list* lista) {
             char ubicacion;
             char descripcion;
             char gustos[MAX_LIKE_LENGTH];
-
+//TODA ESTA MIERDA SEGURAMENTE TENGA QUE ESTAR DENTRO DE UN WHILE
 
             printf("\n----- Menú -----\n");
             printf("1. Perfil (1)\n");
             printf("2. Página principal (2)\n");
+            printf("3. Mostrar lista de usuarios (3)\n");
             printf("0. Salir (0) \n");
             printf("Ingresa la opción deseada: ");
             scanf("%d", &opcion);
@@ -244,7 +249,7 @@ void  menu(User_list* lista) {
             if (opcion == 0) {
 
             }
-            if (opcion == 1) {
+            if (opcion == 1) {//Entrar al perfil
                 printf("\n----- Perfil -----\n");
                 printf("1. Editar (1)\n"); // En está parte tendremos que hacer una función que elimine la cuenta si no ve necesario.
                 printf("2. Ver valoraciones\n");
@@ -282,10 +287,35 @@ void  menu(User_list* lista) {
 
                     }
 
-                    if (opcion == 2) {
+                    if (opcion == 2) { //Menú principal
+                        int elegir_post = 0;
+                        printf("Introduzca que quiere hacer, ver los post de los demas (1) o hacer un post (2)");
+                        scanf("%d",elegir_post);
+                        if (elegir_post == 1){
+                            //Para los posts no se usara scanf, sino fgets("post",MAX_POST_LENGHT,stdi);
+                            char post[MAX_POST_LENGHT];
+                            FILE* fd;
+                            fscanf("%s",&post[MAX_POST_LENGHT],"r");
+
+                        }
+                        if (elegir_post == 2){
+
+                        }
+
+
+
                     }
 
-
+                    if (opcion == 3){//Mostrar la lista de usuarios
+                        char lista_username[lista->size][MAX_USERNAME_LENGTH];
+                        User_data* actual = lista->first;
+                        int i = 0;
+                        while (actual != NULL){
+                            strcpy(lista_username[i], actual->username);
+                            actual = actual->next;
+                            i++;
+                        }
+                    }
                 }
             }
         }
