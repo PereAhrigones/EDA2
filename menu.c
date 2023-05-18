@@ -55,11 +55,12 @@ int datosfichero(User_list* lista) {//Aquí lo que sí hay que pasar como parame
     fclose(fp);
 }
 
-User_list* ficherodatos() { //Esto me tengo que mirar bien como hacerlo
+User_list* ficherodatos() { //A la que hay algo en el archivo esto se muere (YA NO)
     FILE *fp;
-    fp = fopen("C:\\Users\\senyo\\CLionProjects\\EDA2\\Usuarios", "r");//Esto habría que cambiarlo para que se pudiera abrir en cualquier ordenador
+    fp = fopen("C:\\Users\\senyo\\CLionProjects\\EDA2\\Usuarios.txt", "r");//Esto habría que cambiarlo para que se pudiera abrir en cualquier ordenador
     if (fp == NULL) {
         printf("Error al abrir el archivo.\n");
+        return  NULL;
     }
     User_list *lista = (User_list*) malloc(sizeof(User_list));
     lista->first = (User_data *) malloc(sizeof(User_data));
@@ -75,7 +76,7 @@ User_list* ficherodatos() { //Esto me tengo que mirar bien como hacerlo
     char gusto4[MAX_LIKE_LENGTH];
     char gusto5[MAX_LIKE_LENGTH];
     float nota;
-    if(fscanf(fp, "%s %s %s %s %d %d %s %s %s %s %s %f", nombre_usuario, correo, contraseña, ciudad, &año, &num_usuario, gusto1, gusto2, gusto3, gusto4, gusto5, nota) == 12){
+    if(fscanf(fp, "%s %s %s %s %d %d %s %s %s %s %s %f", nombre_usuario, correo, contraseña, ciudad, &año, &num_usuario, gusto1, gusto2, gusto3, gusto4, gusto5, &nota) == 12){
         insert_user(lista->first, nombre_usuario, correo, contraseña, ciudad, año, num_usuario, gusto1, gusto2, gusto3, gusto4, gusto5, nota);
         lista->last = lista->first;
         lista->first->prev = NULL;
@@ -120,7 +121,7 @@ char* cambiar_ciudad(){
         printf("Introduce tu ciudad de residencia \n");
         scanf("%s", ciudad);
     }
-    return ciudad;
+    return ciudad;//Aquí hay un warning de que devuelve la dirección de una variable local
 }
 //Esto ahora mismo no sirve para nada
 /*char** cambiar_gustos(char nombre_usuario[MAX_USERNAME_LENGTH],int num_gustos){
@@ -139,7 +140,7 @@ char* cambiar_nombre_de_usuario(){
     printf("Introduce tu ciudad de residencia \n");//What
     scanf("%s", usuario);
     }
-    return usuario;
+    return usuario;//Aquí hay un warning de que devuelve la dirección de una variable local
 }
 
 
@@ -148,7 +149,7 @@ void limpiar_User_data(User_data* guardar){
     if(guardar == NULL){
         return;
     }
-    free(guardar->email);
+    free(guardar->email);//Warnings en todos los free por algo del offset
     free(guardar->password);
     free(guardar->username);
     free(guardar->city);
@@ -193,13 +194,13 @@ void create_user(User_list* lista){
     int flag = FALSE;
     float nota = 0.0;
     while (flag == FALSE){
-        printf("Introduzca un nombre de usuario (máximo", MAX_USERNAME_LENGTH, "caracteres y mínimo", MIN_USERNAME_LENGTH, ").\n");
+        printf("Introduzca un nombre de usuario (máximo MAX_USERNAME_LENGTH caracteres y mínimo MIN_USERNAME_LENGTH).\n");
         scanf("%s", usuario);
         if(strlen(usuario) > MIN_USERNAME_LENGTH && strlen(usuario) < MAX_USERNAME_LENGTH) flag = TRUE;
     }
     flag = FALSE;
     while(flag == FALSE){
-        printf("\nIntroduzca una contraseña (máximo", MAX_PASSWORD_LENGTH, "caracteres y mínimo", MIN_PASSWORD_LENGTH, ").\n");
+        printf("\nIntroduzca una contraseña (máximo MAX_PASSWORD_LENGTH caracteres y mínimo MIN_PASSWORD_LENGTH).\n");
         scanf("%s", password);
         if(strlen(password) > MIN_PASSWORD_LENGTH && strlen(password) < MAX_PASSWORD_LENGTH) flag = TRUE;
     }
@@ -303,7 +304,7 @@ char** bubblesort(char arr[], int n){
             }
         }
     }
-    return arr;
+    return arr; //Warning de que el tipo de retorno es disatinto al esperado. Actual: cahr* Esperado: char**
 }
 
 void  menu(User_list* lista) {
@@ -311,9 +312,10 @@ void  menu(User_list* lista) {
     int login = -1;
     printf("Hola, Buenos días!\n");
     printf("¿Eres un nuevo usuario(1) o ya tienes cuenta(2)?\n");
+    scanf("%d", &login);
     while (login != 1 && login != 2) {
-        scanf("%d", &login);
         printf("\nPor favor seleccione 1 si es un nuevo usuario o 2 si ya tiene una cuenta.\n");
+        scanf("%d", &login);
     }
 
     if (login == 1) create_user(lista);
@@ -327,7 +329,7 @@ void  menu(User_list* lista) {
         scanf("%s", nombre);
         printf("Ingresa la contraseña:\n");
         scanf("%s", contraseña);
-        buscar_usuario(lista, nombre, contraseña);//Hay que juntar esto con lo de abajo y hacer un while por si se equivoca al iniciar sesión pueda volver a intentarlo
+        //buscar_usuario(lista, nombre, contraseña);//Hay que juntar esto con lo de abajo y hacer un while por si se equivoca al iniciar sesión pueda volver a intentarlo
 
         if (buscar_usuario(lista, nombre, contraseña) == USER_ALREADY_EXISTS) {
             printf("Inicio de sesión exitoso. ¡Bienvenido!\n");
@@ -338,10 +340,10 @@ void  menu(User_list* lista) {
             int opcion3;
             int num_gustos;
             int gustos_cambio;
-            char nombre_usuario;
-            char ubicacion;
-            char descripcion;
-            char gustos[MAX_LIKE_LENGTH];
+            char nombre_usuario;//Esto no es una string
+            char ubicacion;//Esto tampoco
+            char descripcion;//Ni esto
+            char gustos[MAX_LIKE_LENGTH];//Esto sí pero probablemente tendría que ser un array de strings
 //TODA ESTA MIERDA SEGURAMENTE TENGA QUE ESTAR DENTRO DE UN WHILE
 
             printf("\n----- Menú -----\n");
@@ -349,7 +351,7 @@ void  menu(User_list* lista) {
             printf("2. Página principal (2)\n");
             printf("3. Mostrar lista de usuarios (3)\n");
             printf("0. Salir (0) \n");
-            printf("Ingresa la opción deseada: ");
+            printf("Ingresa la opción deseada: \n");
             scanf("%d", &opcion);
 
             if (opcion == 0) {
@@ -382,22 +384,24 @@ void  menu(User_list* lista) {
                         printf("Introduce una descripción:\n");
                         scanf("%d", &descripcion);
                     } else if (opcion3 == 4) {
-                        print_gustos(lista,&nombre_usuario);
+                        print_gustos(lista, &nombre_usuario);
                         printf("Intoduzca cuantos gustos desea cambiar (1-5)");
                         scanf("%d", num_gustos);
-                        for (int i = 0;i < num_gustos;i ++){
-                            print_gustos(lista,&nombre_usuario);
+                        for (int i = 0; i < num_gustos; i++) {
+                            print_gustos(lista, &nombre_usuario);
                             printf("Intoduzca que gusto desea cambiar (1-5)");
-                            scanf("%d",gustos_cambio);
-                            printf("Intoduzca su nuevo gusto %d",i);
+                            scanf("%d", gustos_cambio);
+                            printf("Intoduzca su nuevo gusto %d", i);
                             scanf("%s", gustos[gustos_cambio]);
-                            guardar_gustos(lista,&nombre_usuario, &gustos[gustos_cambio],gustos_cambio);
+                            guardar_gustos(lista, &nombre_usuario, &gustos[gustos_cambio], gustos_cambio);
                         }
                         if (opcion2 == 2) {
 
                         }
 
                     }
+                }
+            }
 
                     if (opcion == 2) { //Menú principal
                         int elegir_post = 0;
@@ -407,8 +411,8 @@ void  menu(User_list* lista) {
                             //Para los posts no se usara scanf, sino fgets("post",MAX_POST_LENGHT,stdi);
                             char post[MAX_POST_LENGHT];
                             FILE* fd;
-                            fscanf("%s",&post[MAX_POST_LENGHT],"r");
-
+                            fscanf("%s",&post[MAX_POST_LENGHT],"r"); //Aquí hay un warning de que el fscanf está mal
+                            //Este fscanf está haciendo que hay un warning también la libreria de stdio.h
                         }
                         if (elegir_post == 2){
 
@@ -427,14 +431,12 @@ void  menu(User_list* lista) {
                             actual = actual->next;
                             i++;
                         }
-                        char** lista_ordenada = bubblesort(lista_username, lista->size);
+                        char** lista_ordenada = bubblesort(lista_username, lista->size); //Warning de que lista_username es un tipo de puntero incompatible
                         for (int j = 0; j < lista->size; ++j) {
-                            printf("%s\n", lista_ordenada[j]);
+                            printf("%s\n", &lista_ordenada[j]);
                         }
-
                     }
                 }
             }
         }
-    }
-}
+
