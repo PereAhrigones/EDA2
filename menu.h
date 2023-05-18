@@ -4,7 +4,7 @@
 
 #ifndef EDA2_MENU_H
 #define EDA2_MENU_H
-#include "main.h"
+
 
 #define MAX_USERNAME_LENGTH 16
 #define MIN_USERNAME_LENGTH 4
@@ -40,16 +40,23 @@ typedef struct{
     int size;
 }User_list;
 
-typedef struct publicacion{
+typedef struct {
     char contenido[MAX_POST_LENGHT];
     char *usuario;
-};
+}publicacion;
 
-int print_gustos(User_list* lista ,char username[MAX_USERNAME_LENGTH]);
+void insert_user(User_data* miembro, char nombre_usuario[MAX_USERNAME_LENGTH], char correo[MAX_EMAIL_LENGTH], char contraseña[MAX_PASSWORD_LENGTH], char ciudad[MAX_CITY_NAME], int año, int num_usuario, char gusto1[MAX_LIKE_LENGTH], char gusto2[MAX_LIKE_LENGTH], char gusto3[MAX_LIKE_LENGTH], char gusto4[MAX_LIKE_LENGTH], char gusto5[MAX_LIKE_LENGTH], float nota);
+
+void push(User_list* lista, char nombre_usuario[MAX_USERNAME_LENGTH], char correo[MAX_EMAIL_LENGTH], char contraseña[MAX_PASSWORD_LENGTH], char ciudad[MAX_CITY_NAME], int año, int num_usuario, char gusto1[MAX_LIKE_LENGTH], char gusto2[MAX_LIKE_LENGTH], char gusto3[MAX_LIKE_LENGTH], char gusto4[MAX_LIKE_LENGTH], char gusto5[MAX_LIKE_LENGTH], float nota);
+
+User_list* ficherodatos();
+
+void print_gustos(User_list* lista ,char username[MAX_USERNAME_LENGTH]);
 void guardar_gustos(User_list* lista,char username[MAX_USERNAME_LENGTH],char gustos[MAX_LIKE_LENGTH],int numero);
 int buscar_usuario(User_list* lista, char algo[MAX_USERNAME_LENGTH], char otro[MAX_PASSWORD_LENGTH]);// Tengo que mirar como estan declaradas las cosas en el otro proyecto
 void create_user(); //Esto no va a ser void porque va a tener que devolver una estructura pero hasta que la creemos se queda así
-void bubblesort(char arr[], int n);
+char** bubblesort(char arr[], int n);
+void limpiar_User_data(User_data* guardar);
 
 
 
