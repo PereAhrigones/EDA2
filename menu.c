@@ -48,8 +48,8 @@ User_list* ficherodatos() { //A la que hay algo en el archivo esto se muere (YA 
     float nota;
     if(fscanf(fp, "%s %s %s %s %d %d %s %s %s %s %s %f", nombre_usuario, correo, contraseña, ciudad, &año, &num_usuario, gusto1, gusto2, gusto3, gusto4, gusto5, &nota) == 12){
         insert_user(lista->first, nombre_usuario, correo, contraseña, ciudad, año, num_usuario, gusto1, gusto2, gusto3, gusto4, gusto5, nota);
-        lista->last = lista->first;
         lista->first->prev = NULL;
+        lista->last = lista->first;
         lista->size = 1;//Esto es para el primer elemento de la lista
     } else{
         printf("\nSe ha producido un error al intentar leer el archivo.\n");
@@ -58,6 +58,7 @@ User_list* ficherodatos() { //A la que hay algo en el archivo esto se muere (YA 
     while (fscanf(fp, "%s %s %s %s %d %d %s %s %s %s %s", nombre_usuario, correo, contraseña, ciudad, &año, &num_usuario, gusto1, gusto2, gusto3, gusto4, gusto5, nota) == 12) {//Nombre de usuario, email, contraseña, ciudad, año, num usuario, gustos
         push(lista, nombre_usuario, correo, contraseña, ciudad, año, num_usuario, gusto1, gusto2, gusto3, gusto4, gusto5, nota);
     }
+    fclose(fp);
     return lista;
 }
 
@@ -202,14 +203,14 @@ int buscar_usuario(User_list *lista, char username[], char otro[]) {
 
         if (usuarioEncontrado == TRUE) {
             if (contraseñaEncontrada == TRUE){
-                printf("El usuario y la contraseña coinciden. Usuario encontrado.\n");
+                //printf("El usuario y la contraseña coinciden. Usuario encontrado.\n");
                 return USER_ALREADY_EXISTS;
             } else {
-                printf("Contraseña incorrecta.\n");
+                //printf("Contraseña incorrecta.\n");
                 return USERNAME_ALREADY_EXISTS;
             }
         } else {
-            printf("El usuario no coincide. Usuario no encontrado.\n");//Quitar los prints de aquí y ponerlos en otro lado porque como usamos esta función en varios sitios se printea cuando no toca
+            //printf("El usuario no coincide. Usuario no encontrado.\n");//Quitar los prints de aquí y ponerlos en otro lado porque como usamos esta función en varios sitios se printea cuando no toca
             return USER_DOES_NOT_EXIST;
         }
 }

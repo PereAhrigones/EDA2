@@ -7,9 +7,11 @@
 #include "usuario.h"
 #include "publicacion.h"
 
-timeline* leer_posts();
+User_data* encontrar_usuario(char username[], User_list *lista);
 
+timeline* leer_posts(User_list* lista);
 
+int main();
 
 
 #endif //EDA2_MAIN_H
