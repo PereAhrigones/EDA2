@@ -8,49 +8,19 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-void insert_user(User_data* miembro, char nombre_usuario[MAX_USERNAME_LENGTH], char correo[MAX_EMAIL_LENGTH], char contraseña[MAX_PASSWORD_LENGTH], char ciudad[MAX_CITY_NAME], int año, int num_usuario, char gusto1[MAX_LIKE_LENGTH], char gusto2[MAX_LIKE_LENGTH], char gusto3[MAX_LIKE_LENGTH], char gusto4[MAX_LIKE_LENGTH], char gusto5[MAX_LIKE_LENGTH], float nota){
-    strcpy(miembro->username, nombre_usuario);
-    strcpy(miembro->email, correo);
-    strcpy(miembro->password, contraseña);
-    strcpy(miembro->city, ciudad);
-    miembro->birth = año;
-    miembro->user_number = num_usuario;
-    strcpy(miembro->likes[1], gusto1);
-    strcpy(miembro->likes[2], gusto2);
-    strcpy(miembro->likes[3], gusto3);
-    strcpy(miembro->likes[4], gusto4);
-    strcpy(miembro->likes[5], gusto5);
-    miembro->nota = nota;
-    miembro->next = NULL;
-}
 
-void push(User_list* lista, char nombre_usuario[MAX_USERNAME_LENGTH], char correo[MAX_EMAIL_LENGTH], char contraseña[MAX_PASSWORD_LENGTH], char ciudad[MAX_CITY_NAME], int año, int num_usuario, char gusto1[MAX_LIKE_LENGTH], char gusto2[MAX_LIKE_LENGTH], char gusto3[MAX_LIKE_LENGTH], char gusto4[MAX_LIKE_LENGTH], char gusto5[MAX_LIKE_LENGTH], float nota) {
-    User_data *usuario = lista->first;
-    while (usuario->next != NULL) {
-        usuario = usuario->next;
-    }
-
-    usuario->next = (User_data *) malloc(sizeof(User_data));
-    //Aquí van todos los datos
-    insert_user(usuario->next, nombre_usuario, correo, contraseña, ciudad, año, num_usuario, gusto1, gusto2, gusto3, gusto4, gusto5, nota);
-    lista->last = usuario->next;
-    usuario->next->prev = usuario;
-    lista->size++;
-}
 
 int datosfichero(User_list* lista) {//Aquí lo que sí hay que pasar como parametro es la estructura de la lista de usuario
 
-
-    FILE * fp = fopen("C:\\Users\\senyo\\CLionProjects\\EDA2\\Usuarios", "w");
+    FILE* fp = fopen("C:\\Users\\senyo\\CLionProjects\\EDA2\\Usuarios", "w");
     if (fp == NULL) {
         printf("Error al abrir el archivo.\n");
         return NO_FILE_FOUND;
-
     }
     User_data *usuario = lista->first;
     while (usuario->next != NULL) {
-        usuario = usuario->next;
         fprintf(fp, "%s %s %s %s %d %d %s %s %s %s %s %f\n", usuario->username, usuario->email, usuario->password, usuario->city, usuario->birth, usuario->user_number, usuario->likes[0],usuario->likes[1], usuario->likes[2], usuario->likes[3], usuario->likes[4], usuario->nota);
+        usuario = usuario->next;
     }
     fclose(fp);
 }
@@ -103,26 +73,7 @@ void print_gustos(User_list* lista ,char username[MAX_USERNAME_LENGTH]){
     }
 }
 
-//Con esta función también lo haría con la estructura y no con el archivo
-void guardar_gustos(User_list* lista,char username[MAX_USERNAME_LENGTH],char gustos[MAX_LIKE_LENGTH],int numero){ //No está revisado si esta función tiene sentido o.
-    User_data *user_likes = lista->first;
-    while (user_likes->next != NULL) { //Yo esto no lo haría buscando en el fichero si no mejor buscando en la lista
-        if (strcmp(user_likes->username, username) == 0) { //Creo, no estoy seguro, pero  a esto creo que le falta cosa.
-            strncpy(user_likes -> likes[numero] ,gustos,MAX_LIKE_LENGTH);
-            user_likes = user_likes->next;
-            return;
-        }
-    }
-}
 
-char* cambiar_ciudad(){
-    char ciudad[MAX_CITY_NAME];
-    while(strlen(ciudad) <= 1) {
-        printf("Introduce tu ciudad de residencia \n");
-        scanf("%s", ciudad);
-    }
-    return ciudad;//Aquí hay un warning de que devuelve la dirección de una variable local
-}
 //Esto ahora mismo no sirve para nada
 /*char** cambiar_gustos(char nombre_usuario[MAX_USERNAME_LENGTH],int num_gustos){
 
@@ -134,51 +85,23 @@ char* cambiar_ciudad(){
     }
 }*/
 
+char* cambiar_ciudad(){
+    char ciudad[MAX_CITY_NAME];
+    while(strlen(ciudad) <= 1) {
+        printf("Introduce tu ciudad de residencia \n");
+        scanf("%s", ciudad);
+    }
+    return ciudad;//Aquí hay un warning de que devuelve la dirección de una variable local
+}
+
 char* cambiar_nombre_de_usuario(){
     char usuario[MAX_USERNAME_LENGTH];
     while(strlen(usuario) <= 1) {
-    printf("Introduce tu ciudad de residencia \n");//What
-    scanf("%s", usuario);
+        printf("Introduce tu ciudad de residencia \n");//What
+        scanf("%s", usuario);
     }
     return usuario;//Aquí hay un warning de que devuelve la dirección de una variable local
 }
-
-
-void limpiar_User_data(User_data* guardar){
-
-    if(guardar == NULL){
-        return;
-    }
-    free(guardar->email);//Warnings en todos los free por algo del offset
-    free(guardar->password);
-    free(guardar->username);
-    free(guardar->city);
-    guardar->user_number = 0 ;
-    guardar->birth = 0;
-    for (int i = 0; i < MAX_LIKE_LENGTH; i++) {
-       free(guardar->likes[i]);
-    }
-
-    free(guardar);
-}
-void borrar_lista_de_usuarios(User_list* lista) {
-
-    if (lista == NULL) {
-        return;
-    }
-    User_data* actual = lista->first;
-    User_data* siguiente = NULL;
-
-    while(actual!= NULL){
-        limpiar_User_data(actual);
-        actual = actual->next;
-
-    }
-    lista->first = NULL;
-    lista->last = NULL;
-    lista->size = 0 ;
-}
-
 
 void create_user(User_list* lista){
     char usuario[MAX_USERNAME_LENGTH];
@@ -253,7 +176,7 @@ void create_user(User_list* lista){
 
 
 
-int buscar_usuario(User_list *lista, char username[MAX_USERNAME_LENGTH], char otro[MAX_PASSWORD_LENGTH]) {
+int buscar_usuario(User_list *lista, char username[], char otro[]) {
 
     int usuarioEncontrado = FALSE;
     int contraseñaEncontrada = FALSE;
@@ -277,7 +200,6 @@ int buscar_usuario(User_list *lista, char username[MAX_USERNAME_LENGTH], char ot
         }
     }
 
-
         if (usuarioEncontrado == TRUE) {
             if (contraseñaEncontrada == TRUE){
                 printf("El usuario y la contraseña coinciden. Usuario encontrado.\n");
@@ -287,7 +209,7 @@ int buscar_usuario(User_list *lista, char username[MAX_USERNAME_LENGTH], char ot
                 return USERNAME_ALREADY_EXISTS;
             }
         } else {
-            printf("El usuario no coincide. Usuario no encontrado.\n");
+            printf("El usuario no coincide. Usuario no encontrado.\n");//Quitar los prints de aquí y ponerlos en otro lado porque como usamos esta función en varios sitios se printea cuando no toca
             return USER_DOES_NOT_EXIST;
         }
 }
@@ -304,7 +226,7 @@ char** bubblesort(char arr[], int n){
             }
         }
     }
-    return arr; //Warning de que el tipo de retorno es disatinto al esperado. Actual: cahr* Esperado: char**
+    return arr; //Warning de que el tipo de retorno es disatinto al esperado. Actual: char* Esperado: char**
 }
 
 void  menu(User_list* lista) {
@@ -405,14 +327,11 @@ void  menu(User_list* lista) {
 
                     if (opcion == 2) { //Menú principal
                         int elegir_post = 0;
-                        printf("Introduzca que quiere hacer, ver los post de los demas (1) o hacer un post (2)");
-                        scanf("%d",elegir_post);
+                        printf("Introduzca que quiere hacer, ver los post de los demas (1) o hacer un post (2):\n");
+                        scanf("%d", &elegir_post);
                         if (elegir_post == 1){
                             //Para los posts no se usara scanf, sino fgets("post",MAX_POST_LENGHT,stdi);
-                            char post[MAX_POST_LENGHT];
-                            FILE* fd;
-                            fscanf("%s",&post[MAX_POST_LENGHT],"r"); //Aquí hay un warning de que el fscanf está mal
-                            //Este fscanf está haciendo que hay un warning también la libreria de stdio.h
+                            //Lo de cargarlo en las estructuras hay que hacer que ocurra al iniciar el programa.
                         }
                         if (elegir_post == 2){
 

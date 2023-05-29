@@ -4,8 +4,10 @@
 
 #ifndef EDA2_MAIN_H
 #define EDA2_MAIN_H
-#include "menu.h"
+#include "usuario.h"
+#include "publicacion.h"
 
+timeline* leer_posts();
 
 
 
