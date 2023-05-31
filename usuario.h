@@ -19,6 +19,15 @@
 #define USER_DOES_NOT_EXIST -3
 #define NO_FILE_FOUND 500
 #define MAX_POST_LENGHT 250
+#define MAX_SOLICITUDES 10
+#define MAX_WORD_LENGHT 60
+
+
+
+typedef struct{
+    int numSolicitudes;
+    char solicitudes_nombre[10][50];
+} amigo;
 
 typedef struct _data{
     char username[MAX_USERNAME_LENGTH];
@@ -29,15 +38,23 @@ typedef struct _data{
     int user_number;
     char likes[5][MAX_LIKE_LENGTH];
     float nota;
+    amigo* solicitudes;
     struct _data* next;
     struct _data* prev;
 }User_data;
+
+
 
 typedef struct{
     User_data* first;
     User_data* last;
     int size;
 }User_list;
+
+typedef struct {
+    User_data solicitudes[10];
+    int top;
+}PilaSolicitudes;
 
 void insert_user(User_data* miembro, char nombre_usuario[], char correo[], char contraseña[], char ciudad[], int año, int num_usuario, char gusto1[], char gusto2[], char gusto3[], char gusto4[], char gusto5[], float nota);
 

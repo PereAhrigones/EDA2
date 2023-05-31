@@ -365,6 +365,7 @@ void  menu(User_list* lista, timeline* tl) {
                             printf("%s\n", &lista_ordenada[j]);
                         }
                     }
+
                 }
             }
         }
