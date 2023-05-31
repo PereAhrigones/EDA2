@@ -30,6 +30,19 @@ void pop_post(timeline* tl){
     tl->size--;
 }
 
+int Contar_Palabras(publicacion* publi){
+    if(publi->contenido[MAX_POST_LENGHT] == NULL)return 0;
+
+    int counter = sizeof (publi->contenido[MAX_POST_LENGHT]);
+    for (int i = 0;i < counter;i++){
+        if(strcmp(&publi->contenido[i],NULL) == 0){
+            counter ++;
+        }
+
+    }
+    return counter;
+}
+
 void show_top(timeline* tl){
     printf("\n%s\n", tl->last->contenido);
     printf("- %s\n\n", tl->last->usuario->username);

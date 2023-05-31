@@ -19,6 +19,11 @@ typedef struct{
     int size;
 }timeline;
 
+typedef struct{
+    int counter;
+    char key[MAX_WORD_LENGHT];
+}diccionario;
+
 void insert_post(publicacion* publ,User_data* user , char post[]);
 void push_post(timeline* tl,User_data* user, char post[]);
 void pop_post(timeline* tl);
