@@ -5,6 +5,7 @@
 #include "publicacion.h"
 #include <string.h>
 #include <stdlib.h>
+#include <stdio.h>
 
 void insert_post(publicacion* publ, User_data *user, char post[]){
     publ->usuario = user;
@@ -22,4 +23,14 @@ void push_post(timeline* tl, User_data *user, char post[]){
     tl->last = actual->next;
     actual->next->prev = actual;
     tl->size++;
+}
+
+void pop_post(timeline* tl){
+    tl->last->prev->next = NULL;
+    tl->size--;
+}
+
+void show_top(timeline* tl){
+    printf("\n%s\n", tl->last->contenido);
+    printf("- %s\n\n", tl->last->usuario->username);
 }

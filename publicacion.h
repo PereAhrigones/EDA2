@@ -21,5 +21,7 @@ typedef struct{
 
 void insert_post(publicacion* publ,User_data* user , char post[]);
 void push_post(timeline* tl,User_data* user, char post[]);
+void pop_post(timeline* tl);
+void show_top(timeline* tl);
 
 #endif //EDA2_PUBLICACION_H

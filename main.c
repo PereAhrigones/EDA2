@@ -46,9 +46,9 @@ timeline* leer_posts(User_list* lista){
 
 int main() {
     //chcp(65001>0) Había algo así para poner los acentos pero no me acuerdo de como era y no lo he conseguido encontrar
-    User_list* lista = ficherodatos();//Cargamos lo que está en el fichero al empezar
-    timeline* tl = leer_posts(lista);
-    menu(lista);//Antes del menú hay que cargar las cosas
+    User_list* lista = ficherodatos();//Cargamos lo que está en el fichero de usuarios al empezar
+    timeline* tl = leer_posts(lista);//Cargamos todos los posts
+    menu(lista, tl);//Antes del menú hay que cargar las cosas
 }
 
 

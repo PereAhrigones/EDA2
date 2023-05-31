@@ -67,7 +67,7 @@ void print_gustos(User_list* lista ,char username[MAX_USERNAME_LENGTH]){
     while (user_likes->next != NULL) {
         if (strcmp(user_likes->username, username) == 0) {
             for(int i =0; i < 5; i++){
-                printf("%d",i,user_likes->likes[i]);
+                printf("%d", i, user_likes->likes[i]);
             }
         }
         break;
@@ -230,7 +230,7 @@ char** bubblesort(char arr[], int n){
     return arr; //Warning de que el tipo de retorno es disatinto al esperado. Actual: char* Esperado: char**
 }
 
-void  menu(User_list* lista) {
+void  menu(User_list* lista, timeline* tl) {
 
     int login = -1;
     printf("Hola, Buenos días!\n");
@@ -330,12 +330,21 @@ void  menu(User_list* lista) {
                         int elegir_post = 0;
                         printf("Introduzca que quiere hacer, ver los post de los demas (1) o hacer un post (2):\n");
                         scanf("%d", &elegir_post);
-                        if (elegir_post == 1){
-                            //Para los posts no se usara scanf, sino fgets("post",MAX_POST_LENGHT,stdi);
-                            //Lo de cargarlo en las estructuras hay que hacer que ocurra al iniciar el programa.
+                        if (elegir_post == 1){ //Ver posts
+                            show_top(tl);
                         }
-                        if (elegir_post == 2){
-
+                        if (elegir_post == 2){ //Escribir un post
+                            char sol[2*MAX_POST_LENGHT];
+                            printf("\nEscribe tu mensaje (tamaño máximo %d caracteres):\n", MAX_POST_LENGHT);
+                            fgets(sol, 2*MAX_POST_LENGHT, stdin);
+                            while (strlen(sol) > MAX_POST_LENGHT){
+                                printf("\nTu mensaje es demasiado largo. Redúcelo en %d caracteres.\n", strlen(sol)-MAX_POST_LENGHT);
+                                fgets(sol, 2*MAX_POST_LENGHT, stdin);
+                            }
+                            push_post(tl, encontrar_usuario(nombre, lista), sol);
+                            FILE* f = fopen("C:\\Users\\senyo\\CLionProjects\\EDA2\\posts.txt", "a");
+                            fprintf(f, "%s\n", sol);
+                            fprintf(f, "%s\n", nombre);
                         }
 
 

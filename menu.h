@@ -5,6 +5,8 @@
 #ifndef EDA2_MENU_H
 #define EDA2_MENU_H
 #include "usuario.h"
+#include "publicacion.h"
+#include "main.h"
 
 
 int datosfichero(User_list* lista);
@@ -18,6 +20,6 @@ char** bubblesort(char arr[], int n);
 
 
 
-void menu();
+void menu(User_list* lista, timeline* tl);
 
 #endif //EDA2_MENU_H
