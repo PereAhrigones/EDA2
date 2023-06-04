@@ -331,7 +331,7 @@ void  menu(User_list* lista, timeline* tl) {
                         printf("Introduzca que quiere hacer, ver los post de los demas (1) o hacer un post (2):\n");
                         scanf("%d", &elegir_post);
                         if (elegir_post == 1){ //Ver posts
-                            show_top(tl);
+                            show_top(tl);//NO ESTÁ ACABADO
                         }
                         if (elegir_post == 2){ //Escribir un post
                             char sol[2*MAX_POST_LENGHT];
@@ -345,6 +345,10 @@ void  menu(User_list* lista, timeline* tl) {
                             FILE* f = fopen("C:\\Users\\senyo\\CLionProjects\\EDA2\\posts.txt", "a");
                             fprintf(f, "%s\n", sol);
                             fprintf(f, "%s\n", nombre);
+                        }
+                        if (elegir_post == 3){//Ver palabras más usadas.
+                            diccionario *total_palabras = contar_palabras(tl);
+
                         }
 
 

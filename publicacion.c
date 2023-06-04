@@ -91,19 +91,20 @@ void addItem(diccionario **dict, char *key, int value) {
     *dict = d;
 }
 
-int contar_palabras(timeline *tl){
+diccionario *contar_palabras(timeline *tl){
     publicacion *actual;
-    diccionario *dict = dictAlloc();
+    diccionario *dict = *dictAlloc();
     char *copia;
-    char delimitador[] = ",.:;()/!¡?¿&·\"\\^*[]{}+-¬@#ºª<>% "; //Si alguien encuentra algún símbolo que falta que lo ponga. NO BORRÉIS NADA DE LO QUE YA ESTÁ
+    char delimitador[] = ",.:;()/!¡?¿&·\"\\^*[]{}+-¬@#ºª<>%€'= "; //Si alguien encuentra algún símbolo que falta que lo ponga. NO BORRÉIS NADA DE LO QUE YA ESTÁ
     for(actual=tl->first; actual != NULL; actual = actual->next){
         strcpy(copia, actual->contenido);
         char *palabra = strtok(copia, delimitador);
         if(palabra != NULL){
             while (palabra != NULL){
-                addItem(dict, palabra, getItem(dict, palabra)+1);
+                addItem(&dict, palabra, getItem(dict, palabra)+1);
                 palabra = strtok(NULL, delimitador);
             }
         }
     }
+    return dict;
 }
