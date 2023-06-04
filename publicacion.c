@@ -30,20 +30,80 @@ void pop_post(timeline* tl){
     tl->size--;
 }
 
-int Contar_Palabras(publicacion* publi){
-    if(publi->contenido[MAX_POST_LENGHT] == NULL)return 0;
 
-    int counter = sizeof (publi->contenido[MAX_POST_LENGHT]);
-    for (int i = 0;i < counter;i++){
-        if(strcmp(&publi->contenido[i],NULL) == 0){
-            counter ++;
-        }
-
-    }
-    return counter;
-}
 
 void show_top(timeline* tl){
     printf("\n%s\n", tl->last->contenido);
     printf("- %s\n\n", tl->last->usuario->username);
+}
+
+diccionario **dictAlloc() {
+    return malloc(sizeof(diccionario));
+}
+
+void dictDealloc(diccionario **dict) {
+    free(dict);
+}
+
+int getItem(diccionario *dict, char *key) {
+    diccionario *ptr;
+    for (ptr = dict; ptr != NULL; ptr = ptr->next) {
+        if (strcmp(ptr->key, key) == 0) {
+            return ptr->counter;
+        }
+    }
+
+    return ITEM_NOT_FOUND;
+}
+
+void delItem(diccionario **dict, char *key) {
+    diccionario *ptr, *prev;
+    for (ptr = *dict, prev = NULL; ptr != NULL; prev = ptr, ptr = ptr->next) {
+        if (strcmp(ptr->key, key) == 0) {
+            if (ptr->next != NULL) {
+                if (prev == NULL) {
+                    *dict = ptr->next;
+                } else {
+                    prev->next = ptr->next;
+                }
+            } else if (prev != NULL) {
+                prev->next = NULL;
+            } else {
+                *dict = NULL;
+            }
+
+            free(ptr->key);
+            free(ptr);
+
+            return;
+        }
+    }
+}
+
+//Esta función hay que cambiarla un poco para que se ajuste a lo que queremos
+void addItem(diccionario **dict, char *key, int value) {
+    delItem(dict, key); /* If we already have a item with this key, delete it. */
+    diccionario *d = malloc(sizeof(diccionario));
+    d->key = malloc(strlen(key)+1);
+    strcpy(d->key, key);
+    d->counter = value;
+    d->next = *dict;
+    *dict = d;
+}
+
+int contar_palabras(timeline *tl){
+    publicacion *actual;
+    diccionario *dict = dictAlloc();
+    char *copia;
+    char delimitador[] = ",.:;()/!¡?¿&·\"\\^*[]{}+-¬@#ºª<>% "; //Si alguien encuentra algún símbolo que falta que lo ponga. NO BORRÉIS NADA DE LO QUE YA ESTÁ
+    for(actual=tl->first; actual != NULL; actual = actual->next){
+        strcpy(copia, actual->contenido);
+        char *palabra = strtok(copia, delimitador);
+        if(palabra != NULL){
+            while (palabra != NULL){
+                addItem(dict, palabra, getItem(dict, palabra)+1);
+                palabra = strtok(NULL, delimitador);
+            }
+        }
+    }
 }

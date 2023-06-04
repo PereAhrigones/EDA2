@@ -20,13 +20,14 @@
 #define NO_FILE_FOUND 500
 #define MAX_POST_LENGHT 250
 #define MAX_SOLICITUDES 10
-#define MAX_WORD_LENGHT 60
+#define MAX_LIKES 5
+
 
 
 
 typedef struct{
     int numSolicitudes;
-    char solicitudes_nombre[10][50];
+    char solicitudes_nombre[MAX_SOLICITUDES][MAX_USERNAME_LENGTH];
 } amigo;
 
 typedef struct _data{
@@ -36,7 +37,7 @@ typedef struct _data{
     char city[MAX_CITY_NAME];
     int birth;
     int user_number;
-    char likes[5][MAX_LIKE_LENGTH];
+    char likes[MAX_LIKES][MAX_LIKE_LENGTH];
     float nota;
     amigo* solicitudes;
     struct _data* next;
@@ -52,7 +53,7 @@ typedef struct{
 }User_list;
 
 typedef struct {
-    User_data solicitudes[10];
+    User_data solicitudes[MAX_SOLICITUDES];
     int top;
 }PilaSolicitudes;
 

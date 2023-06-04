@@ -84,8 +84,9 @@ void borrar_lista_de_usuarios(User_list* lista) {
 }
 
 void enviarSolicitudAmistad(User_data* usuario, User_data* amigo, PilaSolicitudes* pila) {
-    User_data usuario;
-    User_data amigo;
+   // User_data usuario;
+   // User_data amigo;
+   //Lo que hay justo arriba es necesario?
     PilaSolicitudes pilaSolicitudes;
     pilaSolicitudes.top = -1;
 
