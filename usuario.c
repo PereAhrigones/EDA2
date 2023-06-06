@@ -106,5 +106,60 @@ void enviarSolicitudAmistad(char usuarioActual, char* usuarioDestino, Friend_req
     // Enviar solicitud de amistad
     printf("Enviando solicitud de amistad de %s a %s\n", usuarioActual->username, usuarioDestino->username);
 }
+void initStack(Stack* stack) {
+    stack->top = NULL;
+}
 
+// Función para verificar si la pila está vacía
+int isStackEmpty(Stack* stack) {
+    return (stack->top == NULL);
+}
+
+
+void pushRequest(Stack* stack, const char* sender, const char* receiver) {
+    // Crear un nuevo nodo para la solicitud
+    Friend_request* newRequest = (Friend_request*)malloc(sizeof(Friend_request));
+    strcpy(newRequest->sender, sender);
+    strcpy(newRequest->receiver, receiver);
+
+    // Enlazar el nuevo nodo al nodo anterior en la pila
+    newRequest->next = stack->top;
+
+    // Actualizar el top de la pila
+    stack->top = newRequest;
+}
+
+Friend_request* popRequest(Stack* stack) {
+    if (isStackEmpty(stack)) {
+        printf("Error: la pila de solicitudes de amistad está vacía\n");
+        return NULL;
+    }
+
+    // Obtener la solicitud de amistad en el top de la pila
+    Friend_request* topRequest = stack->top;
+
+    // Actualizar el top de la pila al siguiente nodo
+    stack->top = stack->top->next;
+
+    // Devolver la solicitud de amistad desempujada
+    return topRequest;
+}
+
+void enviarSolicitudAmistad(Stack* stack, User_data* usuarioActual, User_data* usuarioDestino) {
+    // Verificar si ya hay una solicitud pendiente o si ya son amigos
+    Friend_request* solicitudActual = stack->top;
+    while (solicitudActual != NULL) {
+        if (strcmp(solicitudActual->sender, usuarioActual->username) == 0 &&
+            strcmp(solicitudActual->receiver, usuarioDestino->username) == 0) {
+            printf("Ya has enviado una solicitud de amistad a %s\n", usuarioDestino->username);
+            return;
+        }
+        solicitudActual = solicitudActual->next;
+    }
+
+    // Enviar solicitud de amistad
+    pushRequest(stack, usuarioActual->username, usuarioDestino->username);
+    printf("Enviando solicitud de amistad de %s a %s\n", usuarioActual->username, usuarioDestino->username);
+
+}
 

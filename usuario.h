@@ -22,10 +22,12 @@
 #define MAX_SOLICITUDES 10
 #define MAX_LIKES 5
 
-typedef struct{
-    int numSolicitudes;
-    char solicitudes_nombre[MAX_SOLICITUDES][MAX_USERNAME_LENGTH];
-} amigo;
+
+typedef struct _friend_request {
+    char sender[MAX_USERNAME_LENGTH];
+    char receiver[MAX_USERNAME_LENGTH];
+    struct _friend_request* next;
+} Friend_request;
 
 typedef struct _data{
     char username[MAX_USERNAME_LENGTH];
