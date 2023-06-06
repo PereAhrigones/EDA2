@@ -51,23 +51,31 @@ void guardar_gustos(User_list* lista,char username[MAX_USERNAME_LENGTH],char gus
 }
 
 
-void limpiar_User_data(User_data* guardar){
 
-    if(guardar == NULL){
+
+void limpiar_User_data(User_data* guardar) {
+    if (guardar == NULL) {
         return;
     }
-    free(guardar->email);//Warnings en todos los free por algo del offset
+
+    free(guardar->email);
     free(guardar->password);
     free(guardar->username);
     free(guardar->city);
-    guardar->user_number = 0 ;
-    guardar->birth = 0;
+
     for (int i = 0; i < MAX_LIKE_LENGTH; i++) {
         free(guardar->likes[i]);
+
     }
+
+    guardar->user_number = 0;
+    guardar->birth = 0;
 
     free(guardar);
 }
+
+
+
 
 void borrar_lista_de_usuarios(User_list* lista) {
 
