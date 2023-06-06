@@ -26,18 +26,36 @@ void insert_user(User_data* miembro, char nombre_usuario[], char correo[], char 
     miembro->next = NULL;
 }
 
-void push(User_list* lista, char nombre_usuario[], char correo[], char contraseña[], char ciudad[], int año, int num_usuario, char gusto1[], char gusto2[], char gusto3[], char gusto4[], char gusto5[], float nota) {
-    User_data *usuario = lista->first;
-    while (usuario->next != NULL) {
-        usuario = usuario->next;
+void push(User_list* lista, char nombre_usuario[], char correo[], char contraseña[], char ciudad[], int año, int num_usuario, char gusto1[], char gusto2[], char gusto3[], char gusto4[], char gusto5[], float nota, float nota_max, float nota_min, int valoraciones) {
+    User_data *nuevo_usuario = (User_data*) malloc(sizeof(User_data));  //Crear un nuevo usuario
+    strcpy(nuevo_usuario->username, nombre_usuario);
+    strcpy(nuevo_usuario->email, correo);
+    strcpy(nuevo_usuario->password, contraseña);
+    strcpy(nuevo_usuario->city, ciudad);
+    nuevo_usuario->birth = año;
+    nuevo_usuario->user_number = num_usuario;
+    strcpy(nuevo_usuario->likes[0], gusto1);
+    strcpy(nuevo_usuario->likes[1], gusto2);
+    strcpy(nuevo_usuario->likes[2], gusto3);
+    strcpy(nuevo_usuario->likes[3], gusto4);
+    strcpy(nuevo_usuario->likes[4], gusto5);
+    nuevo_usuario->nota = nota;
+    nuevo_usuario->nota_max = nota_max;
+    nuevo_usuario->nota_min = nota_min;
+    nuevo_usuario->num_valoraciones = valoraciones;
+    nuevo_usuario->solicitudes = NULL;
+    nuevo_usuario->next = NULL;
+    nuevo_usuario->prev = NULL;
+    if (lista->first == NULL) {
+        lista->first = nuevo_usuario;
+        lista->last = nuevo_usuario;
+    } else {
+        nuevo_usuario->prev = lista->last;
+        lista->last->next = nuevo_usuario;
+        lista->last = nuevo_usuario;
     }
 
-    usuario->next = (User_data *) malloc(sizeof(User_data));
-    //Aquí van todos los datos
-    insert_user(usuario->next, nombre_usuario, correo, contraseña, ciudad, año, num_usuario, gusto1, gusto2, gusto3, gusto4, gusto5, nota);
-    lista->last = usuario->next;
-    usuario->next->prev = usuario;
-    lista->size++;
+    lista->size++;  // Incrementar el tamaño de la lista
 }
 
 void guardar_gustos(User_list* lista,char username[MAX_USERNAME_LENGTH],char gustos[MAX_LIKE_LENGTH],int numero){ //No está revisado si esta función tiene sentido o.
@@ -97,6 +115,7 @@ void borrar_lista_de_usuarios(User_list* lista) {
 void initStack(Stack* stack) {
     stack->top = NULL;
 }
+
 
 // Función para verificar si la pila está vacía
 int isStackEmpty(Stack* stack) {

@@ -6,6 +6,7 @@
 #include <string.h>
 #include <stdlib.h>
 #include <stdio.h>
+#include <ctype.h>
 
 void insert_post(publicacion* publ, User_data *user, char post[]){
     publ->usuario = user;
@@ -30,7 +31,26 @@ void pop_post(timeline* tl){
     tl->size--;
 }
 
+char** bubblesort_dictionary(char arr[], int n){
+    int i, j;
+    char string[n];
+    for(i=0;i<n;i++){
+        for(j=i+1;j<n;j++){
+            if(strcmp(&arr[i], &arr[j])>0){
+                strcpy(string,&arr[i]);
+                strcpy(&arr[i],&arr[j]);
+                strcpy(&arr[j],string);
+            }
+        }
+    }
+    return arr; //Warning de que el tipo de retorno es distinto al esperado. Actual: char* Esperado: char**
+}
 
+int count_max_word_repeat(diccionario* word){
+    int counter = 0;
+
+
+}
 
 void show_top(timeline* tl){
     printf("\n%s\n", tl->last->contenido);

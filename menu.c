@@ -225,6 +225,7 @@ int buscar_usuario(User_list *lista, char username[], char otro[]) {
         }
 }
 
+
 char** bubblesort(char arr[], int n){
     int i, j;
     char string[MAX_USERNAME_LENGTH];

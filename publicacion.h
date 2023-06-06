@@ -30,6 +30,7 @@ typedef struct _dicc{
 void insert_post(publicacion* publ,User_data* user , char post[]);
 void push_post(timeline* tl,User_data* user, char post[]);
 void pop_post(timeline* tl);
+char** bubblesort_dictionary(char arr[], int n);
 void show_top(timeline* tl);
 diccionario *contar_palabras(timeline *tl); //https://parzibyte.me/blog/2018/11/13/separar-cadena-delimitadores-c-strtok/
 

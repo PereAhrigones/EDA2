@@ -4,7 +4,6 @@
 
 #ifndef EDA2_MAIN_H
 #define EDA2_MAIN_H
-
 #include "usuario.h"
 #include "publicacion.h"
 
