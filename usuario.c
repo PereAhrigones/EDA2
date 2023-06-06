@@ -83,35 +83,28 @@ void borrar_lista_de_usuarios(User_list* lista) {
     lista->size = 0 ;
 }
 
-void enviarSolicitudAmistad(User_data* usuario, User_data* amigo, PilaSolicitudes* pila) {
-   // User_data usuario;
-   // User_data amigo;
-   //Lo que hay justo arriba es necesario?
-    PilaSolicitudes pilaSolicitudes;
-    pilaSolicitudes.top = -1;
-
-    printf("Ingrese su nombre: ");
-    scanf("%s", usuario->username);
-
-    printf("Ingrese su edad: ");
-    scanf("%d", &usuario->username);
-
-    printf("Ingrese el nombre del usuario al que desea enviar una solicitud de amistad: ");
-    scanf("%s", amigo->username);
-
-    printf("Ingrese la edad del usuario: ");
-    scanf("%d", &amigo->birth);
-
-    printf("Enviando solicitud de amistad a %s...\n", amigo->username);
-    // Lógica para enviar la solicitud de amistad
-
-    if (pila->top == MAX_SOLICITUDES - 1) {
-        printf("No se pueden almacenar más solicitudes de amistad\n");
-        return;
+//Esto hay que revisarlo porque hemos cambiado la estructura
+void enviarSolicitudAmistad(char usuarioActual, char* usuarioDestino, Friend_request** solicitudesPendientes) {
+    // Verificar si ya hay una solicitud pendiente o si ya son amigos
+    Friend_request *solicitudActual = *solicitudesPendientes;
+    while (solicitudActual != NULL) {
+        if (solicitudActual->sender == usuarioActual && solicitudActual->receiver == usuarioDestino) {
+            printf("Ya has enviado una solicitud de amistad a %s\n", usuarioDestino);
+            return;
+        }
+        solicitudActual = solicitudActual->next;
     }
-    pila->top++;
-    pila->solicitudes[pila->top] = *amigo;
-    printf("Solicitud de amistad enviada a %s y almacenada\n", amigo->username);
+
+    // Crear una nueva solicitud de amistad
+    Friend_request *nuevaSolicitud = (Friend_request *) malloc(sizeof(Friend_request));
+    //Esto da error porque he cambiado la estructura. Ahora lo arreglo
+    strcpy(nuevaSolicitud->sender, usuarioActual);
+    nuevaSolicitud->receiver = usuarioDestino;
+    nuevaSolicitud->next = *solicitudesPendientes;
+    *solicitudesPendientes = nuevaSolicitud;
+
+    // Enviar solicitud de amistad
+    printf("Enviando solicitud de amistad de %s a %s\n", usuarioActual->username, usuarioDestino->username);
 }
 
 

@@ -22,9 +22,6 @@
 #define MAX_SOLICITUDES 10
 #define MAX_LIKES 5
 
-
-
-
 typedef struct{
     int numSolicitudes;
     char solicitudes_nombre[MAX_SOLICITUDES][MAX_USERNAME_LENGTH];
@@ -39,11 +36,10 @@ typedef struct _data{
     int user_number;
     char likes[MAX_LIKES][MAX_LIKE_LENGTH];
     float nota;
-    amigo* solicitudes;
+    Friend_request *solicitudes;
     struct _data* next;
     struct _data* prev;
 }User_data;
-
 
 
 typedef struct{
@@ -52,10 +48,10 @@ typedef struct{
     int size;
 }User_list;
 
-typedef struct {
-    User_data solicitudes[MAX_SOLICITUDES];
-    int top;
-}PilaSolicitudes;
+
+typedef struct _stack {
+    Friend_request* top;
+} Stack;
 
 void insert_user(User_data* miembro, char nombre_usuario[], char correo[], char contraseña[], char ciudad[], int año, int num_usuario, char gusto1[], char gusto2[], char gusto3[], char gusto4[], char gusto5[], float nota);
 
@@ -64,5 +60,5 @@ void limpiar_User_data(User_data* guardar);
 int buscar_usuario(User_list* lista, char algo[], char otro[]);// Tengo que mirar como estan declaradas las cosas en el otro proyecto
 
 
-#include "menu.h"
+
 #endif //EDA2_USUARIO_H

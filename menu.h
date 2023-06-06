@@ -6,7 +6,7 @@
 #define EDA2_MENU_H
 #include "usuario.h"
 #include "publicacion.h"
-#include "main.h"
+//#include "main.h"
 
 
 int datosfichero(User_list* lista);
@@ -16,9 +16,6 @@ void print_gustos(User_list* lista ,char username[MAX_USERNAME_LENGTH]);
 void guardar_gustos(User_list* lista,char username[MAX_USERNAME_LENGTH],char gustos[MAX_LIKE_LENGTH],int numero);
 void create_user(User_list* lista); //Esto no va a ser void porque va a tener que devolver una estructura pero hasta que la creemos se queda así
 char** bubblesort(char arr[], int n);
-
-
-
 
 void menu(User_list* lista, timeline* tl);
 
