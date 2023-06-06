@@ -83,29 +83,6 @@ void borrar_lista_de_usuarios(User_list* lista) {
     lista->size = 0 ;
 }
 
-//Esto hay que revisarlo porque hemos cambiado la estructura
-void enviarSolicitudAmistad(char usuarioActual, char* usuarioDestino, Friend_request** solicitudesPendientes) {
-    // Verificar si ya hay una solicitud pendiente o si ya son amigos
-    Friend_request *solicitudActual = *solicitudesPendientes;
-    while (solicitudActual != NULL) {
-        if (solicitudActual->sender == usuarioActual && solicitudActual->receiver == usuarioDestino) {
-            printf("Ya has enviado una solicitud de amistad a %s\n", usuarioDestino);
-            return;
-        }
-        solicitudActual = solicitudActual->next;
-    }
-
-    // Crear una nueva solicitud de amistad
-    Friend_request *nuevaSolicitud = (Friend_request *) malloc(sizeof(Friend_request));
-    //Esto da error porque he cambiado la estructura. Ahora lo arreglo
-    strcpy(nuevaSolicitud->sender, usuarioActual);
-    nuevaSolicitud->receiver = usuarioDestino;
-    nuevaSolicitud->next = *solicitudesPendientes;
-    *solicitudesPendientes = nuevaSolicitud;
-
-    // Enviar solicitud de amistad
-    printf("Enviando solicitud de amistad de %s a %s\n", usuarioActual->username, usuarioDestino->username);
-}
 void initStack(Stack* stack) {
     stack->top = NULL;
 }
