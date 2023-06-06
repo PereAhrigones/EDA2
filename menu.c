@@ -118,13 +118,13 @@ void create_user(User_list* lista){
     int flag = FALSE;
     float nota = 0.0;
     while (flag == FALSE){
-        printf("Introduzca un nombre de usuario (máximo MAX_USERNAME_LENGTH caracteres y mínimo MIN_USERNAME_LENGTH).\n");
+        printf("Introduzca un nombre de usuario (máximo %d caracteres y mínimo %d).\n",MAX_USERNAME_LENGTH,MIN_USERNAME_LENGTH);
         scanf("%s", usuario);
         if(strlen(usuario) > MIN_USERNAME_LENGTH && strlen(usuario) < MAX_USERNAME_LENGTH) flag = TRUE;
     }
     flag = FALSE;
     while(flag == FALSE){
-        printf("\nIntroduzca una contraseña (máximo MAX_PASSWORD_LENGTH caracteres y mínimo MIN_PASSWORD_LENGTH).\n");
+        printf("\nIntroduzca una contraseña (máximo %d caracteres y mínimo %d).\n",MAX_PASSWORD_LENGTH,MIN_PASSWORD_LENGTH);
         scanf("%s", password);
         if(strlen(password) > MIN_PASSWORD_LENGTH && strlen(password) < MAX_PASSWORD_LENGTH) flag = TRUE;
     }
