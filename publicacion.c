@@ -14,6 +14,7 @@ void insert_post(publicacion* publ, User_data *user, char post[]){
     publ->next = NULL;
 }
 
+//ESTA FUNCIÓN SEGURAMENTE ESTÉ MAL PORQUE ESTA BASADA EN LA ANTIGUA FUNCIÓN PUSH DE LOS USUARIOS QUE TAMBIÉN ESTABA MAL
 void push_post(timeline* tl, User_data *user, char post[]){
     publicacion* actual = tl->first;
     while (actual->next != NULL){
@@ -46,6 +47,7 @@ char** bubblesort_dictionary(char arr[], int n){
     return arr; //Warning de que el tipo de retorno es distinto al esperado. Actual: char* Esperado: char**
 }
 
+//QUE MIERDAS ES ESTO?
 int count_max_word_repeat(diccionario* word){
     int counter = 0;
 
@@ -73,7 +75,7 @@ int getItem(diccionario *dict, char *key) {
         }
     }
 
-    return ITEM_NOT_FOUND;
+    return ITEM_NOT_FOUND; //Devuelve 0
 }
 
 void delItem(diccionario **dict, char *key) {
@@ -133,4 +135,32 @@ diccionario *contar_palabras(timeline *tl){
         }
     }
     return *dict;
+}
+
+void show_recent_posts_from_user(User_data* user, timeline* tl, int n){
+    publicacion *post;
+    post = tl->last;
+    int i = 0;
+    while (post != NULL && i < n){
+        if (strcmp(user->username, post->usuario->username) == 0){
+            printf("%s\n", post->contenido);
+            printf("- %s\n\n", post->usuario->username);
+            i++;
+        }
+        post = post->prev;
+    }
+}
+
+void show_old_posts_from_user(User_data* user, timeline* tl, int n){
+    publicacion *post;
+    post = tl->first;
+    int i = 0;
+    while (post != NULL && i < n){
+        if (strcmp(user->username, post->usuario->username) == 0){
+            printf("%s\n", post->contenido);
+            printf("- %s\n\n", post->usuario->username);
+            i++;
+        }
+        post = post->next;
+    }
 }

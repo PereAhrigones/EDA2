@@ -155,7 +155,7 @@ Friend_request* popRequest(Stack* stack) {
     return topRequest;
 }
 
-void valoracion(User_data* user,float nota_dada){
+void valoracion(User_data* user, float nota_dada){
 
     if(nota_dada < user->nota_min) user->nota_min = nota_dada;
 

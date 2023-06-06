@@ -68,6 +68,7 @@ void initStack(Stack* stack);
 int isStackEmpty(Stack* stack);
 void pushRequest(Stack* stack, const char* sender, const char* receiver);
 Friend_request* popRequest(Stack* stack);
+void valoracion(User_data* user, float nota_dada);
 void enviarSolicitudAmistad(Stack* stack, char usuarioActual[], char usuarioDestino[]);
 
 
