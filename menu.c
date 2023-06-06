@@ -12,17 +12,18 @@
 
 int datosfichero(User_list* lista) {//Aquí lo que sí hay que pasar como parametro es la estructura de la lista de usuario
 
-    FILE* fp = fopen("C:\\Users\\senyo\\CLionProjects\\EDA2\\Usuarios", "w");
+    FILE* fp = fopen("C:\\Users\\senyo\\CLionProjects\\EDA2\\Usuarios.txt", "w");
     if (fp == NULL) {
         printf("Error al abrir el archivo.\n");
         return NO_FILE_FOUND;
     }
     User_data *usuario = lista->first;
-    while (usuario->next != NULL) {
-        fprintf(fp, "%s %s %s %s %d %d %s %s %s %s %s %f\n", usuario->username, usuario->email, usuario->password, usuario->city, usuario->birth, usuario->user_number, usuario->likes[0],usuario->likes[1], usuario->likes[2], usuario->likes[3], usuario->likes[4], usuario->nota);
+    while (usuario != NULL) {
+        fprintf(fp, "%s %s %s %s %d %d %s %s %s %s %s %f %f %f %d\n", usuario->username, usuario->email, usuario->password, usuario->city, usuario->birth, usuario->user_number, usuario->likes[0],usuario->likes[1], usuario->likes[2], usuario->likes[3], usuario->likes[4], usuario->nota, usuario->nota_max, usuario->nota_min, usuario->num_valoraciones);
         usuario = usuario->next;
     }
     fclose(fp);
+    return TRUE;
 }
 
 User_list* ficherodatos() { //A la que hay algo en el archivo esto se muere (YA NO)
@@ -46,8 +47,10 @@ User_list* ficherodatos() { //A la que hay algo en el archivo esto se muere (YA 
     char gusto4[MAX_LIKE_LENGTH];
     char gusto5[MAX_LIKE_LENGTH];
     float nota;
-    if(fscanf(fp, "%s %s %s %s %d %d %s %s %s %s %s %f", nombre_usuario, correo, contraseña, ciudad, &año, &num_usuario, gusto1, gusto2, gusto3, gusto4, gusto5, &nota) == 12){
-        insert_user(lista->first, nombre_usuario, correo, contraseña, ciudad, año, num_usuario, gusto1, gusto2, gusto3, gusto4, gusto5, nota);
+    float nota_maxima, nota_minima;
+    int valoraciones;
+    if(fscanf(fp, "%s %s %s %s %d %d %s %s %s %s %s %f %f %f %d", nombre_usuario, correo, contraseña, ciudad, &año, &num_usuario, gusto1, gusto2, gusto3, gusto4, gusto5, &nota, &nota_maxima, &nota_minima, &valoraciones) == 15){
+        insert_user(lista->first, nombre_usuario, correo, contraseña, ciudad, año, num_usuario, gusto1, gusto2, gusto3, gusto4, gusto5, nota, nota_maxima, nota_minima, valoraciones);
         lista->first->prev = NULL;
         lista->last = lista->first;
         lista->size = 1;//Esto es para el primer elemento de la lista
@@ -56,7 +59,7 @@ User_list* ficherodatos() { //A la que hay algo en el archivo esto se muere (YA 
     }
     //El while es para el resto de elementos de la lista
     while (fscanf(fp, "%s %s %s %s %d %d %s %s %s %s %s", nombre_usuario, correo, contraseña, ciudad, &año, &num_usuario, gusto1, gusto2, gusto3, gusto4, gusto5, nota) == 12) {//Nombre de usuario, email, contraseña, ciudad, año, num usuario, gustos
-        push(lista, nombre_usuario, correo, contraseña, ciudad, año, num_usuario, gusto1, gusto2, gusto3, gusto4, gusto5, nota);
+        push(lista, nombre_usuario, correo, contraseña, ciudad, año, num_usuario, gusto1, gusto2, gusto3, gusto4, gusto5, nota, nota_maxima, nota_minima, valoraciones);
     }
     fclose(fp);
     return lista;
@@ -85,7 +88,7 @@ void print_gustos(User_list* lista ,char username[MAX_USERNAME_LENGTH]){
         if ((&nombre_usuario,&gustos[i]) == TRUE) guardar_gustos(&nombre_usuario,&gustos[i]);
     }
 }*/
-
+/*
 char* cambiar_ciudad(){
     char ciudad[MAX_CITY_NAME];
     while(strlen(ciudad) <= 1) {
@@ -94,8 +97,8 @@ char* cambiar_ciudad(){
     }
     return ciudad;//Aquí hay un warning de que devuelve la dirección de una variable local
 }
-
-char* cambiar_nombre_de_usuario(){
+*/
+char* cambiar_nombre_de_usuario(){ // Esta función se va eliminar por nuestra salud mental.
     char usuario[MAX_USERNAME_LENGTH];
     while(strlen(usuario) <= 1) {
         printf("Introduce tu ciudad de residencia \n");//What
@@ -108,6 +111,7 @@ void create_user(User_list* lista){
     char usuario[MAX_USERNAME_LENGTH];
     char password[MAX_PASSWORD_LENGTH];
     char email[MAX_EMAIL_LENGTH];
+    char ciudad[MAX_CITY_NAME];
     int año = 0;
     int num_usuario = lista->size;//Esto hay que hacerlo, solo he dejado la variable aquí para poder hacer el código
     char gusto1[MAX_LIKE_LENGTH];
@@ -117,6 +121,9 @@ void create_user(User_list* lista){
     char gusto5[MAX_LIKE_LENGTH];
     int flag = FALSE;
     float nota = 0.0;
+    float nota_max = 0.0;
+    float nota_min = 5.0;
+    int valoraciones = 0;
     while (flag == FALSE){
         printf("Introduzca un nombre de usuario (máximo %d caracteres y mínimo %d).\n",MAX_USERNAME_LENGTH,MIN_USERNAME_LENGTH);
         scanf("%s", usuario);
@@ -135,7 +142,10 @@ void create_user(User_list* lista){
             printf("Introduce tu email\n");
             scanf("%s", email);
         }
-        char *ciudad = cambiar_ciudad();
+        while (strlen(ciudad) <= 1){
+            printf("Introduce tu ciudad de residencia \n");
+            scanf("%s", ciudad);
+        }
 
         while( año <= 1920 || año > 2023) {
             printf("Introduce tu año de nacimiento\n");
@@ -162,8 +172,8 @@ void create_user(User_list* lista){
             printf("Dinos algo que te guste:\n");
             scanf("%s", gusto5);
         }
+        push(lista, usuario, email, password, ciudad, año, num_usuario, gusto1, gusto2, gusto3, gusto4, gusto5, nota, nota_max, nota_min, valoraciones);
 
-        push(lista, usuario, email, password, ciudad, año, num_usuario, gusto1, gusto2, gusto3, gusto4, gusto5, nota);
         datosfichero(lista);
         return;
     }
@@ -230,53 +240,240 @@ char** bubblesort(char arr[], int n){
     return arr; //Warning de que el tipo de retorno es disatinto al esperado. Actual: char* Esperado: char**
 }
 
-void  menu(User_list* lista, timeline* tl) {
 
-    int login = -1;
+
+void menu(User_list* lista, timeline* tl) {
+
+    int login, flag = FALSE;
     printf("Hola, Buenos días!\n");
     printf("¿Eres un nuevo usuario(1) o ya tienes cuenta(2)?\n");
     scanf("%d", &login);
-    while (login != 1 && login != 2) {
-        printf("\nPor favor seleccione 1 si es un nuevo usuario o 2 si ya tiene una cuenta.\n");
-        scanf("%d", &login);
+    char nombre[MAX_PASSWORD_LENGTH];
+    char contraseña[MAX_PASSWORD_LENGTH];
+    char ubicacion[MAX_CITY_NAME];
+    char sol[2*MAX_POST_LENGHT];
+    while (flag == FALSE) {
+        switch (login) {
+            case 1:
+                create_user(lista);
+                strcpy(nombre, lista->last->username);
+                flag = TRUE;
+                break;
+            case 2:
+                printf("Ingresa el nombre de usuario\n");
+                scanf("%s", nombre);
+                printf("Ingresa la contraseña:\n");
+                scanf("%s", contraseña);
+                if (buscar_usuario(lista, nombre, contraseña) == USER_ALREADY_EXISTS) {
+                    printf("Inicio de sesión exitoso. ¡Bienvenido!\n");
+                }
+                flag = TRUE;
+                break;
+            default:
+                printf("Si eres un nuevo usuario elige (1) y si eres un usuario existente elige (2)\n");
+                scanf("%d", &login);
+        }
     }
+    char lista_username[lista->size][MAX_USERNAME_LENGTH];
+    User_data *actual = lista->first;
+    int i = 0;
+    flag = FALSE;
+    printf("\n----- Menú -----\n");
+    printf("1. Perfil (1)\n");
+    printf("2. Página principal (2)\n");
+    printf("3. Mostrar lista de usuarios (3)\n");
+    printf("0. Salir (0) \n");
+    printf("Ingresa la opción deseada: \n");
 
-    if (login == 1) create_user(lista);
+    scanf("%d", &login);
+    while (flag == FALSE) {
+        switch (login) {
+            case 1: //Hay que hacer la parte de las solicitudes de amistad
+                printf("\n----- Perfil -----\n");
+                printf("1. Editar (1)\n"); // En está parte tendremos que hacer una función que elimine la cuenta si no ve necesario.
+                printf("2. Ver valoraciones\n");
+                printf("0. Atrás (0) \n");
+                printf("Ingresa la opción deseada:\n");
+                int opcion;
+                scanf("%d", &opcion);
+                while (flag == FALSE) {
+                    switch (opcion) {
+                        case 1:
+                            printf("Introduce que dato quieres editar\n");
+                            printf("1. Ubicación del usuario (1) \n");
+                            printf("2. Cambiar contraseña (2) \n");
+                            printf("3. Gustos del usuario (3) \n");
+                            printf("0. Volver al menú principal (0) \n");
+                            int perfil;
+                            scanf("%d", &perfil);
+                            while (flag == FALSE) {
+                                switch (perfil) {
+                                    case 1:
+                                        printf("Introduzca la nueva ubicación:\n");
+                                        scanf("%s", ubicacion);
+                                        strcpy(encontrar_usuario(nombre, lista)->city, ubicacion);
+                                        int check = datosfichero(lista);
+                                        if (check == NO_FILE_FOUND) {
+                                            printf("No se ha podido cambiar la ubicación :(\n");
+                                        } else {
+                                            printf("Se ha cambiado la ubicación correctamente.\n");
+                                        }
+                                        break;
+                                    case 2:
+                                        printf("Introduzca la contraseña actual:\n");
+                                        char cont_actual[MAX_PASSWORD_LENGTH];
+                                        scanf("%s", cont_actual);
+                                        if (strcmp(contraseña, cont_actual) == 0) {
+                                            printf("Introduzca la nueva contraseña:\n");
+                                            int marcador = FALSE;
+                                            while (marcador == FALSE) {
+                                                printf("\nIntroduzca una contraseña (máximo %d caracteres y mínimo %d).\n",
+                                                       MAX_PASSWORD_LENGTH, MIN_PASSWORD_LENGTH);
+                                                scanf("%s", contraseña);
+                                                if (strlen(contraseña) > MIN_PASSWORD_LENGTH &&
+                                                    strlen(contraseña) < MAX_PASSWORD_LENGTH)
+                                                    marcador = TRUE;
+                                            }
+                                            check = datosfichero(lista);
+                                            if (check == NO_FILE_FOUND) {
+                                                printf("No se ha podido cambiar la contraseña :(\n");
+                                            } else {
+                                                printf("Se ha cambiado la contraseña correctamente.\n");
+                                            }
+                                        } else {
+                                            printf("Contraseña incorrecta.\n");
+                                        }
+                                        break;
+                                    case 3:
+                                        print_gustos(lista, nombre);
+                                        int gustos_cambio;
+                                        char gusto[MAX_LIKE_LENGTH];
+                                        print_gustos(lista, &nombre);
+                                        printf("Intoduzca que gusto desea cambiar (1-5):\n");
+                                        scanf("%d", &gustos_cambio);
+                                        printf("Intoduzca su nuevo gusto:\n");
+                                        scanf("%s", gusto);
+                                        strcpy(encontrar_usuario(nombre, lista)->likes[gustos_cambio], gusto);
+                                        check = datosfichero(lista);
+                                        if (check == NO_FILE_FOUND) {
+                                            printf("No se ha podido cambiar el gusto :(\n");
+                                        } else {
+                                            printf("Se ha cambiado el gusto correctamente.\n");
+                                        }
+                                        break;
+                                    case 0:
+                                        flag = TRUE;
+                                        break;
+                                    default:
+                                        printf("Por favor elija una de las opciones disponibles.\n");
+                                        scanf("%d", &perfil);
+                                }
+                            }
+                            flag = FALSE;
+                            break;
+                        case 2:
+                            if (encontrar_usuario(nombre, lista)->num_valoraciones == 0){
+                                printf("Aún no tienes valoraciones.\n");
+                            } else{
+                                printf("El resto de usuarios te han valorado con una nota media de: %f\n",
+                                       encontrar_usuario(nombre, lista)->nota);
+                                printf("La nota más alta que te han dado ha sido un astronómico: %f\n",
+                                       encontrar_usuario(nombre, lista)->nota_max);
+                                printf("La nota más baja que te han dado ha sido un triste: %f\n",
+                                       encontrar_usuario(nombre, lista)->nota_min);
+                            }
+                            break;
+                        case 0:
+                            flag = TRUE;
+                            break;
+                        default:
+                            printf("Por favor elija una de las opciones disponibles.\n");
+                            scanf("%d", &opcion);
+                    }
+                }
+                flag = FALSE;
+                break;
+            case 2:
+                while(flag == FALSE){
+                    int menu;
+                    printf("\n----- Menú Principal -----\n");
+                    printf("1. Crear una publicación (1)\n");
+                    printf("2. Ver publicaciones (2)\n");
+                    printf("3. Acceder al perfil de un usuario (3)\n");
+                    printf("0. Salir (0) \n");
+                    scanf("%d", &menu);
+                    switch (menu) {
+                        case 1:
+                            printf("\nEscribe tu mensaje (tamaño máximo %d caracteres):\n", MAX_POST_LENGHT);
+                            fgets(sol, 2*MAX_POST_LENGHT, stdin);
+                            while (strlen(sol) > MAX_POST_LENGHT){
+                                printf("\nTu mensaje es demasiado largo. Redúcelo en %d caracteres.\n", strlen(sol)-MAX_POST_LENGHT);
+                                fgets(sol, 2*MAX_POST_LENGHT, stdin);
+                            }
+                            push_post(tl, encontrar_usuario(nombre, lista), sol);
+                            FILE* f = fopen("C:\\Users\\senyo\\CLionProjects\\EDA2\\posts.txt", "a");
+                            fprintf(f, "%s\n", sol);
+                            fprintf(f, "%s\n", nombre);
+                            fclose(f);
+                            break;
+                        case 2:
+                            printf("Hay que hacerlo");
+                            break;
+                        case 3:
+                            printf("También hay que hacerlo");
+                            break;
+                        case 0:
+                            printf("Falta por hacer");
+                            break;
+                        default:
+                            printf("También está en obras esta zona");
 
+                    }
+                    flag = TRUE;
+                }
+                break;
+            case 3:
+                while (actual != NULL) {
+                    strcpy(lista_username[i], actual->username);
+                    actual = actual->next;
+                    i++;
+                }
+                char **lista_ordenada = bubblesort(lista_username,lista->size); //Warning de que lista_username es un tipo de puntero incompatible
+                for (int j = 0; j < lista->size; ++j) {
+                    printf("%s\n", &lista_ordenada[j]);
+                }
+                break;
+            case 0:
+                flag = TRUE;
+                break;
+            default:
+                printf("Por favor elija una de las opciones disponibles.\n");
 
-    if (login == 2) {
+                printf("\n----- Menú -----\n");
+                printf("1. Perfil (1)\n");
+                printf("2. Página principal (2)\n");
+                printf("3. Mostrar lista de usuarios (3)\n");
+                printf("0. Salir (0) \n");
+                printf("Ingresa la opción deseada: \n");
 
-        char nombre[MAX_PASSWORD_LENGTH];
-        char contraseña[MAX_PASSWORD_LENGTH];
-        printf("Ingresa el nombre de usuario\n");
-        scanf("%s", nombre);
-        printf("Ingresa la contraseña:\n");
-        scanf("%s", contraseña);
-        //buscar_usuario(lista, nombre, contraseña);//Hay que juntar esto con lo de abajo y hacer un while por si se equivoca al iniciar sesión pueda volver a intentarlo
+                scanf("%d", &login);
+        }
+    }
+}
 
-        if (buscar_usuario(lista, nombre, contraseña) == USER_ALREADY_EXISTS) {
-            printf("Inicio de sesión exitoso. ¡Bienvenido!\n");
-
-            // Menú con opciones
+            /*// Menú con opciones
             int opcion;
             int opcion2;
             int opcion3;
             int num_gustos;
             int gustos_cambio;
             char nombre_usuario;//Esto no es una string
-            char ubicacion;//Esto tampoco
+            //Esto tampoco
             char descripcion;//Ni esto
             char gustos[MAX_LIKE_LENGTH];//Esto sí pero probablemente tendría que ser un array de strings
 //TODA ESTA MIERDA SEGURAMENTE TENGA QUE ESTAR DENTRO DE UN WHILE
-
-            printf("\n----- Menú -----\n");
-            printf("1. Perfil (1)\n");
-            printf("2. Página principal (2)\n");
-            printf("3. Mostrar lista de usuarios (3)\n");
-            printf("0. Salir (0) \n");
-            printf("Ingresa la opción deseada: \n");
-            scanf("%d", &opcion);
-
+*/
+/*
             if (opcion == 0) {
 
             }
@@ -292,17 +489,13 @@ void  menu(User_list* lista, timeline* tl) {
 
                 }
                 if (opcion2 == 1) {
-                    printf("Introduce que dato quieres editar\n");
-                    printf("1. nombre del usuario: \n");
-                    printf("2. ubicación del usuario: \n");
-                    printf("3. descripción del usuario: \n");
-                    printf("4. gustos del usuario: \n");
+
 
                     scanf("%d", &opcion3);// pregunta que quiere cambiar
                     if (opcion3 == 1) {
                         cambiar_nombre_de_usuario();
                     } else if (opcion3 == 2) {
-                        cambiar_ciudad();
+                       // cambiar_ciudad();
                     } else if (opcion3 == 3) {
                         printf("Introduce una descripción:\n");
                         scanf("%d", &descripcion);
@@ -374,3 +567,4 @@ void  menu(User_list* lista, timeline* tl) {
             }
         }
 
+*/

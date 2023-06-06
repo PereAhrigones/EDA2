@@ -6,8 +6,8 @@
 #include <string.h>
 #include <stdlib.h>
 #include <stdio.h>
-
-void insert_user(User_data* miembro, char nombre_usuario[], char correo[], char contraseña[], char ciudad[], int año, int num_usuario, char gusto1[], char gusto2[], char gusto3[], char gusto4[], char gusto5[], float nota){
+//insert_user igual se puede borrar
+void insert_user(User_data* miembro, char nombre_usuario[], char correo[], char contraseña[], char ciudad[], int año, int num_usuario, char gusto1[], char gusto2[], char gusto3[], char gusto4[], char gusto5[], float nota, float nota_max, float nota_min, int valoraciones){
     strcpy(miembro->username, nombre_usuario);
     strcpy(miembro->email, correo);
     strcpy(miembro->password, contraseña);
@@ -20,6 +20,9 @@ void insert_user(User_data* miembro, char nombre_usuario[], char correo[], char 
     strcpy(miembro->likes[4], gusto4);
     strcpy(miembro->likes[5], gusto5);
     miembro->nota = nota;
+    miembro->nota_max = nota_max;
+    miembro->nota_min = nota_min;
+    miembro->num_valoraciones = valoraciones;
     miembro->next = NULL;
 }
 
@@ -100,7 +103,10 @@ void pushRequest(Stack* stack, const char* sender, const char* receiver) {
     strcpy(newRequest->receiver, receiver);
 
     // Enlazar el nuevo nodo al nodo anterior en la pila
-    newRequest->next = stack->top;
+    if (stack->top != NULL) {
+        stack->top->below = newRequest; //creo que ahora está bien
+    }
+    newRequest->below = NULL;
 
     // Actualizar el top de la pila
     stack->top = newRequest;
@@ -122,21 +128,34 @@ Friend_request* popRequest(Stack* stack) {
     return topRequest;
 }
 
-void enviarSolicitudAmistad(Stack* stack, User_data* usuarioActual, User_data* usuarioDestino) {
+void valoracion(User_data* user,float nota_dada){
+
+    if(nota_dada < user->nota_min) user->nota_min = nota_dada;
+
+    if (nota_dada > user->nota_max ) user->nota_max = nota_dada;
+
+    user->nota = (user->nota * user->num_valoraciones + nota_dada) / (user->num_valoraciones+1);
+
+    user->num_valoraciones++;
+}
+
+
+
+void enviarSolicitudAmistad(Stack* stack, char usuarioActual[], char usuarioDestino[]) {
     // Verificar si ya hay una solicitud pendiente o si ya son amigos
     Friend_request* solicitudActual = stack->top;
     while (solicitudActual != NULL) {
-        if (strcmp(solicitudActual->sender, usuarioActual->username) == 0 &&
-            strcmp(solicitudActual->receiver, usuarioDestino->username) == 0) {
-            printf("Ya has enviado una solicitud de amistad a %s\n", usuarioDestino->username);
+        if (strcmp(solicitudActual->sender, usuarioActual) == 0 &&
+            strcmp(solicitudActual->receiver, usuarioDestino) == 0) {
+            printf("Ya has enviado una solicitud de amistad a %s\n", usuarioDestino);
             return;
         }
-        solicitudActual = solicitudActual->next;
+        solicitudActual = solicitudActual->below;
     }
 
     // Enviar solicitud de amistad
-    pushRequest(stack, usuarioActual->username, usuarioDestino->username);
-    printf("Enviando solicitud de amistad de %s a %s\n", usuarioActual->username, usuarioDestino->username);
+    pushRequest(stack, usuarioActual, usuarioDestino);
+    printf("Enviando solicitud de amistad de %s a %s\n", usuarioActual, usuarioDestino);
 
 }
 

@@ -11,7 +11,7 @@
 User_data* encontrar_usuario(char username[], User_list *lista);
 
 timeline* leer_posts(User_list* lista);
-
+#include "menu.h"
 int main();
 
 

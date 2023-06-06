@@ -26,7 +26,7 @@
 typedef struct _friend_request {
     char sender[MAX_USERNAME_LENGTH];
     char receiver[MAX_USERNAME_LENGTH];
-    struct _friend_request* next;
+    struct _friend_request* below;
 } Friend_request;
 
 typedef struct _data{
@@ -38,6 +38,9 @@ typedef struct _data{
     int user_number;
     char likes[MAX_LIKES][MAX_LIKE_LENGTH];
     float nota;
+    float nota_max;
+    float nota_min;
+    int num_valoraciones;
     Friend_request *solicitudes;
     struct _data* next;
     struct _data* prev;
@@ -55,9 +58,9 @@ typedef struct _stack {
     Friend_request* top;
 } Stack;
 
-void insert_user(User_data* miembro, char nombre_usuario[], char correo[], char contraseña[], char ciudad[], int año, int num_usuario, char gusto1[], char gusto2[], char gusto3[], char gusto4[], char gusto5[], float nota);
+void insert_user(User_data* miembro, char nombre_usuario[], char correo[], char contraseña[], char ciudad[], int año, int num_usuario, char gusto1[], char gusto2[], char gusto3[], char gusto4[], char gusto5[], float nota, float nota_max, float nota_min, int valoraciones);
 
-void push(User_list* lista, char nombre_usuario[], char correo[], char contraseña[], char ciudad[], int año, int num_usuario, char gusto1[], char gusto2[], char gusto3[], char gusto4[], char gusto5[], float nota);
+void push(User_list* lista, char nombre_usuario[], char correo[], char contraseña[], char ciudad[], int año, int num_usuario, char gusto1[], char gusto2[], char gusto3[], char gusto4[], char gusto5[], float nota, float nota_max, float nota_min, int valoraciones);
 void limpiar_User_data(User_data* guardar);
 int buscar_usuario(User_list* lista, char algo[], char otro[]);// Tengo que mirar como estan declaradas las cosas en el otro proyecto
 

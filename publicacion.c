@@ -82,7 +82,7 @@ void delItem(diccionario **dict, char *key) {
 
 //Esta función hay que cambiarla un poco para que se ajuste a lo que queremos
 void addItem(diccionario **dict, char *key, int value) {
-    delItem(dict, key); /* If we already have a item with this key, delete it. */
+    delItem(dict, key); /* If we already have an item with this key, delete it. */
     diccionario *d = malloc(sizeof(diccionario));
     d->key = malloc(strlen(key)+1);
     strcpy(d->key, key);
@@ -93,18 +93,24 @@ void addItem(diccionario **dict, char *key, int value) {
 
 diccionario *contar_palabras(timeline *tl){
     publicacion *actual;
-    diccionario *dict = *dictAlloc();
+    diccionario **dict = dictAlloc();
     char *copia;
     char delimitador[] = ",.:;()/!¡?¿&·\"\\^*[]{}+-¬@#ºª<>%€'= "; //Si alguien encuentra algún símbolo que falta que lo ponga. NO BORRÉIS NADA DE LO QUE YA ESTÁ
     for(actual=tl->first; actual != NULL; actual = actual->next){
         strcpy(copia, actual->contenido);
+        char copia_2[MAX_POST_LENGHT];
+        strcpy(copia_2,copia);
+        for (int i = 0; strlen(copia);i++){
+            copia_2[i] = tolower(copia_2[i]);
+        }
+        strcpy(copia,copia_2);
         char *palabra = strtok(copia, delimitador);
         if(palabra != NULL){
             while (palabra != NULL){
-                addItem(&dict, palabra, getItem(dict, palabra)+1);
+                addItem(dict, palabra, getItem(*dict, palabra)+1);
                 palabra = strtok(NULL, delimitador);
             }
         }
     }
-    return dict;
+    return *dict;
 }

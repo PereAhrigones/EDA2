@@ -6,8 +6,7 @@
 #define EDA2_MENU_H
 #include "usuario.h"
 #include "publicacion.h"
-//#include "main.h"
-
+#include "main.h"
 
 int datosfichero(User_list* lista);
 User_list* ficherodatos();
