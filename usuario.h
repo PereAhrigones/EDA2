@@ -63,7 +63,12 @@ void insert_user(User_data* miembro, char nombre_usuario[], char correo[], char 
 void push(User_list* lista, char nombre_usuario[], char correo[], char contraseña[], char ciudad[], int año, int num_usuario, char gusto1[], char gusto2[], char gusto3[], char gusto4[], char gusto5[], float nota, float nota_max, float nota_min, int valoraciones);
 void limpiar_User_data(User_data* guardar);
 int buscar_usuario(User_list* lista, char algo[], char otro[]);// Tengo que mirar como estan declaradas las cosas en el otro proyecto
-
+void borrar_lista_de_usuarios(User_list* lista);
+void initStack(Stack* stack);
+int isStackEmpty(Stack* stack);
+void pushRequest(Stack* stack, const char* sender, const char* receiver);
+Friend_request* popRequest(Stack* stack);
+void enviarSolicitudAmistad(Stack* stack, char usuarioActual[], char usuarioDestino[]);
 
 
 #endif //EDA2_USUARIO_H

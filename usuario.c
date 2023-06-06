@@ -149,7 +149,7 @@ Friend_request* popRequest(Stack* stack) {
     Friend_request* topRequest = stack->top;
 
     // Actualizar el top de la pila al siguiente nodo
-    stack->top = stack->top->next;
+    stack->top = stack->top->below;
 
     // Devolver la solicitud de amistad desempujada
     return topRequest;
