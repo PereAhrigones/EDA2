@@ -251,16 +251,16 @@ int buscar_usuario(User_list *lista, char username[], char otro[]) {
 char** bubblesort(char arr[], int n){
     int i, j;
     char string[MAX_USERNAME_LENGTH];
-    for(i=0;i<n;i++){
-        for(j=i+1;j<n;j++){
-            if(strcmp(&arr[i], &arr[j])>0){
-                strcpy(string,&arr[i]);
-                strcpy(&arr[i],&arr[j]);
-                strcpy(&arr[j],string);
+    for(i = 0; i < n; i++) {
+        for(j = i + 1; j < n; j++) {
+            if(strcmp(&arr[i], &arr[j]) > 0) {
+                strcpy(string, &arr[i]);
+                strcpy(&arr[i], &arr[j]);
+                strcpy(&arr[j], string);
             }
         }
     }
-    return &arr; //Warning de que el tipo de retorno es disatinto al esperado. Actual: char* Esperado: char**
+    return arr;
 }
 
 
@@ -542,7 +542,7 @@ void menu(User_list* lista, timeline* tl) {
                                                     break;
                                                 case 3:
                                                     while (nota < 0 || nota > 5){
-                                                        printf("¿Que valoración le das a este usuario?\n");
+                                                        printf("¿Que valoración le das a este usuario? (0-5)\n");
                                                         scanf("%f", &nota);
                                                     }
                                                     valoracion(other_user, nota);
