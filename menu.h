@@ -8,6 +8,7 @@
 #include "publicacion.h"
 #include "main.h"
 
+void submenu_publicaciones_usuarios(User_data *other_user, timeline *tl);
 int datosfichero(User_list* lista);
 User_list* ficherodatos();
 

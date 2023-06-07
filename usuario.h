@@ -29,6 +29,10 @@ typedef struct _friend_request {
     struct _friend_request* below;
 } Friend_request;
 
+typedef struct _stack {
+    Friend_request* top;
+} Stack;
+
 typedef struct _data{
     char username[MAX_USERNAME_LENGTH];
     char email[MAX_EMAIL_LENGTH];
@@ -41,7 +45,8 @@ typedef struct _data{
     float nota_max;
     float nota_min;
     int num_valoraciones;
-    Friend_request *solicitudes;
+    char amigos[MAX_AMIGOS][MAX_USERNAME_LENGTH];
+    Friend_request *solicitudes; //Esto hay que verlo
     struct _data* next;
     struct _data* prev;
 }User_data;
@@ -53,10 +58,6 @@ typedef struct{
     int size;
 }User_list;
 
-
-typedef struct _stack {
-    Friend_request* top;
-} Stack;
 
 void insert_user(User_data* miembro, char nombre_usuario[], char correo[], char contraseña[], char ciudad[], int año, int num_usuario, char gusto1[], char gusto2[], char gusto3[], char gusto4[], char gusto5[], float nota, float nota_max, float nota_min, int valoraciones);
 

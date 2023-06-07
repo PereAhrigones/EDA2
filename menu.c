@@ -8,7 +8,36 @@
 #include <stdlib.h>
 #include <stdio.h>
 
+void submenu_publicaciones_usuarios(User_data *other_user, timeline *tl){
+    int flag = FALSE;
+    while (flag == FALSE){
+        int submenu;
+        int num_public;
+        printf("1. Ver las publicaciones más recientes (1)\n");
+        printf("2. Ver las publicaciones más antiguas (2)\n");
+        printf("0. Volver (0)\n");
+        scanf("%d", &submenu);
 
+        switch (submenu) {
+            case 1:
+                printf("Selecciona cuantas publicaciones quieres ver (si quieres ver todas escribe \"-1\":\n");
+                scanf("%d", &num_public);
+                show_recent_posts_from_user(other_user, tl, num_public);
+                break;
+            case 2:
+                printf("Selecciona cuantas publicaciones quieres ver (si quieres ver todas escribe \"-1\":\n");
+                scanf("%d", &num_public);
+                show_old_posts_from_user(other_user, tl, num_public);
+                break;
+            case 0:
+                flag = TRUE;
+                break;
+            default:
+                printf("Por favor elija una de las opciones disponibles.\n");
+        }
+    }
+
+}
 
 int datosfichero(User_list* lista) {//Aquí lo que sí hay que pasar como parametro es la estructura de la lista de usuario
 
@@ -98,14 +127,7 @@ char* cambiar_ciudad(){
     return ciudad;//Aquí hay un warning de que devuelve la dirección de una variable local
 }
 */
-char* cambiar_nombre_de_usuario(){ // Esta función se va eliminar por nuestra salud mental.
-    char usuario[MAX_USERNAME_LENGTH];
-    while(strlen(usuario) <= 1) {
-        printf("Introduce tu ciudad de residencia \n");//What
-        scanf("%s", usuario);
-    }
-    return usuario;//Aquí hay un warning de que devuelve la dirección de una variable local
-}
+
 
 void create_user(User_list* lista){
     char usuario[MAX_USERNAME_LENGTH];
@@ -245,7 +267,7 @@ char** bubblesort(char arr[], int n){
 
 void menu(User_list* lista, timeline* tl) {
 
-    int login, flag = FALSE, nota = -1;
+    int login, flag = FALSE, nota = -1, num, num_palabras;
     printf("Hola, Buenos días!\n");
     printf("¿Eres un nuevo usuario(1) o ya tienes cuenta(2)?\n");
     scanf("%d", &login);
@@ -254,6 +276,8 @@ void menu(User_list* lista, timeline* tl) {
     char ubicacion[MAX_CITY_NAME];
     char sol[2*MAX_POST_LENGHT];
     User_data *other_user;
+    publicacion *ultima;
+    diccionario *dictionary;
     while (flag == FALSE) {
         switch (login) {
             case 1:
@@ -297,8 +321,11 @@ void menu(User_list* lista, timeline* tl) {
         switch (login) {
             case 1: //Hay que hacer la parte de las solicitudes de amistad
                 printf("\n----- Perfil -----\n");
-                printf("1. Editar (1)\n"); // En está parte tendremos que hacer una función que elimine la cuenta si no ve necesario.
-                printf("2. Ver valoraciones\n");
+                printf("1. Editar (1)\n");
+                printf("2. Ver valoraciones (2)\n");
+                printf("3. Ver tus publicaciones (3)\n");
+                printf("4. Gestionar solicitudes de amistad (4)\n");
+                printf("5. Ver lista de amigos (5)\n");
                 printf("0. Atrás (0) \n");
                 printf("Ingresa la opción deseada:\n");
                 int opcion;
@@ -368,6 +395,10 @@ void menu(User_list* lista, timeline* tl) {
                                             printf("Se ha cambiado el gusto correctamente.\n");
                                         }
                                         break;
+                                    case 4:
+                                        break;
+                                    case 5:
+                                        break;
                                     case 0:
                                         flag = TRUE;
                                         break;
@@ -389,6 +420,9 @@ void menu(User_list* lista, timeline* tl) {
                                 printf("La nota más baja que te han dado ha sido un triste: %f\n",
                                        encontrar_usuario(nombre, lista)->nota_min);
                             }
+                            break;
+                        case 3:
+                            submenu_publicaciones_usuarios(encontrar_usuario(nombre, lista), tl);
                             break;
                         case 0:
                             flag = TRUE;
@@ -418,13 +452,48 @@ void menu(User_list* lista, timeline* tl) {
                                 fgets(sol, 2*MAX_POST_LENGHT, stdin);
                             }
                             push_post(tl, encontrar_usuario(nombre, lista), sol);
-                            FILE* f = fopen("C:\\Users\\senyo\\CLionProjects\\EDA2\\posts.txt", "a");
-                            fprintf(f, "%s\n", sol);
-                            fprintf(f, "%s\n", nombre);
-                            fclose(f);
+                            postsfichero(tl);
                             break;
-                        case 2:
-                            printf("Hay que hacerlo");
+                        case 2://Hacer un submenu donde puedas elegir ver las publicaciones más recientes, ver las palabras más utilizadas y igual algo más
+                            while (flag == FALSE){
+                                int post;
+                                printf("\n1. Ver las publicaciones recientes (1)\n");
+                                printf("2. Ver las palabras más utilizadas (2)\n");
+                                printf("0. Volver (0)\n");
+                                scanf("%d", &post);
+                                switch (post) {
+                                    case 1:
+                                        printf("Selecciona cuantas publicaciones quieres ver a la vez:\n");
+                                        scanf("%d", &num);
+                                        while (flag == FALSE){
+                                            for (int j = 0; j < num; ++j) {
+                                                printf("\n%s\n", ultima->contenido);
+                                                printf("- %s\n", ultima->usuario->username);
+                                            }
+                                            char cont[MAX_POST_LENGHT];
+                                            printf("Marca 0 si quieres salir. Cualquier otra cosa para continuar viendo más publicaciones.\n");
+                                            if (cont[0] == 48){
+                                                flag = TRUE;
+                                            }
+                                        }
+                                        flag = FALSE;
+                                        break;
+                                    case 2://Aquí falta un huevo de cosas.
+                                        dictionary = contar_palabras(tl, &num_palabras);
+
+                                        bubblesort_dictionary(&dictionary, num_palabras);
+                                        for (int j = num_palabras-1; j < num_palabras-11; ++j) {
+                                            printf("");
+                                        }
+                                        break;
+                                    case 0:
+                                        flag = TRUE;
+                                        break;
+                                    default:
+                                        printf("Por favor elija una de las opciones disponibles.\n");
+                                }
+                            }
+                            flag = FALSE;
                             break;
                         case 3:
                             while (flag == FALSE) {
@@ -479,33 +548,7 @@ void menu(User_list* lista, timeline* tl) {
                                                     valoracion(other_user, nota);
                                                     break;
                                                 case 4:
-                                                    while (flag == FALSE){
-                                                        int submenu;
-                                                        int num_public;
-                                                        printf("1. Ver las publicaciones más recientes (1)\n");
-                                                        printf("2. Ver las publicaciones más antiguas (2)\n");
-                                                        printf("0. Volver (0)\n");
-                                                        scanf("%d", &submenu);
-
-                                                        switch (submenu) {
-                                                            case 1:
-                                                                printf("Selecciona cuantas publicaciones quieres ver (si quieres ver todas escribe \"-1\":\n");
-                                                                scanf("%d", &num_public);
-                                                                show_recent_posts_from_user(other_user, tl, num_public);
-                                                                break;
-                                                            case 2:
-                                                                printf("Selecciona cuantas publicaciones quieres ver (si quieres ver todas escribe \"-1\":\n");
-                                                                scanf("%d", &num_public);
-                                                                show_old_posts_from_user(other_user, tl, num_public);
-                                                                break;
-                                                            case 0:
-                                                                flag = TRUE;
-                                                                break;
-                                                            default:
-                                                                printf("Por favor elija una de las opciones disponibles.\n");
-                                                        }
-                                                    }
-                                                    flag = FALSE;
+                                                    submenu_publicaciones_usuarios(other_user, tl);
                                                     break;
                                                 case 0:
                                                     flag = TRUE;

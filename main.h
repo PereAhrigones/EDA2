@@ -10,6 +10,10 @@
 User_data* encontrar_usuario(char username[], User_list *lista);
 
 timeline* leer_posts(User_list* lista);
+
+Stack *cargar_solicitudes_amistad();
+
+void cargar_amigos(User_list *lista);
 #include "menu.h"
 int main();
 

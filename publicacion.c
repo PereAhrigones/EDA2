@@ -8,6 +8,22 @@
 #include <stdio.h>
 #include <ctype.h>
 
+int postsfichero(timeline *tl){
+    FILE *fp = fopen("C:\\Users\\senyo\\CLionProjects\\EDA2\\posts.txt", "w");
+    if (fp == NULL){
+        printf("Error al abrir el archivo.\n");
+        return NO_FILE_FOUND;
+    }
+    publicacion *post = tl->first;
+    while (post != NULL){
+        fprintf("%s\n", post->contenido);
+        fprintf("%s\n", post->usuario->username);
+        post = post->next;
+    }
+    fclose(fp);
+    return TRUE;
+}
+
 void insert_post(publicacion* publ, User_data *user, char post[]){
     publ->usuario = user;
     strcpy(publ->contenido, post);
@@ -45,13 +61,6 @@ char** bubblesort_dictionary(char arr[], int n){
         }
     }
     return arr; //Warning de que el tipo de retorno es distinto al esperado. Actual: char* Esperado: char**
-}
-
-//QUE MIERDAS ES ESTO?
-int count_max_word_repeat(diccionario* word){
-    int counter = 0;
-
-
 }
 
 void show_top(timeline* tl){
@@ -113,9 +122,10 @@ void addItem(diccionario **dict, char *key, int value) {
     *dict = d;
 }
 
-diccionario *contar_palabras(timeline *tl){
+diccionario *contar_palabras(timeline *tl, int *numero_palabras){
     publicacion *actual;
     diccionario **dict = dictAlloc();
+    numero_palabras = 0;
     char *copia;
     char delimitador[] = ",.:;()/!¡?¿&·\"\\^*[]{}+-¬@#ºª<>%€'= "; //Si alguien encuentra algún símbolo que falta que lo ponga. NO BORRÉIS NADA DE LO QUE YA ESTÁ
     for(actual=tl->first; actual != NULL; actual = actual->next){
@@ -126,9 +136,10 @@ diccionario *contar_palabras(timeline *tl){
             copia_2[i] = tolower(copia_2[i]);
         }
         strcpy(copia,copia_2);
-        char *palabra = strtok(copia, delimitador);
+        char *palabra = strtok(copia_2, delimitador);
         if(palabra != NULL){
             while (palabra != NULL){
+                if (getItem(*dict, palabra) == 0) numero_palabras++;
                 addItem(dict, palabra, getItem(*dict, palabra)+1);
                 palabra = strtok(NULL, delimitador);
             }
@@ -137,9 +148,10 @@ diccionario *contar_palabras(timeline *tl){
     return *dict;
 }
 
-void show_recent_posts_from_user(User_data* user, timeline* tl, int n){
+void show_recent_posts_from_user(User_data* user, timeline* tl, int n){//Hacer lo del -1
     publicacion *post;
     post = tl->last;
+    if (n == -1) n = 999;
     int i = 0;
     while (post != NULL && i < n){
         if (strcmp(user->username, post->usuario->username) == 0){
@@ -151,9 +163,10 @@ void show_recent_posts_from_user(User_data* user, timeline* tl, int n){
     }
 }
 
-void show_old_posts_from_user(User_data* user, timeline* tl, int n){
+void show_old_posts_from_user(User_data* user, timeline* tl, int n){//Hacer lo del -1
     publicacion *post;
     post = tl->first;
+    if (n == -1) n = 999;
     int i = 0;
     while (post != NULL && i < n){
         if (strcmp(user->username, post->usuario->username) == 0){

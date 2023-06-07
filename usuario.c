@@ -129,14 +129,13 @@ void pushRequest(Stack* stack, const char* sender, const char* receiver) {
     strcpy(newRequest->sender, sender);
     strcpy(newRequest->receiver, receiver);
 
-    // Enlazar el nuevo nodo al nodo anterior en la pila
-    if (stack->top != NULL) {
-        stack->top->below = newRequest; //creo que ahora está bien
+    if (stack->top == NULL){
+        newRequest->below = NULL;
+        stack->top = newRequest;
+    } else{
+        newRequest->below = stack->top;
+        stack->top = newRequest;
     }
-    newRequest->below = NULL;
-
-    // Actualizar el top de la pila
-    stack->top = newRequest;
 }
 
 Friend_request* popRequest(Stack* stack) {
@@ -155,19 +154,6 @@ Friend_request* popRequest(Stack* stack) {
     return topRequest;
 }
 
-void valoracion(User_data* user, float nota_dada){
-
-    if(nota_dada < user->nota_min) user->nota_min = nota_dada;
-
-    if (nota_dada > user->nota_max ) user->nota_max = nota_dada;
-
-    user->nota = (user->nota * user->num_valoraciones + nota_dada) / (user->num_valoraciones+1);
-
-    user->num_valoraciones++;
-}
-
-
-
 void enviarSolicitudAmistad(Stack* stack, char usuarioActual[], char usuarioDestino[]) {
     // Verificar si ya hay una solicitud pendiente o si ya son amigos
     Friend_request* solicitudActual = stack->top;
@@ -183,6 +169,15 @@ void enviarSolicitudAmistad(Stack* stack, char usuarioActual[], char usuarioDest
     // Enviar solicitud de amistad
     pushRequest(stack, usuarioActual, usuarioDestino);
     printf("Enviando solicitud de amistad de %s a %s\n", usuarioActual, usuarioDestino);
-
 }
 
+void valoracion(User_data* user, float nota_dada){
+
+    if(nota_dada < user->nota_min) user->nota_min = nota_dada;
+
+    if (nota_dada > user->nota_max ) user->nota_max = nota_dada;
+
+    user->nota = (user->nota * user->num_valoraciones + nota_dada) / (user->num_valoraciones+1);
+
+    user->num_valoraciones++;
+}
