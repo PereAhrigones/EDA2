@@ -31,7 +31,7 @@ int postsfichero(timeline *tl);
 void insert_post(publicacion* publ,User_data* user , char post[]);
 void push_post(timeline* tl,User_data* user, char post[]);
 void pop_post(timeline* tl);
-char** bubblesort_dictionary(char arr[], int n);
+void bubblesort_dictionary(diccionario* dict[],int n) ;
 void show_top(timeline* tl);
 diccionario *contar_palabras(timeline *tl, int* contar_palabras); //https://parzibyte.me/blog/2018/11/13/separar-cadena-delimitadores-c-strtok/
 void show_recent_posts_from_user(User_data* user, timeline* tl, int n);

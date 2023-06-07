@@ -48,19 +48,19 @@ void pop_post(timeline* tl){
     tl->size--;
 }
 
-char** bubblesort_dictionary(char arr[], int n){
+void bubblesort_dictionary(diccionario* dict[], int n) {
     int i, j;
-    char string[n];
-    for(i=0;i<n;i++){
-        for(j=i+1;j<n;j++){
-            if(strcmp(&arr[i], &arr[j])>0){
-                strcpy(string,&arr[i]);
-                strcpy(&arr[i],&arr[j]);
-                strcpy(&arr[j],string);
+    diccionario *temp;
+    for (i = 0; i < n - 1; i++) {
+        for (j = 0; j < n - i - 1; j++) {
+            if (strcmp(dict[j]-> key, dict[j + 1]-> key) > 0) {
+                // Intercambiar los elementos si están en el orden incorrecto
+                temp = dict[j];
+                dict[j] = dict[j + 1];
+                dict[j + 1] = temp;
             }
         }
     }
-    return arr; //Warning de que el tipo de retorno es distinto al esperado. Actual: char* Esperado: char**
 }
 
 void show_top(timeline* tl){
