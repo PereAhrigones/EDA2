@@ -168,7 +168,34 @@ void enviarSolicitudAmistad(Stack* stack, char usuarioActual[], char usuarioDest
 
     // Enviar solicitud de amistad
     pushRequest(stack, usuarioActual, usuarioDestino);
-    printf("Enviando solicitud de amistad de %s a %s\n", usuarioActual, usuarioDestino);
+    printf("Se ha enviado una solicitude de amistad de %s a %s\n", usuarioActual, usuarioDestino);
+}
+
+void guardar_amigos(User_list* lista){
+    FILE *fp = fopen("C:\\Users\\senyo\\CLionProjects\\EDA2\\amigos.txt", "w");
+    if (fp == NULL){
+        printf("Ha habido un error al actualizar la lista de amigos en la base de datos");
+        return;
+    }
+    User_data *actual = lista->first;
+    while (actual != NULL){
+        int i = 0;
+        fprintf(fp, "%s ", actual->username);
+        while (strcmp(actual->amigos[i], " ") != 0){
+            fprintf(fp, "%s ", actual->amigos[i]);
+            i++;
+        }
+        fprintf(fp, "\n");
+        actual = actual->next;
+    }
+}
+
+void imprimir_lista_amigos(User_data *usuario){
+    int i = 0;
+    while (strcmp(usuario->amigos[i], " ") != 0){
+        printf("%s\n", usuario->amigos[i]);
+        i++;
+    }
 }
 
 void valoracion(User_data* user, float nota_dada){

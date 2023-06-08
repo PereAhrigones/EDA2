@@ -46,7 +46,7 @@ typedef struct _data{
     float nota_min;
     int num_valoraciones;
     char amigos[MAX_AMIGOS][MAX_USERNAME_LENGTH];
-    Friend_request *solicitudes; //Esto hay que verlo
+    Stack *solicitudes; //Esto hay que verlo
     struct _data* next;
     struct _data* prev;
 }User_data;
@@ -69,6 +69,8 @@ void initStack(Stack* stack);
 int isStackEmpty(Stack* stack);
 void pushRequest(Stack* stack, const char* sender, const char* receiver);
 Friend_request* popRequest(Stack* stack);
+void guardar_amigos(User_list* lista);
+void imprimir_lista_amigos(User_data *usuario);
 void valoracion(User_data* user, float nota_dada);
 void enviarSolicitudAmistad(Stack* stack, char usuarioActual[], char usuarioDestino[]);
 

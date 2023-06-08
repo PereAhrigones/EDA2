@@ -42,25 +42,32 @@ timeline* leer_posts(User_list* lista){
     return tl;
 }
 
-Stack *cargar_solicitudes_amistad(){
+void cargar_solicitudes_amistad(User_list* lista){
     FILE *fp = fopen("C:\\Users\\senyo\\CLionProjects\\EDA2\\amistad.txt", "r");
-    Stack *solicitudes;
-    initStack(solicitudes);
     if (fp == NULL) {
         printf("Error al abrir el archivo.\n");
-        return  NULL;
+        return;
     }
     char solicitante[MAX_USERNAME_LENGTH], solicitado[MAX_USERNAME_LENGTH];
     if (fscanf(fp, "%s %s", solicitante, solicitado) == 2){
-        pushRequest(solicitudes, solicitante, solicitado);
+        pushRequest(encontrar_usuario(solicitado, lista)->solicitudes, solicitante, solicitado);
     } else{
         printf("\nSe ha producido un error al intentar leer el archivo.\n");
     }
     while (fscanf(fp, "%s %s", solicitante, solicitado) == 2){
-        pushRequest(solicitudes, solicitante, solicitado);
+        pushRequest(encontrar_usuario(solicitado, lista)->solicitudes, solicitante, solicitado);
     }
     fclose(fp);
-    return solicitudes;
+}
+
+void init_amigos(User_list *lista){
+    User_data *actual = lista->first;
+    while (actual != NULL){
+        for (int i = 0; i < MAX_AMIGOS; ++i) {
+            strcpy(actual->amigos[i], " ");
+        }
+        actual = actual->next;
+    }
 }
 
 void cargar_amigos(User_list *lista){
@@ -86,14 +93,14 @@ void cargar_amigos(User_list *lista){
             }
         }
     }
-
 }
 
 int main() {
     //chcp(65001>nul) Había algo así para poner los acentos pero no me acuerdo de como era y no lo he conseguido encontrar
     User_list* lista = ficherodatos();//Cargamos lo que está en el fichero de usuarios al empezar
     timeline* tl = leer_posts(lista);//Cargamos todos los posts
-    Stack* pila_solicitudes = cargar_solicitudes_amistad();
+    cargar_solicitudes_amistad(lista);
+    init_amigos(lista);
     cargar_amigos(lista);
     menu(lista, tl);//Antes del menú hay que cargar las cosas
 }

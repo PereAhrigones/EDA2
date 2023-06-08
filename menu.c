@@ -7,6 +7,7 @@
 #include <string.h>
 #include <stdlib.h>
 #include <stdio.h>
+#include <ctype.h>
 
 void submenu_publicaciones_usuarios(User_data *other_user, timeline *tl){
     int flag = FALSE;
@@ -267,7 +268,10 @@ char** bubblesort(char arr[], int n){
 
 void menu(User_list* lista, timeline* tl) {
 
-    int login, flag = FALSE, nota = -1, num, num_palabras;
+    int login, flag = FALSE, num, num_palabras, cont_amigos;
+    float nota = -1.0;
+    char aceptacion;
+    Friend_request *solicitud_amistad;
     printf("Hola, Buenos días!\n");
     printf("¿Eres un nuevo usuario(1) o ya tienes cuenta(2)?\n");
     scanf("%d", &login);
@@ -396,8 +400,39 @@ void menu(User_list* lista, timeline* tl) {
                                         }
                                         break;
                                     case 4:
+                                        while (flag == FALSE){
+                                            solicitud_amistad = popRequest(encontrar_usuario(nombre, lista)->solicitudes);
+                                            if (solicitud_amistad == NULL) break;
+                                            printf("Tienes una solicitud de amistad de: %s\n", solicitud_amistad->sender);
+                                            while (flag == FALSE){
+                                                printf("Escribe si quieres aceptar la solicitud de amistad (Y) o no (N).\n");
+                                                scanf("%c", &aceptacion);
+                                                aceptacion = tolower(aceptacion);
+                                                if (strcmp(&aceptacion, "y") == 0 || strcmp(&aceptacion, "n") == 0){
+                                                    flag = TRUE;
+                                                    if (strcmp(&aceptacion, "y") == 0){
+                                                        cont_amigos = 0;
+                                                        while (strcmp(encontrar_usuario(nombre, lista)->amigos[cont_amigos], " ") != 0){
+                                                            cont_amigos++;
+                                                            if (cont_amigos == MAX_AMIGOS) break;
+                                                        }
+                                                        if (cont_amigos != MAX_AMIGOS){
+                                                            strcpy(encontrar_usuario(nombre, lista)->amigos[cont_amigos], solicitud_amistad->sender);
+                                                            printf("Se ha añadido correctamente a la lista de amigos\n");
+                                                        } else{
+                                                            printf("Lista de amigos llena.\n");
+                                                        }
+                                                    } else{
+                                                        printf("Solicitud denegada.\n");
+                                                    }
+                                                }
+                                            }
+                                            flag = FALSE;
+                                        }
+                                        guardar_amigos(lista);
                                         break;
                                     case 5:
+                                        imprimir_lista_amigos(encontrar_usuario(nombre, lista));
                                         break;
                                     case 0:
                                         flag = TRUE;
@@ -446,7 +481,7 @@ void menu(User_list* lista, timeline* tl) {
                     switch (menu) {
                         case 1:
                             printf("\nEscribe tu mensaje (tamaño máximo %d caracteres):\n", MAX_POST_LENGHT);
-                            fgets(sol, 2*MAX_POST_LENGHT, stdin);
+                            fgets(sol, 2*MAX_POST_LENGHT, stdin);//Creo que el error está aquí.
                             while (strlen(sol) > MAX_POST_LENGHT){
                                 printf("\nTu mensaje es demasiado largo. Redúcelo en %d caracteres.\n", strlen(sol)-MAX_POST_LENGHT);
                                 fgets(sol, 2*MAX_POST_LENGHT, stdin);
@@ -522,7 +557,7 @@ void menu(User_list* lista, timeline* tl) {
                                             int usuario;
                                             printf("\n----- Menú Usuario -----\n");
                                             printf("1. Ver datos del usuario (1)\n");
-                                            printf("2. Enviar una solicitud de amistad(2)\n");
+                                            printf("2. Enviar una solicitud de amistad (2)\n");
                                             printf("3. Valorar usuario (3)\n");
                                             printf("4. Ver las publicaciones de este usuario (4)\n");
                                             printf("0. Volver (0)\n");
@@ -538,7 +573,7 @@ void menu(User_list* lista, timeline* tl) {
                                                     printf("Valoración media: %f\n", other_user->nota);
                                                     break;
                                                 case 2:
-                                                    printf("Luego la hago\n");
+                                                    enviarSolicitudAmistad(encontrar_usuario(otro, lista)->solicitudes, nombre, otro);
                                                     break;
                                                 case 3:
                                                     while (nota < 0 || nota > 5){
