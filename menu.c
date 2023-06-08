@@ -456,7 +456,7 @@ void menu(User_list* lista, timeline* tl) {
                             break;
                         case 2://Hacer un submenu donde puedas elegir ver las publicaciones más recientes, ver las palabras más utilizadas y igual algo más
                             while (flag == FALSE){
-                                int post;
+                                int post, top = 1;
                                 printf("\n1. Ver las publicaciones recientes (1)\n");
                                 printf("2. Ver las palabras más utilizadas (2)\n");
                                 printf("0. Volver (0)\n");
@@ -480,10 +480,10 @@ void menu(User_list* lista, timeline* tl) {
                                         break;
                                     case 2://Aquí falta un huevo de cosas.
                                         dictionary = contar_palabras(tl, &num_palabras);
-
-                                        bubblesort_dictionary(&dictionary, num_palabras);
+                                        diccionario *array_dict = create_array_dict(dictionary, num_palabras);
+                                        bubblesort_dictionary(&array_dict, num_palabras);
                                         for (int j = num_palabras-1; j < num_palabras-11; ++j) {
-                                            printf("");
+                                            printf("Top %d: %s con %d usos\n", top, array_dict[j].key, array_dict[j].counter);
                                         }
                                         break;
                                     case 0:

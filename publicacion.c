@@ -53,11 +53,11 @@ void bubblesort_dictionary(diccionario* dict[], int n) {
     diccionario *temp;
     for (i = 0; i < n - 1; i++) {
         for (j = 0; j < n - i - 1; j++) {
-            if (strcmp(dict[j]-> key, dict[j + 1]-> key) > 0) {
+            if (dict[j]->counter, dict[j+1]->counter) {
                 // Intercambiar los elementos si están en el orden incorrecto
                 temp = dict[j];
-                dict[j] = dict[j + 1];
-                dict[j + 1] = temp;
+                dict[j] = dict[j +1];
+                dict[j+1] = temp;
             }
         }
     }
@@ -146,6 +146,15 @@ diccionario *contar_palabras(timeline *tl, int *numero_palabras){
         }
     }
     return *dict;
+}
+
+diccionario *create_array_dict(diccionario *dict, int tamaño){
+    diccionario array[tamaño];
+    for (int i = 0; i < tamaño; ++i) {
+        array[i] = *dict;
+        dict = dict->next;
+    }
+    return array;
 }
 
 void show_recent_posts_from_user(User_data* user, timeline* tl, int n){//Hacer lo del -1
