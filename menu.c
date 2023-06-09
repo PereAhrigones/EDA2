@@ -23,12 +23,12 @@ void submenu_publicaciones_usuarios(User_data *other_user, timeline *tl){
             case 1:
                 printf("Selecciona cuantas publicaciones quieres ver (si quieres ver todas escribe \"-1\":\n");
                 scanf("%d", &num_public);
-                show_recent_posts_from_user(other_user, tl, num_public);
+                show_recent_posts_from_user(other_user->username, tl, num_public);
                 break;
             case 2:
                 printf("Selecciona cuantas publicaciones quieres ver (si quieres ver todas escribe \"-1\":\n");
                 scanf("%d", &num_public);
-                show_old_posts_from_user(other_user, tl, num_public);
+                show_old_posts_from_user(other_user->username, tl, num_public);
                 break;
             case 0:
                 flag = TRUE;
@@ -123,13 +123,13 @@ void create_user(User_list* lista){
     while (flag == FALSE){
         printf("Introduzca un nombre de usuario (máximo %d caracteres y mínimo %d).\n",MAX_USERNAME_LENGTH,MIN_USERNAME_LENGTH);
         scanf("%s", usuario);
-        if(strlen(usuario) > MIN_USERNAME_LENGTH && strlen(usuario) < MAX_USERNAME_LENGTH) flag = TRUE;
+        if(strlen(usuario) > MIN_USERNAME_LENGTH-1 && strlen(usuario) < MAX_USERNAME_LENGTH-1) flag = TRUE;
     }
     flag = FALSE;
     while(flag == FALSE){
         printf("\nIntroduzca una contraseña (máximo %d caracteres y mínimo %d).\n",MAX_PASSWORD_LENGTH,MIN_PASSWORD_LENGTH);
         scanf("%s", password);
-        if(strlen(password) > MIN_PASSWORD_LENGTH && strlen(password) < MAX_PASSWORD_LENGTH) flag = TRUE;
+        if(strlen(password) > MIN_PASSWORD_LENGTH-1 && strlen(password) < MAX_PASSWORD_LENGTH-1) flag = TRUE;
     }
     if (buscar_usuario(lista, usuario,password) == USER_DOES_NOT_EXIST){
 
@@ -455,12 +455,12 @@ void menu(User_list* lista, timeline* tl) {
                     switch (menu) {
                         case 1:
                             printf("\nEscribe tu mensaje (tamaño máximo %d caracteres):\n", MAX_POST_LENGHT);
-                            fgets(sol, 2*MAX_POST_LENGHT, stdin);//Creo que el error está aquí.
+                            scanf("%[^\n]",sol);//Creo que el error está aquí.
                             while (strlen(sol) > MAX_POST_LENGHT){
                                 printf("\nTu mensaje es demasiado largo. Redúcelo en %d caracteres.\n", strlen(sol)-MAX_POST_LENGHT);
-                                fgets(sol, 2*MAX_POST_LENGHT, stdin);
+                                scanf("%[^\n]",sol);
                             }
-                            push_post(tl, encontrar_usuario(nombre, lista), sol);
+                            push_post(tl, nombre, sol);
                             postsfichero(tl);
                             break;
                         case 2://Hacer un submenu donde puedas elegir ver las publicaciones más recientes, ver las palabras más utilizadas y igual algo más
@@ -476,8 +476,9 @@ void menu(User_list* lista, timeline* tl) {
                                         scanf("%d", &num);
                                         while (flag == FALSE){
                                             for (int j = 0; j < num; ++j) {//Aquí hay que actualizar ultima
+                                                ultima = tl->last;
                                                 printf("\n%s\n", ultima->contenido);
-                                                printf("- %s\n", ultima->usuario->username);
+                                                printf("- %s\n", ultima->username);
                                             }
                                             char cont[MAX_POST_LENGHT];
                                             printf("Marca 0 si quieres salir. Cualquier otra cosa para continuar viendo más publicaciones.\n");

@@ -59,22 +59,22 @@ int postsfichero(timeline *tl){
     publicacion *post = tl->first;
     while (post != NULL){
         fprintf(fp, "%s\n", post->contenido);
-        fprintf(fp, "%s\n", post->usuario->username);
+        fprintf(fp, "%s\n", post->username);
         post = post->next;
     }
     fclose(fp);
     return TRUE;
 }
 
-void insert_post(publicacion* publ, User_data *user, char post[]){
-    publ->usuario = user;
+void insert_post(publicacion* publ, char user[], char post[]){
+    strcpy(publ->username, user);
     strcpy(publ->contenido, post);
     publ->next = NULL;
     publ->prev = NULL;
 }
 
 
-void push_post(timeline* tl, User_data *user, char post[]){
+void push_post(timeline* tl, char user[], char post[]){
     publicacion *publi = (publicacion*) malloc(sizeof(publicacion));
     insert_post(publi, user, post);
     if (tl->first == NULL){
@@ -109,7 +109,7 @@ void bubblesort_dictionary(diccionario* dict[], int n) {
 
 void show_top(timeline* tl){
     printf("\n%s\n", tl->last->contenido);
-    printf("- %s\n\n", tl->last->usuario->username);
+    printf("- %s\n\n", tl->last->username);
 }
 
 diccionario **dictAlloc() {
@@ -201,30 +201,30 @@ diccionario *create_array_dict(diccionario *dict, int tamaño){
     return *array;
 }
 
-void show_recent_posts_from_user(User_data* user, timeline* tl, int n){//Hacer lo del -1
+void show_recent_posts_from_user(char user[], timeline* tl, int n){
     publicacion *post;
     post = tl->last;
     if (n == -1) n = 999;
     int i = 0;
     while (post != NULL && i < n){
-        if (strcmp(user->username, post->usuario->username) == 0){
+        if (strcmp(user, post->username) == 0){
             printf("%s\n", post->contenido);
-            printf("- %s\n\n", post->usuario->username);
+            printf("- %s\n\n", post->username);
             i++;
         }
         post = post->prev;
     }
 }
 
-void show_old_posts_from_user(User_data* user, timeline* tl, int n){//Hacer lo del -1
+void show_old_posts_from_user(char user[], timeline* tl, int n){
     publicacion *post;
     post = tl->first;
     if (n == -1) n = 999;
     int i = 0;
     while (post != NULL && i < n){
-        if (strcmp(user->username, post->usuario->username) == 0){
+        if (strcmp(user, post->username) == 0){
             printf("%s\n", post->contenido);
-            printf("- %s\n\n", post->usuario->username);
+            printf("- %s\n\n", post->username);
             i++;
         }
         post = post->next;

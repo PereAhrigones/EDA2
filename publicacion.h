@@ -18,7 +18,7 @@ typedef struct _notificacion{
 
 typedef struct _post{
     char contenido[MAX_POST_LENGHT];
-    User_data *usuario;
+    char username[MAX_USERNAME_LENGTH];
     struct _post* next;
     struct _post* prev;
 }publicacion;
@@ -41,14 +41,14 @@ void show(notificaciones* lista);
 int isEmpty(notificaciones* lista);
 int isFull(notificaciones* lista);
 int postsfichero(timeline *tl);
-void insert_post(publicacion* publ,User_data* user , char post[]);
-void push_post(timeline* tl,User_data* user, char post[]);
+void insert_post(publicacion* publ,char user[] , char post[]);
+void push_post(timeline* tl,char user[], char post[]);
 void pop_post(timeline* tl);
 void bubblesort_dictionary(diccionario* dict[],int n) ;
 void show_top(timeline* tl);
 diccionario *contar_palabras(timeline *tl, int* contar_palabras); //https://parzibyte.me/blog/2018/11/13/separar-cadena-delimitadores-c-strtok/
-void show_recent_posts_from_user(User_data* user, timeline* tl, int n);
-void show_old_posts_from_user(User_data* user, timeline* tl, int n);
+void show_recent_posts_from_user(char user[], timeline* tl, int n);
+void show_old_posts_from_user(char user[], timeline* tl, int n);
 diccionario *create_array_dict(diccionario *dict, int tamaño);
 
 //https://gist.github.com/kylef/86784/fe97567ec9baf5c0dce3c7fcbec948e21dfcce09

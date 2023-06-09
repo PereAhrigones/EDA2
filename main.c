@@ -28,7 +28,7 @@ timeline* leer_posts(User_list* lista){
     if(fgets(post, MAX_POST_LENGHT, fd) != NULL){
         //En el archivo hay un enter depués del post y la siguiente línea es el usuario
         fscanf(fd, "%s", user);
-        insert_post(tl->first, encontrar_usuario(user, lista), post);
+        insert_post(tl->first, user, post);
         tl->first->prev = NULL;
         tl->last = tl->first;
         tl->size = 1;
@@ -37,7 +37,7 @@ timeline* leer_posts(User_list* lista){
     while (!feof(fd)){
         fgets(post, MAX_POST_LENGHT, fd);
         fscanf(fd, "%s", user);
-        push_post(tl, encontrar_usuario(user, lista), post);
+        push_post(tl, user, post);
     }
     fclose(fd);
     return tl;
