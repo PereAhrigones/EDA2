@@ -142,7 +142,9 @@ Friend_request* popRequest(Stack* stack) {
 
 void enviarSolicitudAmistad(Stack* stack, char usuarioActual[], char usuarioDestino[]) {
     // Verificar si ya hay una solicitud pendiente o si ya son amigos
-    Friend_request* solicitudActual = stack->top;
+    printf("Prueba0\n");
+    Friend_request* solicitudActual = stack->top;//Con esto se muere. Creo que es porque apunta a NULL aunque no tiene demasiado sentido.
+    printf("Prueba1\n");
     while (solicitudActual != NULL) {
         if (strcmp(solicitudActual->sender, usuarioActual) == 0 &&
             strcmp(solicitudActual->receiver, usuarioDestino) == 0) {
