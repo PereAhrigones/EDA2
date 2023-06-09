@@ -23,6 +23,7 @@
 #define MAX_LIKES 5
 #define MAX_AMIGOS 50
 
+
 typedef struct _friend_request {
     char sender[MAX_USERNAME_LENGTH];
     char receiver[MAX_USERNAME_LENGTH];

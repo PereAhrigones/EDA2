@@ -14,11 +14,11 @@ void insert_user(User_data* miembro, char nombre_usuario[], char correo[], char 
     strcpy(miembro->city, ciudad);
     miembro->birth = año;
     miembro->user_number = num_usuario;
-    strcpy(miembro->likes[1], gusto1);
-    strcpy(miembro->likes[2], gusto2);
-    strcpy(miembro->likes[3], gusto3);
-    strcpy(miembro->likes[4], gusto4);
-    strcpy(miembro->likes[5], gusto5);
+    strcpy(miembro->likes[0], gusto1);
+    strcpy(miembro->likes[1], gusto2);
+    strcpy(miembro->likes[2], gusto3);
+    strcpy(miembro->likes[3], gusto4);
+    strcpy(miembro->likes[4], gusto5);
     miembro->nota = nota;
     miembro->nota_max = nota_max;
     miembro->nota_min = nota_min;

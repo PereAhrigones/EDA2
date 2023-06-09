@@ -6,6 +6,8 @@
 #define EDA2_PUBLICACION_H
 #define MAX_WORD_LENGHT 60
 #define ITEM_NOT_FOUND 0
+#define MAX_NOTIFICACIONES 100
+#define MAX_NOTIF_LENGTH 100
 #include "usuario.h"
 
 typedef struct _post{
@@ -27,6 +29,9 @@ typedef struct _dicc{
     struct _dicc *next;
 }diccionario;
 
+void enqueue(int type);
+void dequeue();
+void show();
 int postsfichero(timeline *tl);
 void insert_post(publicacion* publ,User_data* user , char post[]);
 void push_post(timeline* tl,User_data* user, char post[]);
