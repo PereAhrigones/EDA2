@@ -57,19 +57,6 @@ void push(User_list* lista, char nombre_usuario[], char correo[], char contrase�
     lista->size++;  // Incrementar el tamaño de la lista
 }
 
-void guardar_gustos(User_list* lista,char username[MAX_USERNAME_LENGTH],char gustos[MAX_LIKE_LENGTH],int numero){ //No está revisado si esta función tiene sentido o.
-    User_data *user_likes = lista->first;
-    while (user_likes->next != NULL) {
-        if (strcmp(user_likes->username, username) == 0) { //Creo, no estoy seguro, pero  a esto creo que le falta cosa.
-            strcpy(user_likes -> likes[numero] ,gustos);
-            return;
-        }
-    }
-}
-
-
-
-
 void limpiar_User_data(User_data* guardar) {
     if (guardar == NULL) {
         return;

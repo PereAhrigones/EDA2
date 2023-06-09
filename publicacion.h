@@ -38,7 +38,8 @@ typedef struct _dicc{
 void enqueue(char mensaje[], notificaciones* lista);
 void dequeue(notificaciones* lista);
 void show(notificaciones* lista);
-void isEmpty(notificaciones* lista);
+int isEmpty(notificaciones* lista);
+int isFull(notificaciones* lista);
 int postsfichero(timeline *tl);
 void insert_post(publicacion* publ,User_data* user , char post[]);
 void push_post(timeline* tl,User_data* user, char post[]);

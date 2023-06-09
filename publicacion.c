@@ -7,19 +7,20 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <ctype.h>
-
+/*
 void enqueue(char mensaje[], notificaciones* lista){
-    if (lista->rear == MAX_NOTIFICACIONES - 1){
+    if ((lista->rear == MAX_NOTIFICACIONES-1 && (lista->front == -1 || lista->front == 0)) || (lista->rear == lista->front-1)){
         printf("Overflow \n");
     } else{
         if (lista->front == -1) lista->front = 0;
         lista->rear++;
+        if(lista->rear == MAX_NOTIFICACIONES) lista->rear = 0;
         strcpy(lista->notif[lista->rear], mensaje);
     }
 }
 
-void dequeue(notificaciones* lista){
-    if(lista->front == -1 || lista->front > lista->rear){
+void dequeue(notificaciones* lista){//Falta esto
+    if(lista->front == -1 || lista->front == lista->rear){
         printf("Underflow \n");
         return;
     } else{
@@ -28,7 +29,7 @@ void dequeue(notificaciones* lista){
     }
 }
 
-void show(notificaciones* lista){
+void show(notificaciones* lista){//Falta el salto del fin del array al inicio
     if(lista->front == -1){
         printf("No hay notificaciones.\n");
     } else{
@@ -39,6 +40,16 @@ void show(notificaciones* lista){
     }
 }
 
+int isEmpty(notificaciones* lista){//Falta poner si se ha vaciado
+    if(lista->front == -1 && lista->rear == -1) return TRUE;
+    else return FALSE;
+}
+
+int isFull(notificaciones* lista){//Falta comprobar.
+    if (lista->front == lista->rear) return TRUE;
+    else return FALSE;
+}
+*/
 int postsfichero(timeline *tl){
     FILE *fp = fopen("C:\\Users\\senyo\\CLionProjects\\EDA2\\posts.txt", "w");
     if (fp == NULL){
@@ -59,19 +70,21 @@ void insert_post(publicacion* publ, User_data *user, char post[]){
     publ->usuario = user;
     strcpy(publ->contenido, post);
     publ->next = NULL;
+    publ->prev = NULL;
 }
 
-//ESTA FUNCIÓN SEGURAMENTE ESTÉ MAL PORQUE ESTA BASADA EN LA ANTIGUA FUNCIÓN PUSH DE LOS USUARIOS QUE TAMBIÉN ESTABA MAL
+
 void push_post(timeline* tl, User_data *user, char post[]){
-    publicacion* actual = tl->first;
-    while (actual->next != NULL){
-        actual = actual->next;
+    publicacion *publi = (publicacion*) malloc(sizeof(publicacion));
+    insert_post(publi, user, post);
+    if (tl->first == NULL){
+        tl->first = publi;
+        tl->last = publi;
+    } else{
+        publi->prev = tl->last;
+        tl->last->next = publi;
+        tl->last = publi;
     }
-    actual->next = (publicacion *) malloc(sizeof(publicacion));
-    insert_post(actual->next, user, post);
-    tl->last = actual->next;
-    actual->next->prev = actual;
-    tl->size++;
 }
 
 void pop_post(timeline* tl){

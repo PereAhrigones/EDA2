@@ -103,28 +103,6 @@ void print_gustos(User_data* usuario){
 }
 
 
-//Esto ahora mismo no sirve para nada
-/*char** cambiar_gustos(char nombre_usuario[MAX_USERNAME_LENGTH],int num_gustos){
-
-    char ** gustos = malloc(num_gustos *sizeof (char*));
-    for (int i = 0; i <  num_gustos; i++) {
-        printf("Introduce el gusto numero %d\n", i+1);
-        scanf("%s", gustos[i] = malloc(MAX_LIKE_LENGTH * sizeof (char))); // Se tiene que repetir de 1 a 5 veces.
-        if ((&nombre_usuario,&gustos[i]) == TRUE) guardar_gustos(&nombre_usuario,&gustos[i]);
-    }
-}*/
-/*
-char* cambiar_ciudad(){
-    char ciudad[MAX_CITY_NAME];
-    while(strlen(ciudad) <= 1) {
-        printf("Introduce tu ciudad de residencia \n");
-        scanf("%s", ciudad);
-    }
-    return ciudad;//Aquí hay un warning de que devuelve la dirección de una variable local
-}
-*/
-
-
 void create_user(User_list* lista){
     char usuario[MAX_USERNAME_LENGTH];
     char password[MAX_PASSWORD_LENGTH];
@@ -244,23 +222,6 @@ int buscar_usuario(User_list *lista, char username[], char otro[]) {
 }
 
 
-char** bubblesort(char arr[], int n){
-    int i, j;
-    char string[MAX_USERNAME_LENGTH];
-    for(i = 0; i < n; i++) {
-        for(j = i + 1; j < n; j++) {
-            if(strcmp(&arr[i], &arr[j]) > 0) {
-                strcpy(string, &arr[i]);
-                strcpy(&arr[i], &arr[j]);
-                strcpy(&arr[j], string);
-            }
-        }
-    }
-    return arr;
-}
-
-
-
 void menu(User_list* lista, timeline* tl) {
 
     int login = -1, flag = FALSE, num, num_palabras, cont_amigos;
@@ -273,7 +234,7 @@ void menu(User_list* lista, timeline* tl) {
     char nombre[MAX_USERNAME_LENGTH], otro[MAX_USERNAME_LENGTH];
     char contraseña[MAX_PASSWORD_LENGTH];
     char ubicacion[MAX_CITY_NAME];
-    char sol[2*MAX_POST_LENGHT];
+    char sol[2 * MAX_POST_LENGHT];
     User_data *other_user;
     publicacion *ultima;
     diccionario *dictionary;
@@ -338,112 +299,113 @@ void menu(User_list* lista, timeline* tl) {
                             printf("0. Volver al menú principal (0) \n");
                             int perfil;
                             scanf("%d", &perfil);
-                            while (flag == FALSE) {
-                                switch (perfil) {
-                                    case 1:
-                                        printf("Introduzca la nueva ubicación:\n");
-                                        scanf("%s", ubicacion);
-                                        strcpy(encontrar_usuario(nombre, lista)->city, ubicacion);
-                                        int check = datosfichero(lista);
-                                        if (check == NO_FILE_FOUND) {
-                                            printf("No se ha podido cambiar la ubicación :(\n");
-                                        } else {
-                                            printf("Se ha cambiado la ubicación correctamente.\n");
+                            switch (perfil) {
+                                case 1:
+                                    printf("Introduzca la nueva ubicación:\n");
+                                    scanf("%s", ubicacion);
+                                    strcpy(encontrar_usuario(nombre, lista)->city, ubicacion);
+                                    int check = datosfichero(lista);
+                                    if (check == NO_FILE_FOUND) {
+                                        printf("No se ha podido cambiar la ubicación :(\n");
+                                    } else {
+                                        printf("Se ha cambiado la ubicación correctamente.\n");
+                                    }
+                                    break;
+                                case 2:
+                                    printf("Introduzca la contraseña actual:\n");
+                                    char cont_actual[MAX_PASSWORD_LENGTH];
+                                    scanf("%s", cont_actual);
+                                    if (strcmp(contraseña, cont_actual) == 0) {
+                                        printf("Introduzca la nueva contraseña:\n");
+                                        int marcador = FALSE;
+                                        while (marcador == FALSE) {
+                                            printf("\nIntroduzca una contraseña (máximo %d caracteres y mínimo %d).\n",
+                                                   MAX_PASSWORD_LENGTH, MIN_PASSWORD_LENGTH);
+                                            scanf("%s", contraseña);
+                                            if (strlen(contraseña) > MIN_PASSWORD_LENGTH &&
+                                                strlen(contraseña) < MAX_PASSWORD_LENGTH)
+                                                marcador = TRUE;
                                         }
-                                        break;
-                                    case 2:
-                                        printf("Introduzca la contraseña actual:\n");
-                                        char cont_actual[MAX_PASSWORD_LENGTH];
-                                        scanf("%s", cont_actual);
-                                        if (strcmp(contraseña, cont_actual) == 0) {
-                                            printf("Introduzca la nueva contraseña:\n");
-                                            int marcador = FALSE;
-                                            while (marcador == FALSE) {
-                                                printf("\nIntroduzca una contraseña (máximo %d caracteres y mínimo %d).\n",
-                                                       MAX_PASSWORD_LENGTH, MIN_PASSWORD_LENGTH);
-                                                scanf("%s", contraseña);
-                                                if (strlen(contraseña) > MIN_PASSWORD_LENGTH &&
-                                                    strlen(contraseña) < MAX_PASSWORD_LENGTH)
-                                                    marcador = TRUE;
-                                            }
-                                            check = datosfichero(lista);
-                                            if (check == NO_FILE_FOUND) {
-                                                printf("No se ha podido cambiar la contraseña :(\n");
-                                            } else {
-                                                printf("Se ha cambiado la contraseña correctamente.\n");
-                                            }
-                                        } else {
-                                            printf("Contraseña incorrecta.\n");
-                                        }
-                                        break;
-                                    case 3:
-                                        print_gustos(encontrar_usuario(nombre, lista));
-                                        int gustos_cambio = 0;
-                                        char gusto[MAX_LIKE_LENGTH];
-                                        while (gustos_cambio < 1 || gustos_cambio > 5){
-                                            printf("Intoduzca que gusto desea cambiar (1-5):\n");
-                                            scanf("%d", &gustos_cambio);
-                                        }
-                                        printf("Intoduzca su nuevo gusto:\n");
-                                        scanf("%s", gusto);
-                                        strcpy(encontrar_usuario(nombre, lista)->likes[gustos_cambio-1], gusto);
                                         check = datosfichero(lista);
                                         if (check == NO_FILE_FOUND) {
-                                            printf("No se ha podido cambiar el gusto :(\n");
+                                            printf("No se ha podido cambiar la contraseña :(\n");
                                         } else {
-                                            printf("Se ha cambiado el gusto correctamente.\n");
+                                            printf("Se ha cambiado la contraseña correctamente.\n");
                                         }
-                                        print_gustos(encontrar_usuario(nombre, lista));
-                                        break;
-                                    case 4:
-                                        while (flag == FALSE){
-                                            solicitud_amistad = popRequest(encontrar_usuario(nombre, lista)->solicitudes);
-                                            if (solicitud_amistad == NULL) break;
-                                            printf("Tienes una solicitud de amistad de: %s\n", solicitud_amistad->sender);
-                                            while (flag == FALSE){
-                                                printf("Escribe si quieres aceptar la solicitud de amistad (Y) o no (N).\n");
-                                                scanf("%c", &aceptacion);
-                                                aceptacion = tolower(aceptacion);
-                                                if (strcmp(&aceptacion, "y") == 0 || strcmp(&aceptacion, "n") == 0){
-                                                    flag = TRUE;
-                                                    if (strcmp(&aceptacion, "y") == 0){
-                                                        cont_amigos = 0;
-                                                        while (strcmp(encontrar_usuario(nombre, lista)->amigos[cont_amigos], " ") != 0){
-                                                            cont_amigos++;
-                                                            if (cont_amigos == MAX_AMIGOS) break;
-                                                        }
-                                                        if (cont_amigos != MAX_AMIGOS){
-                                                            strcpy(encontrar_usuario(nombre, lista)->amigos[cont_amigos], solicitud_amistad->sender);
-                                                            printf("Se ha añadido correctamente a la lista de amigos\n");
-                                                        } else{
-                                                            printf("Lista de amigos llena.\n");
-                                                        }
-                                                    } else{
-                                                        printf("Solicitud denegada.\n");
+                                    } else {
+                                        printf("Contraseña incorrecta.\n");
+                                    }
+                                    break;
+                                case 3:
+                                    print_gustos(encontrar_usuario(nombre, lista));
+                                    int gustos_cambio = 0;
+                                    char gusto[MAX_LIKE_LENGTH];
+                                    while (gustos_cambio < 1 || gustos_cambio > 5) {
+                                        printf("Intoduzca que gusto desea cambiar (1-5):\n");
+                                        scanf("%d", &gustos_cambio);
+                                    }
+                                    printf("Intoduzca su nuevo gusto:\n");
+                                    scanf("%s", gusto);
+                                    strcpy(encontrar_usuario(nombre, lista)->likes[gustos_cambio - 1], gusto);
+                                    check = datosfichero(lista);
+                                    if (check == NO_FILE_FOUND) {
+                                        printf("No se ha podido cambiar el gusto :(\n");
+                                    } else {
+                                        printf("Se ha cambiado el gusto correctamente.\n");
+                                    }
+                                    print_gustos(encontrar_usuario(nombre, lista));
+                                    break;
+                                case 4:
+                                    while (flag == FALSE) {
+                                        solicitud_amistad = popRequest(encontrar_usuario(nombre, lista)->solicitudes);
+                                        if (solicitud_amistad == NULL) break;
+                                        printf("Tienes una solicitud de amistad de: %s\n", solicitud_amistad->sender);
+                                        while (flag == FALSE) {
+                                            printf("Escribe si quieres aceptar la solicitud de amistad (Y) o no (N).\n");
+                                            scanf("%c", &aceptacion);
+                                            aceptacion = tolower(aceptacion);
+                                            if (strcmp(&aceptacion, "y") == 0 || strcmp(&aceptacion, "n") == 0) {
+                                                flag = TRUE;
+                                                if (strcmp(&aceptacion, "y") == 0) {
+                                                    cont_amigos = 0;
+                                                    while (strcmp(encontrar_usuario(nombre, lista)->amigos[cont_amigos],
+                                                                  " ") != 0) {
+                                                        cont_amigos++;
+                                                        if (cont_amigos == MAX_AMIGOS) break;
                                                     }
+                                                    if (cont_amigos != MAX_AMIGOS) {
+                                                        strcpy(encontrar_usuario(nombre, lista)->amigos[cont_amigos],
+                                                               solicitud_amistad->sender);
+                                                        printf("Se ha añadido correctamente a la lista de amigos\n");
+                                                    } else {
+                                                        printf("Lista de amigos llena.\n");
+                                                    }
+                                                } else {
+                                                    printf("Solicitud denegada.\n");
                                                 }
                                             }
-                                            flag = FALSE;
                                         }
-                                        guardar_amigos(lista);
-                                        break;
-                                    case 5:
-                                        imprimir_lista_amigos(encontrar_usuario(nombre, lista));
-                                        break;
-                                    case 0:
-                                        flag = TRUE;
-                                        break;
-                                    default:
-                                        printf("Por favor elija una de las opciones disponibles.\n");
-                                        scanf("%d", &perfil);
-                                }
+                                        flag = FALSE;
+                                    }
+                                    guardar_amigos(lista);
+                                    break;
+                                case 5:
+                                    imprimir_lista_amigos(encontrar_usuario(nombre, lista));
+                                    break;
+                                case 0:
+                                    flag = TRUE;
+                                    break;
+                                default:
+                                    printf("Por favor elija una de las opciones disponibles.\n");
+                                    scanf("%d", &perfil);
                             }
+
                             flag = FALSE;
                             break;
                         case 2:
-                            if (encontrar_usuario(nombre, lista)->num_valoraciones == 0){
+                            if (encontrar_usuario(nombre, lista)->num_valoraciones == 0) {
                                 printf("Aún no tienes valoraciones.\n");
-                            } else{
+                            } else {
                                 printf("El resto de usuarios te han valorado con una nota media de: %f\n",
                                        encontrar_usuario(nombre, lista)->nota);
                                 printf("La nota más alta que te han dado ha sido un astronómico: %f\n",
@@ -462,176 +424,213 @@ void menu(User_list* lista, timeline* tl) {
                             printf("Por favor elija una de las opciones disponibles.\n");
                             scanf("%d", &opcion);
                     }
-                }
-                flag = FALSE;
-                break;
-            case 2:
-                while(flag == FALSE){
-                    int menu;
-                    printf("\n----- Menú Principal -----\n");
-                    printf("1. Crear una publicación (1)\n");
-                    printf("2. Ver publicaciones (2)\n");
-                    printf("3. Acceder al perfil de un usuario (3)\n");
-                    printf("0. Salir (0) \n");
-                    scanf("%d", &menu);
-                    switch (menu) {
-                        case 1:
-                            printf("\nEscribe tu mensaje (tamaño máximo %d caracteres):\n", MAX_POST_LENGHT);
-                            fgets(sol, 2*MAX_POST_LENGHT, stdin);//Creo que el error está aquí.
-                            while (strlen(sol) > MAX_POST_LENGHT){
-                                printf("\nTu mensaje es demasiado largo. Redúcelo en %d caracteres.\n", strlen(sol)-MAX_POST_LENGHT);
-                                fgets(sol, 2*MAX_POST_LENGHT, stdin);
-                            }
-                            push_post(tl, encontrar_usuario(nombre, lista), sol);
-                            postsfichero(tl);
-                            break;
-                        case 2://Hacer un submenu donde puedas elegir ver las publicaciones más recientes, ver las palabras más utilizadas y igual algo más
-                            while (flag == FALSE){
-                                int post, top = 1;
-                                printf("\n1. Ver las publicaciones recientes (1)\n");
-                                printf("2. Ver las palabras más utilizadas (2)\n");
-                                printf("0. Volver (0)\n");
-                                scanf("%d", &post);
-                                switch (post) {
-                                    case 1:
-                                        printf("Selecciona cuantas publicaciones quieres ver a la vez:\n");
-                                        scanf("%d", &num);
-                                        while (flag == FALSE){
-                                            for (int j = 0; j < num; ++j) {//Aquí hay que actualizar ultima
-                                                printf("\n%s\n", ultima->contenido);
-                                                printf("- %s\n", ultima->usuario->username);
-                                            }
-                                            char cont[MAX_POST_LENGHT];
-                                            printf("Marca 0 si quieres salir. Cualquier otra cosa para continuar viendo más publicaciones.\n");
-                                            if (cont[0] == 48){
-                                                flag = TRUE;
-                                            }
-                                        }
-                                        flag = FALSE;
-                                        break;
-                                    case 2://Aquí falta un huevo de cosas.
-                                        dictionary = contar_palabras(tl, &num_palabras);
-                                        diccionario *array_dict = create_array_dict(dictionary, num_palabras);
-                                        bubblesort_dictionary(&array_dict, num_palabras);
-                                        for (int j = num_palabras-1; j < num_palabras-11; ++j) {
-                                            printf("Top %d: %s con %d usos\n", top, array_dict[j].key, array_dict[j].counter);
-                                        }
-                                        break;
-                                    case 0:
-                                        flag = TRUE;
-                                        break;
-                                    default:
-                                        printf("Por favor elija una de las opciones disponibles.\n");
-                                }
-                            }
-                            flag = FALSE;
-                            break;
-                        case 3:
-                            while (flag == FALSE) {
-                                printf("Escribe el nombre del usuario que quieras ver.\nSi quieres ver una lista con todos los usarios registrados escribe \"lis\".\n");
-                                scanf("%s", otro);
-                                if (strcmp(otro, "lis") == 0) {
-                                    i = 0;
-                                    while (actual != NULL) {
-                                        strcpy(lista_username[i], actual->username);
-                                        actual = actual->next;
-                                        i++;
-                                    }
-                                    char **lista_ordenada = bubblesort(*lista_username,
-                                                                       lista->size); //Warning de que lista_username es un tipo de puntero incompatible
-                                    for (int j = 0; j < lista->size; ++j) {
-                                        printf("%s\n", lista_ordenada[j]);
-                                    }
-                                    i = 0;
-                                    actual = lista->first;
-                                } else {
-                                    other_user = encontrar_usuario(otro, lista);
-                                    if (other_user == NULL) {
-                                        printf("El usuario no existe. Asegúrate que has escrito su nombre de usuario correctamente.\n");
-                                    } else {
-                                        while (flag == FALSE) {
-                                            int usuario;
-                                            printf("\n----- Menú Usuario -----\n");
-                                            printf("1. Ver datos del usuario (1)\n");
-                                            printf("2. Enviar una solicitud de amistad (2)\n");
-                                            printf("3. Valorar usuario (3)\n");
-                                            printf("4. Ver las publicaciones de este usuario (4)\n");
-                                            printf("0. Volver (0)\n");
-                                            scanf("%d", &usuario);
 
-                                            switch (usuario) {
-                                                case 1:
-                                                    printf("\nNombre de usuario: %s\n", other_user->username);
-                                                    printf("Email: %s\n", other_user->email);
-                                                    printf("Ciudad de residencia: %s\n", other_user->city);
-                                                    printf("Año de nacimiento: \n", other_user->birth);
-                                                    printf("Gustos: %s\t%s\t%s\t%s\t%s\n", other_user->likes[0], other_user->likes[1], other_user->likes[2], other_user->likes[3], other_user->likes[4]);
-                                                    printf("Valoración media: %f\n", other_user->nota);
-                                                    break;
-                                                case 2://El programa peta aquí.
-                                                    enviarSolicitudAmistad(encontrar_usuario(otro, lista)->solicitudes, nombre, otro);
-                                                    break;
-                                                case 3:
-                                                    while (nota < 0 || nota > 5){
-                                                        printf("¿Que valoración le das a este usuario? (0-5)\n");
-                                                        scanf("%f", &nota);
+                    flag = FALSE;
+                    break;
+                    case 2:
+                        while (flag == FALSE) {
+                            int menu;
+                            printf("\n----- Menú Principal -----\n");
+                            printf("1. Crear una publicación (1)\n");
+                            printf("2. Ver publicaciones (2)\n");
+                            printf("3. Acceder al perfil de un usuario (3)\n");
+                            printf("0. Salir (0) \n");
+                            scanf("%d", &menu);
+                            switch (menu) {
+                                case 1:
+                                    printf("\nEscribe tu mensaje (tamaño máximo %d caracteres):\n", MAX_POST_LENGHT);
+                                    fgets(sol, 2 * MAX_POST_LENGHT, stdin);//Creo que el error está aquí.
+                                    while (strlen(sol) > MAX_POST_LENGHT) {
+                                        printf("\nTu mensaje es demasiado largo. Redúcelo en %d caracteres.\n",
+                                               strlen(sol) - MAX_POST_LENGHT);
+                                        fgets(sol, 2 * MAX_POST_LENGHT, stdin);
+                                    }
+                                    push_post(tl, encontrar_usuario(nombre, lista), sol);
+                                    postsfichero(tl);
+                                    break;
+                                case 2://Hacer un submenu donde puedas elegir ver las publicaciones más recientes, ver las palabras más utilizadas y igual algo más
+                                    while (flag == FALSE) {
+                                        int post, top = 1;
+                                        printf("\n1. Ver las publicaciones recientes (1)\n");
+                                        printf("2. Ver las palabras más utilizadas (2)\n");
+                                        printf("0. Volver (0)\n");
+                                        scanf("%d", &post);
+                                        switch (post) {
+                                            case 1:
+                                                printf("Selecciona cuantas publicaciones quieres ver a la vez:\n");
+                                                scanf("%d", &num);
+                                                while (flag == FALSE) {
+                                                    for (int j = 0; j < num; ++j) {//Aquí hay que actualizar ultima
+                                                        printf("\n%s\n", ultima->contenido);
+                                                        printf("- %s\n", ultima->usuario->username);
                                                     }
-                                                    valoracion(other_user, nota);
-                                                    break;
-                                                case 4:
-                                                    submenu_publicaciones_usuarios(other_user, tl);
-                                                    break;
-                                                case 0:
-                                                    flag = TRUE;
-                                                    break;
-                                                default:
-                                                    printf("Por favor elija una de las opciones disponibles.\n");
-                                            }
-
+                                                    char cont[MAX_POST_LENGHT];
+                                                    printf("Marca 0 si quieres salir. Cualquier otra cosa para continuar viendo más publicaciones.\n");
+                                                    if (cont[0] == 48) {
+                                                        flag = TRUE;
+                                                    }
+                                                }
+                                                flag = FALSE;
+                                                break;
+                                            case 2://Aquí falta un huevo de cosas.
+                                                dictionary = contar_palabras(tl, &num_palabras);
+                                                diccionario *array_dict = create_array_dict(dictionary, num_palabras);
+                                                bubblesort_dictionary(&array_dict, num_palabras);
+                                                for (int j = num_palabras - 1; j < num_palabras - 11; ++j) {
+                                                    printf("Top %d: %s con %d usos\n", top, array_dict[j].key,
+                                                           array_dict[j].counter);
+                                                }
+                                                break;
+                                            case 0:
+                                                flag = TRUE;
+                                                break;
+                                            default:
+                                                printf("Por favor elija una de las opciones disponibles.\n");
                                         }
                                     }
-                                }
+                                    flag = FALSE;
+                                    break;
+                                case 3:
+                                    while (flag == FALSE) {
+                                        printf("Escribe el nombre del usuario que quieras ver.\nSi quieres ver una lista con todos los usarios registrados escribe \"lis\".\n");
+                                        scanf("%s", otro);
+                                        if (strcmp(otro, "lis") == 0) {
+                                            i = 0;
+                                            while (actual != NULL) {
+                                                strcpy(lista_username[i], actual->username);
+                                                actual = actual->next;
+                                                i++;
+                                            }
+                                            actual = lista->first;
+                                            int j, n = lista->size;
+                                            char string[MAX_USERNAME_LENGTH];
+                                            for(i = 0; i < n; i++) {
+                                                for(j = i + 1; j < n; j++) {
+                                                    if(strcmp(lista_username[i], lista_username[j]) > 0) {
+                                                        strcpy(string, lista_username[i]);
+                                                        strcpy(lista_username[i], lista_username[j]);
+                                                        strcpy(lista_username[j], string);
+                                                    }
+                                                }
+                                            }
+                                            for (int j = 0; j < lista->size; ++j) {
+                                                printf("%s\n", lista_username[j]);
+                                            }
+                                        } else {
+                                            other_user = encontrar_usuario(otro, lista);
+                                            if (other_user == NULL) {
+                                                printf("El usuario no existe. Asegúrate que has escrito su nombre de usuario correctamente.\n");
+                                            } else {
+                                                while (flag == FALSE) {
+                                                    int usuario;
+                                                    printf("\n----- Menú Usuario -----\n");
+                                                    printf("1. Ver datos del usuario (1)\n");
+                                                    printf("2. Enviar una solicitud de amistad (2)\n");
+                                                    printf("3. Valorar usuario (3)\n");
+                                                    printf("4. Ver las publicaciones de este usuario (4)\n");
+                                                    printf("0. Volver (0)\n");
+                                                    scanf("%d", &usuario);
+
+                                                    switch (usuario) {
+                                                        case 1:
+                                                            printf("\nNombre de usuario: %s\n", other_user->username);
+                                                            printf("Email: %s\n", other_user->email);
+                                                            printf("Ciudad de residencia: %s\n", other_user->city);
+                                                            printf("Año de nacimiento: \n", other_user->birth);
+                                                            printf("Gustos: %s\t%s\t%s\t%s\t%s\n", other_user->likes[0],
+                                                                   other_user->likes[1], other_user->likes[2],
+                                                                   other_user->likes[3], other_user->likes[4]);
+                                                            printf("Valoración media: %f\n", other_user->nota);
+                                                            break;
+                                                        case 2://El programa peta aquí.
+                                                            enviarSolicitudAmistad(
+                                                                    encontrar_usuario(otro, lista)->solicitudes, nombre,
+                                                                    otro);
+                                                            break;
+                                                        case 3:
+                                                            while (nota < 0 || nota > 5) {
+                                                                printf("¿Que valoración le das a este usuario? (0-5)\n");
+                                                                scanf("%f", &nota);
+                                                            }
+                                                            valoracion(other_user, nota);
+                                                            break;
+                                                        case 4:
+                                                            submenu_publicaciones_usuarios(other_user, tl);
+                                                            break;
+                                                        case 0:
+                                                            flag = TRUE;
+                                                            break;
+                                                        default:
+                                                            printf("Por favor elija una de las opciones disponibles.\n");
+                                                    }
+
+                                                }
+                                            }
+                                        }
+                                    }
+                                    flag = FALSE;
+                                    break;
+                                case 0:
+                                    flag = TRUE;
+                                    break;
+                                default:
+                                    printf("Por favor elija una de las opciones disponibles.\n");
+
                             }
-                            flag = FALSE;
-                            break;
-                        case 0:
-                            flag = TRUE;
-                            break;
-                        default:
-                            printf("Por favor elija una de las opciones disponibles.\n");
-
+                        }
+                    flag = FALSE;
+                    break;
+                    case 3: //Ya está piola
+                        i = 0;
+                    while (actual != NULL) {
+                        strcpy(lista_username[i], actual->username);
+                        actual = actual->next;
+                        i++;
                     }
-                }
-                flag = FALSE;
-                break;
-            case 3: //Esto da error
-                i = 0;
-                while (actual != NULL) {
-                    strcpy(lista_username[i], actual->username);
-                    actual = actual->next;
-                    i++;
-                }
-                char **lista_ordenada = bubblesort(*lista_username,lista->size); //Warning de que lista_username es un tipo de puntero incompatible
-                for (int j = 0; j < lista->size; ++j) {
-                    printf("%s\n", &lista_ordenada[j]);
-                }
-                i = 0;
-                actual = lista->first;
-                break;
-            case 0:
-                flag = TRUE;
-                break;
-            default:
-                printf("Por favor elija una de las opciones disponibles.\n");
+                    actual = lista->first;
+                    int j, n = lista->size;
+                    char string[MAX_USERNAME_LENGTH];
+                    for(i = 0; i < n; i++) {
+                        for(j = i + 1; j < n; j++) {
+                            if(strcmp(lista_username[i], lista_username[j]) > 0) {
+                                strcpy(string, lista_username[i]);
+                                strcpy(lista_username[i], lista_username[j]);
+                                strcpy(lista_username[j], string);
+                            }
+                        }
+                    }
+                    for (int j = 0; j < lista->size; ++j) {
+                        printf("%s\n", lista_username[j]);
+                    }
+                    /*
+                        i = 0;
+                        while (actual != NULL) {
+                            strcpy(lista_username[i], actual->username);
+                            actual = actual->next;
+                            i++;
+                        }
+                        char **lista_ordenada = bubblesort(*lista_username,lista->size); //Warning de que lista_username es un tipo de puntero incompatible
+                        for (int j = 0; j < lista->size; ++j) {
+                            printf("%s\n", &lista_ordenada[j]);
+                        }
+                        i = 0;
+                        actual = lista->first;
+                        break;*/
+                    case 0:
+                        flag = TRUE;
+                    break;
+                    default:
+                        printf("Por favor elija una de las opciones disponibles.\n");
 
-                printf("\n----- Menú -----\n");
-                printf("1. Perfil (1)\n");
-                printf("2. Página principal (2)\n");
-                printf("3. Mostrar lista de usuarios (3)\n");
-                printf("0. Salir (0) \n");
-                printf("Ingresa la opción deseada: \n");
+                    printf("\n----- Menú -----\n");
+                    printf("1. Perfil (1)\n");
+                    printf("2. Página principal (2)\n");
+                    printf("3. Mostrar lista de usuarios (3)\n");
+                    printf("0. Salir (0) \n");
+                    printf("Ingresa la opción deseada: \n");
 
-                scanf("%d", &login);
+                    scanf("%d", &login);
+                }
         }
     }
 }

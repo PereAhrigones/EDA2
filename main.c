@@ -95,7 +95,7 @@ void cargar_amigos(User_list *lista){
         }
     }
 }
-
+/*
 notificaciones *init_queue(){
     notificaciones *cola = (notificaciones *) malloc(sizeof(notificaciones));
     cola->front = -1;
@@ -104,7 +104,7 @@ notificaciones *init_queue(){
         strcpy(cola->notif[i], " ");
     }
     return cola;
-}
+}*/
 
 int main() {
     SetConsoleOutputCP(65001);
@@ -113,6 +113,6 @@ int main() {
     cargar_solicitudes_amistad(lista);
     init_amigos(lista);
     cargar_amigos(lista);
-    notificaciones *cola = init_queue();
+   // notificaciones *cola = init_queue();
     menu(lista, tl);//Antes del menú hay que cargar las cosas
 }
