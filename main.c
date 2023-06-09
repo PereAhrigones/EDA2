@@ -16,7 +16,7 @@ User_data* encontrar_usuario(char username[], User_list *lista){
 }
 
 timeline* leer_posts(User_list* lista){
-    FILE* fd = fopen("C:\\Users\\senyo\\CLionProjects\\EDA2\\Usuarios.txt", "r");
+    FILE* fd = fopen("C:\\Users\\senyo\\CLionProjects\\EDA2\\posts.txt", "r");//Esto tendría que poner posts, pero si pongo posts no se inicia el programa.
     if (fd == NULL){
         printf("\nError al abrir el archivo.\n");
         return NULL;
