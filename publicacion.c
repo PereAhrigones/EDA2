@@ -8,6 +8,37 @@
 #include <stdio.h>
 #include <ctype.h>
 
+void enqueue(char mensaje[], notificaciones* lista){
+    if (lista->rear == MAX_NOTIFICACIONES - 1){
+        printf("Overflow \n");
+    } else{
+        if (lista->front == -1) lista->front = 0;
+        lista->rear++;
+        strcpy(lista->notif[lista->rear], mensaje);
+    }
+}
+
+void dequeue(notificaciones* lista){
+    if(lista->front == -1 || lista->front > lista->rear){
+        printf("Underflow \n");
+        return;
+    } else{
+        printf("%s\n", lista->notif[lista->front]);
+        lista->front++;
+    }
+}
+
+void show(notificaciones* lista){
+    if(lista->front == -1){
+        printf("No hay notificaciones.\n");
+    } else{
+        printf("Notificaciones:\n");
+        for (int i = lista->front; i < lista->rear; ++i) {
+            printf("%s\n", lista->notif[i]);
+        }
+    }
+}
+
 int postsfichero(timeline *tl){
     FILE *fp = fopen("C:\\Users\\senyo\\CLionProjects\\EDA2\\posts.txt", "w");
     if (fp == NULL){

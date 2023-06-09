@@ -10,6 +10,12 @@
 #define MAX_NOTIF_LENGTH 100
 #include "usuario.h"
 
+typedef struct _notificacion{
+    char notif[MAX_NOTIFICACIONES][MAX_NOTIF_LENGTH];
+    int front;
+    int rear;
+}notificaciones;
+
 typedef struct _post{
     char contenido[MAX_POST_LENGHT];
     User_data *usuario;
@@ -29,9 +35,10 @@ typedef struct _dicc{
     struct _dicc *next;
 }diccionario;
 
-void enqueue(int type);
-void dequeue();
-void show();
+void enqueue(char mensaje[], notificaciones* lista);
+void dequeue(notificaciones* lista);
+void show(notificaciones* lista);
+void isEmpty(notificaciones* lista);
 int postsfichero(timeline *tl);
 void insert_post(publicacion* publ,User_data* user , char post[]);
 void push_post(timeline* tl,User_data* user, char post[]);

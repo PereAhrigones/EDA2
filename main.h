@@ -14,7 +14,7 @@ timeline* leer_posts(User_list* lista);
 void cargar_solicitudes_amistad(User_list* lista);
 void init_amigos(User_list *lista);
 void cargar_amigos(User_list *lista);
-char *init_queue();
+notificaciones *init_queue();
 #include "menu.h"
 int main();
 

@@ -54,7 +54,6 @@ void push(User_list* lista, char nombre_usuario[], char correo[], char contrase√
         lista->last->next = nuevo_usuario;
         lista->last = nuevo_usuario;
     }
-
     lista->size++;  // Incrementar el tama√±o de la lista
 }
 

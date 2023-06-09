@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <windows.h>
 #include "main.h"
 
 User_data* encontrar_usuario(char username[], User_list *lista){
@@ -95,14 +96,23 @@ void cargar_amigos(User_list *lista){
     }
 }
 
+notificaciones *init_queue(){
+    notificaciones *cola = (notificaciones *) malloc(sizeof(notificaciones));
+    cola->front = -1;
+    cola->rear = -1;
+    for (int i = 0; i < MAX_NOTIFICACIONES; ++i) {
+        strcpy(cola->notif[i], " ");
+    }
+    return cola;
+}
+
 int main() {
-    //chcp(65001>nul) Había algo así para poner los acentos pero no me acuerdo de como era y no lo he conseguido encontrar
+    SetConsoleOutputCP(65001);
     User_list* lista = ficherodatos();//Cargamos lo que está en el fichero de usuarios al empezar
     timeline* tl = leer_posts(lista);//Cargamos todos los posts
     cargar_solicitudes_amistad(lista);
     init_amigos(lista);
     cargar_amigos(lista);
-    /*char cola[MAX_NOTIFICACIONES][MAX_NOTIF_LENGTH];//Esto hay que mirarlo
-    cola = init_queue();*/
+    notificaciones *cola = init_queue();
     menu(lista, tl);//Antes del menú hay que cargar las cosas
 }

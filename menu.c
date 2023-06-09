@@ -88,7 +88,7 @@ User_list* ficherodatos() { //A la que hay algo en el archivo esto se muere (YA 
         printf("\nSe ha producido un error al intentar leer el archivo.\n");
     }
     //El while es para el resto de elementos de la lista
-    while (fscanf(fp, "%s %s %s %s %d %d %s %s %s %s %s", nombre_usuario, correo, contraseña, ciudad, &año, &num_usuario, gusto1, gusto2, gusto3, gusto4, gusto5, &nota, &nota_maxima, &nota_minima, &valoraciones) == 15) {//Nombre de usuario, email, contraseña, ciudad, año, num usuario, gustos
+    while (fscanf(fp, "%s %s %s %s %d %d %s %s %s %s %s %f %f %f %d", nombre_usuario, correo, contraseña, ciudad, &año, &num_usuario, gusto1, gusto2, gusto3, gusto4, gusto5, &nota, &nota_maxima, &nota_minima, &valoraciones) == 15) {//Nombre de usuario, email, contraseña, ciudad, año, num usuario, gustos
         push(lista, nombre_usuario, correo, contraseña, ciudad, año, num_usuario, gusto1, gusto2, gusto3, gusto4, gusto5, nota, nota_maxima, nota_minima, valoraciones);
     }
     fclose(fp);
@@ -263,7 +263,7 @@ char** bubblesort(char arr[], int n){
 
 void menu(User_list* lista, timeline* tl) {
 
-    int login, flag = FALSE, num, num_palabras, cont_amigos;
+    int login = -1, flag = FALSE, num, num_palabras, cont_amigos;
     float nota = -1.0;
     char aceptacion;
     Friend_request *solicitud_amistad;
