@@ -238,6 +238,7 @@ void menu(User_list* lista, timeline* tl) {
     User_data *other_user;
     publicacion *ultima;
     diccionario *dictionary;
+    diccionario *auxiliar;
     while (flag == FALSE) {
         switch (login) {
             case 1:
@@ -455,10 +456,13 @@ void menu(User_list* lista, timeline* tl) {
                     switch (menu) {
                         case 1:
                             printf("\nEscribe tu mensaje (tamaño máximo %d caracteres):\n", MAX_POST_LENGHT);
-                            scanf("%[^\n]",sol);//Creo que el error está aquí.
-                            while (strlen(sol) > MAX_POST_LENGHT){
-                                printf("\nTu mensaje es demasiado largo. Redúcelo en %d caracteres.\n", strlen(sol)-MAX_POST_LENGHT);
-                                scanf("%[^\n]",sol);
+                            scanf(" %[^\n]",sol);
+                            getchar(); // Consumir el carácter de nueva línea pendiente
+
+                            while (strlen(sol) > MAX_POST_LENGHT) {
+                                printf("\nTu mensaje es demasiado largo. Redúcelo en %d caracteres.\n", strlen(sol) - MAX_POST_LENGHT);
+                                scanf(" %[^\n]",sol);
+                                getchar(); // Consumir el carácter de nueva línea pendiente
                             }
                             push_post(tl, nombre, sol);
                             postsfichero(tl);
@@ -474,15 +478,17 @@ void menu(User_list* lista, timeline* tl) {
                                     case 1:
                                         printf("Selecciona cuantas publicaciones quieres ver a la vez:\n");
                                         scanf("%d", &num);
+                                        ultima = tl->last;
                                         while (flag == FALSE){
-                                            for (int j = 0; j < num; ++j) {//Aquí hay que actualizar ultima
-                                                ultima = tl->last;
+                                            for (int j = 0; j < num; j++) {//Aquí hay que actualizar ultima
+
                                                 printf("\n%s\n", ultima->contenido);
                                                 printf("- %s\n", ultima->username);
                                             }
                                             char cont[MAX_POST_LENGHT];
                                             printf("Marca 0 si quieres salir. Cualquier otra cosa para continuar viendo más publicaciones.\n");
-                                            if (cont[0] == 48){
+                                            scanf("%s", cont);
+                                            if (cont[0] == '0'){
                                                 flag = TRUE;
                                             }
                                         }
@@ -490,11 +496,44 @@ void menu(User_list* lista, timeline* tl) {
                                         break;
                                     case 2://Aquí falta un huevo de cosas.
                                         dictionary = contar_palabras(tl, &num_palabras);
-                                        diccionario *array_dict = create_array_dict(dictionary, num_palabras);
-                                        bubblesort_dictionary(&array_dict, num_palabras);
-                                        for (int j = num_palabras-1; j < num_palabras-11; ++j) {
-                                            printf("Top %d: %s con %d usos\n", top, array_dict[j].key, array_dict[j].counter);
+                                        diccionario *array[500*2];
+                                        top = 1;
+                                        int j=0;
+                                        while (j<num_palabras){
+                                            array[j]->counter = dictionary->counter;
+                                            strcpy(array[j]->key, dictionary->key);
+                                            array[j]->next = array[j]->next;
+                                            dictionary = dictionary->next;
+                                            j++;
                                         }
+                                        while (j<500*2){
+                                            array[j]->counter = 0;
+                                            strcpy(array[j]->key, "");
+                                            array[j]->next = NULL;
+                                        }
+
+                                        for(i = 0; i < 500*2; i++) {
+                                            for(j = i + 1; j < 500*2; j++) {
+                                                if(array[i]->counter > array[j]->counter){
+                                                    strcpy(auxiliar->key, array[i]->key);
+                                                    auxiliar->counter = array[i]->counter;
+                                                    auxiliar->next = array[i]->next;
+
+                                                    strcpy(array[i]->key, array[j]->key);
+                                                    array[i]->counter = array[j]->counter;
+                                                    array[i]->next = array[j]->next;
+
+                                                    strcpy(array[j]->key, auxiliar->key);
+                                                    array[j]->counter = auxiliar->counter;
+                                                    array[j]->next = auxiliar->next;
+                                                }
+                                            }
+                                        }
+                                        for (int j = 500*2-1; j > 500*2-11; ++j) {
+                                            printf("Top %d: %s con %d usos\n", top, array[j]->key, array[j]->counter);
+                                            top++;
+                                        }
+
                                         break;
                                     case 0:
                                         flag = TRUE;
