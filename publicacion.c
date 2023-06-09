@@ -16,8 +16,8 @@ int postsfichero(timeline *tl){
     }
     publicacion *post = tl->first;
     while (post != NULL){
-        fprintf("%s\n", post->contenido);
-        fprintf("%s\n", post->usuario->username);
+        fprintf(fp, "%s\n", post->contenido);
+        fprintf(fp, "%s\n", post->usuario->username);
         post = post->next;
     }
     fclose(fp);
@@ -149,12 +149,12 @@ diccionario *contar_palabras(timeline *tl, int *numero_palabras){
 }
 
 diccionario *create_array_dict(diccionario *dict, int tamaño){
-    diccionario array[tamaño];
+    diccionario *array[tamaño];
     for (int i = 0; i < tamaño; ++i) {
-        array[i] = *dict;
+        array[i] = dict;
         dict = dict->next;
     }
-    return array;
+    return *array;
 }
 
 void show_recent_posts_from_user(User_data* user, timeline* tl, int n){//Hacer lo del -1

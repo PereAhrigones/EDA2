@@ -497,7 +497,7 @@ void menu(User_list* lista, timeline* tl) {
                                         printf("Selecciona cuantas publicaciones quieres ver a la vez:\n");
                                         scanf("%d", &num);
                                         while (flag == FALSE){
-                                            for (int j = 0; j < num; ++j) {
+                                            for (int j = 0; j < num; ++j) {//Aquí hay que actualizar ultima
                                                 printf("\n%s\n", ultima->contenido);
                                                 printf("- %s\n", ultima->usuario->username);
                                             }

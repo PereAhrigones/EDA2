@@ -1,0 +1,12 @@
+Test1 test1@correo.com asdfghjkl Barcelona 2002 0 gusto0 nuevogusto gusto2 gusto3 gusto4 4.200000 4.200000 4.200000 1
+
+(null)
+ test2@correo.com qwertyuiop Valencia 2000 1 dfsf sdfsg gadsgsf agdsfds fsgg 0.000000 0.000000 5.000000 0
+
+(null)
+
+
+Test1
+
+
+Test1

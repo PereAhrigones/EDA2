@@ -102,5 +102,7 @@ int main() {
     cargar_solicitudes_amistad(lista);
     init_amigos(lista);
     cargar_amigos(lista);
+    /*char cola[MAX_NOTIFICACIONES][MAX_NOTIF_LENGTH];//Esto hay que mirarlo
+    cola = init_queue();*/
     menu(lista, tl);//Antes del menú hay que cargar las cosas
 }
