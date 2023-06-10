@@ -15,7 +15,7 @@ User_data* encontrar_usuario(char username[], User_list *lista){
     return NULL;
 }
 
-timeline* leer_posts(User_list* lista){
+timeline* leer_posts(){
     FILE* fd = fopen("C:\\Users\\senyo\\CLionProjects\\EDA2\\posts.txt", "r");//Esto tendría que poner posts, pero si pongo posts no se inicia el programa.
     if (fd == NULL){
         printf("\nError al abrir el archivo.\n");
@@ -25,7 +25,7 @@ timeline* leer_posts(User_list* lista){
     char post[MAX_POST_LENGHT];
     timeline* tl = (timeline *) malloc(sizeof(timeline));
     tl->first = (publicacion *) malloc(sizeof(publicacion));
-    if(fgets(post, MAX_POST_LENGHT, fd) != NULL){
+    if(fscanf(fd, " %[^\n]", post) != 0){
         //En el archivo hay un enter depués del post y la siguiente línea es el usuario
         fscanf(fd, "%s", user);
         insert_post(tl->first, user, post);
@@ -35,7 +35,7 @@ timeline* leer_posts(User_list* lista){
     }
     //Usar fgets
     while (!feof(fd)){
-        fgets(post, MAX_POST_LENGHT, fd);
+        fscanf(fd, " %[^\n]", post);
         fscanf(fd, "%s", user);
         push_post(tl, user, post);
     }
@@ -109,7 +109,7 @@ notificaciones *init_queue(){
 int main() {
     SetConsoleOutputCP(65001);
     User_list* lista = ficherodatos();//Cargamos lo que está en el fichero de usuarios al empezar
-    timeline* tl = leer_posts(lista);//Cargamos todos los posts
+    timeline* tl = leer_posts();//Cargamos todos los posts
     cargar_solicitudes_amistad(lista);
     init_amigos(lista);
     cargar_amigos(lista);
