@@ -33,7 +33,7 @@ void submenu_publicaciones_usuarios(User_data *other_user, timeline *tl){
 //Función que escribe en un fichero toda la información de los usuarios
 int datosfichero(User_list* lista) {
 
-    FILE* fp = fopen("/Users/senyo/CLionProjects/EDA2/Usuarios.txt", "w");
+    FILE* fp = fopen("C:\\Users\\senyo\\CLionProjects\\EDA2\\Usuarios.txt", "w");
     if (fp == NULL) {
         printf("Error al abrir el archivo.\n");
         return NO_FILE_FOUND;
@@ -50,7 +50,7 @@ int datosfichero(User_list* lista) {
 //Función que carga toda la información en las estructuras de datos desde el fichero
 User_list* ficherodatos() {
     FILE *fp;
-    fp = fopen("/Users/senyo/CLionProjects/EDA2/Usuarios.txt", "r");//Esto habría que cambiarlo para que se pudiera abrir en cualquier ordenador
+    fp = fopen("C:\\Users\\senyo\\CLionProjects\\EDA2\\Usuarios.txt", "r");//Esto habría que cambiarlo para que se pudiera abrir en cualquier ordenador
     if (fp == NULL) {
         printf("Error al abrir el archivo.\n");
         return  NULL;

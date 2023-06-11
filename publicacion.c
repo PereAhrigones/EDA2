@@ -53,7 +53,7 @@ int isFull(notificaciones* lista){//Falta comprobar.
 
 //Función que escribe las publicaciones en su archivo
 int postsfichero(timeline *tl){
-    FILE *fp = fopen("/EDA2/posts.txt", "w");
+    FILE *fp = fopen("C:\\Users\\senyo\\CLionProjects\\EDA2\\posts.txt", "w");
     if (fp == NULL){
         printf("Error al abrir el archivo.\n");
         return NO_FILE_FOUND;

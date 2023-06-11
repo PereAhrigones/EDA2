@@ -139,7 +139,7 @@ void enviarSolicitudAmistad(User_list* lista, const char* nombre, const char* ot
     }
 
     if (usuarioActual != NULL && usuarioDestino != NULL) {
-        FILE* file = fopen("/Users/senyo/CLionProjects/EDA2/amistad.txt", "a");
+        FILE* file = fopen("C:\\Users\\senyo\\CLionProjects\\EDA2\\amistad.txt", "a");
         if (file == NULL) {
             printf("Error al abrir el archivo de solicitudes.\n");
             return;
