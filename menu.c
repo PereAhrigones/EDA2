@@ -401,7 +401,7 @@ void menu(User_list* lista, timeline* tl) {
                     case 4:
                         while (flag == FALSE){
                             solicitud_amistad = popRequest(encontrar_usuario(nombre, lista)->solicitudes);
-                            if (solicitud_amistad == NULL) break;
+                            if (solicitud_amistad == NULL) break;//Aqquí poner un printf de que no hay solicitudes o algo así
                             printf("Tienes una solicitud de amistad de: %s\n", solicitud_amistad->sender);
 
                             while (flag == FALSE){
@@ -558,8 +558,8 @@ void menu(User_list* lista, timeline* tl) {
                                                     printf("\nNombre de usuario: %s\n", other_user->username);
                                                     printf("Email: %s\n", other_user->email);
                                                     printf("Ciudad de residencia: %s\n", other_user->city);
-                                                    printf("Año de nacimiento: \n", other_user->birth);
-                                                    printf("Gustos: %s\t%s\t%s\t%s\t%s\n", other_user->likes[0], other_user->likes[1], other_user->likes[2], other_user->likes[3], other_user->likes[4]);
+                                                    printf("Año de nacimiento: %d\n", other_user->birth);
+                                                    printf("Gustos: %s   %s   %s   %s   %s\n", other_user->likes[0], other_user->likes[1], other_user->likes[2], other_user->likes[3], other_user->likes[4]);
                                                     printf("Valoración media: %f\n", other_user->nota);
                                                     break;
                                                 case 2://El programa peta aquí.
@@ -571,6 +571,7 @@ void menu(User_list* lista, timeline* tl) {
                                                         scanf("%f", &nota);
                                                     }
                                                     valoracion(other_user, nota);
+                                                    datosfichero(lista);
                                                     break;
                                                 case 4:
                                                     submenu_publicaciones_usuarios(other_user, tl);
