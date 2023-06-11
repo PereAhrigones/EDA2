@@ -92,7 +92,6 @@ Friend_request* dequeueRequest(Queue* queue);
 void push_2(Stack* stack, const Rating* rating);
 void initializeStack(Stack* stack);
 void mostrarNotificacion(Stack* stack);
-void guardarValoracionesUsuarios(User_list* lista);
 void valoracion(User_data* user, float nota_dada);
-void guardarValoracionesUsuario(const User_data* user);
+
 #endif //EDA2_USUARIO_H

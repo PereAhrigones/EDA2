@@ -43,9 +43,7 @@ int isFull(notificaciones* lista);
 int postsfichero(timeline *tl);
 void insert_post(publicacion* publ,char user[] , char post[]);
 void push_post(timeline* tl,char user[], char post[]);
-void pop_post(timeline* tl);
 void bubblesort_dictionary(diccionario* dict[],int n) ;
-void show_top(timeline* tl);
 diccionario *contar_palabras(timeline *tl, int* contar_palabras); //https://parzibyte.me/blog/2018/11/13/separar-cadena-delimitadores-c-strtok/
 diccionario *create_array_dict(diccionario *dict, int tamaño);
 
