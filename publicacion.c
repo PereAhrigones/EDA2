@@ -97,7 +97,7 @@ void bubblesort_dictionary(diccionario* dict[], int n) {
     diccionario *temp;
     for (i = 0; i < n - 1; i++) {
         for (j = 0; j < n - i - 1; j++) {
-            if (dict[j]->counter, dict[j+1]->counter) {
+            if (dict[j]->counter > dict[j+1]->counter) {
                 // Intercambiar los elementos si están en el orden incorrecto
                 temp = dict[j];
                 dict[j] = dict[j +1];
@@ -168,26 +168,40 @@ void addItem(diccionario **dict, char *key, int value) {
 
 diccionario *contar_palabras(timeline *tl, int *numero_palabras){
     publicacion *actual;
+    printf("Prueba1\n");
     diccionario **dict = dictAlloc();
+    printf("Prueba2\n");
     numero_palabras = 0;
-    char *copia;
-    char delimitador[] = ",.:;()/!¡?¿&·\"\\^*[]{}+-¬@#ºª<>%€'= "; //Si alguien encuentra algún símbolo que falta que lo ponga. NO BORRÉIS NADA DE LO QUE YA ESTÁ
+    char copia[MAX_POST_LENGHT];
+    char delimitador[] = "\n,.:;()/!¡?¿&·\"\\^*[]{}+-¬@#ºª<>%€'= "; //Si alguien encuentra algún símbolo que falta que lo ponga. NO BORRÉIS NADA DE LO QUE YA ESTÁ
+    printf("Prueba3\n");
     for(actual=tl->first; actual != NULL; actual = actual->next){
+        printf("Prueba I\n");
         strcpy(copia, actual->contenido);
-        char copia_2[MAX_POST_LENGHT];
-        strcpy(copia_2,copia);
+        /*char copia_2[MAX_POST_LENGHT];
+        strcpy(copia_2,copia);*/
+        printf("Prueba II\n");
+        /*
         for (int i = 0; strlen(copia);i++){
             copia_2[i] = tolower(copia_2[i]);
         }
-        strcpy(copia,copia_2);
-        char *palabra = strtok(copia_2, delimitador);
+        strcpy(copia,copia_2);*/
+        printf("Prueba III\n");
+        char *palabra = strtok(copia, delimitador);
+        printf("Más pruebas\n");
         if(palabra != NULL){
+            printf("Más pruebas 1\n");
             while (palabra != NULL){
+                printf("Más pruebas 2\n");
                 if (getItem(*dict, palabra) == 0) numero_palabras++;
+                printf("Más pruebas 3\n");
                 addItem(dict, palabra, getItem(*dict, palabra)+1);
+                printf("Más pruebas 4\n");
                 palabra = strtok(NULL, delimitador);
+                printf("Más pruebas 5\n");
             }
         }
+        printf("Prueba\n");
     }
     return *dict;
 }

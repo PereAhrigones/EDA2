@@ -1,8 +1,5 @@
 Test1 test1@correo.com asdfghjkl Sitges 2002 0 gusto0 gusto1 gusto2 gusto3 gusto4 4.200000 4.200000 4.200000 1
 ArnauMas gjfjhsdf gaviota123456 hdasfh 2004 1 hfbsdhjg dsgdfg gfsdgfd fgdsg fgdsgs 0.000000 0.000000 5.000000 0
-Xavier xavier@gmail.com qwertyuiop Inazuma 2005 2 futbol meteoritos nenas jordan muerte 0.000000 0.000000 5.000000 0
+Xavier xavier@gmail.com qwertyuiop Inazuma 2005 2 futbol meteoritos nenas jordan muerte 3.250000 3.500000 3.000000 2
 Test2 test2@correo.com 1234567890 City 1950 3 sdffsdgfs gsfs gfdgd sgfgd gdfshds 0.000000 0.000000 5.000000 0
-antonio antonio zxcvbnm,. antonioland 1950 4 antonio masantonio antonio soyantonio antonio 0.000000 0.000000 5.000000 0Xavier
-
-
-
+antonio antonio zxcvbnm,. antonioland 1950 4 antonio masantonio antonio soyantonio antonio 0.000000 0.000000 5.000000 0
