@@ -506,44 +506,6 @@ void menu(User_list* lista, timeline* tl) {
                                         break;
                                     case 2://Aquí falta un huevo de cosas.
                                         dictionary = contar_palabras(tl, &num_palabras);
-                                        diccionario *array[500*2];
-                                        top = 1;
-                                        int j=0;
-                                        while (j<num_palabras){
-                                            array[j]->counter = dictionary->counter;
-                                            strcpy(array[j]->key, dictionary->key);
-                                            array[j]->next = array[j]->next;
-                                            dictionary = dictionary->next;
-                                            j++;
-                                        }
-                                        while (j<500*2){
-                                            array[j]->counter = 0;
-                                            strcpy(array[j]->key, "");
-                                            array[j]->next = NULL;
-                                        }
-
-                                        for(i = 0; i < 500*2; i++) {
-                                            for(j = i + 1; j < 500*2; j++) {
-                                                if(array[i]->counter > array[j]->counter){
-                                                    strcpy(auxiliar->key, array[i]->key);
-                                                    auxiliar->counter = array[i]->counter;
-                                                    auxiliar->next = array[i]->next;
-
-                                                    strcpy(array[i]->key, array[j]->key);
-                                                    array[i]->counter = array[j]->counter;
-                                                    array[i]->next = array[j]->next;
-
-                                                    strcpy(array[j]->key, auxiliar->key);
-                                                    array[j]->counter = auxiliar->counter;
-                                                    array[j]->next = auxiliar->next;
-                                                }
-                                            }
-                                        }
-                                        for (int j = 500*2-1; j > 500*2-11; ++j) {
-                                            printf("Top %d: %s con %d usos\n", top, array[j]->key, array[j]->counter);
-                                            top++;
-                                        }
-
                                         break;
                                     case 0:
                                         flag = TRUE;
@@ -614,8 +576,8 @@ void menu(User_list* lista, timeline* tl) {
                                                         printf("¿Que valoración le das a este usuario? (0-5)\n");
                                                         scanf("%f", &nota);
                                                     }
-                                                    valoracion(nombre,nota);
-                                                    guardarValoracionesUsuario(nombre);
+                                                    valoracion(other_user,nota);
+                                                    datosfichero(lista);
                                                     break;
                                                 case 4:
                                                     submenu_publicaciones_usuarios(other_user, tl);

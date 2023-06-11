@@ -24,7 +24,7 @@ timeline* leer_posts(User_list* lista){
     char post[MAX_POST_LENGHT];
     timeline* tl = (timeline *) malloc(sizeof(timeline));
     tl->first = (publicacion *) malloc(sizeof(publicacion));
-    if(fgets(post, MAX_POST_LENGHT, fd) != NULL){
+    if(fscanf(fd, " %[^\n]", post) != 0){
         //En el archivo hay un enter depués del post y la siguiente línea es el usuario
         fscanf(fd, "%s", user);
         insert_post(tl->first, user, post);
@@ -34,7 +34,7 @@ timeline* leer_posts(User_list* lista){
     }
     //Usar fgets
     while (!feof(fd)){
-        fgets(post, MAX_POST_LENGHT, fd);
+        fscanf(fd, " %[^\n]", post);
         fscanf(fd, "%s", user);
         push_post(tl, user, post);
     }
