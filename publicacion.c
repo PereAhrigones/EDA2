@@ -173,7 +173,7 @@ diccionario *contar_palabras(timeline *tl, int *numero_palabras){
     printf("Prueba2\n");
     numero_palabras = 0;
     char copia[MAX_POST_LENGHT];
-    char delimitador[] = "\n,.:;()/!¡?¿&·\"\\^*[]{}+-¬@#ºª<>%€'= "; //Si alguien encuentra algún símbolo que falta que lo ponga. NO BORRÉIS NADA DE LO QUE YA ESTÁ
+    char delimitador[] = ",.:;()/!¡?¿&·\"\\^*[]{}+-¬@#ºª<>%€'= "; //Si alguien encuentra algún símbolo que falta que lo ponga. NO BORRÉIS NADA DE LO QUE YA ESTÁ
     printf("Prueba3\n");
     for(actual=tl->first; actual != NULL; actual = actual->next){
         printf("Prueba I\n");
@@ -192,8 +192,13 @@ diccionario *contar_palabras(timeline *tl, int *numero_palabras){
         if(palabra != NULL){
             printf("Más pruebas 1\n");
             while (palabra != NULL){
-                printf("Más pruebas 2\n");
-                if (getItem(*dict, palabra) == 0) numero_palabras++;
+                printf("Más pruebas 2\n");//Muere aquí
+                if (strcmp(palabra, "\n") == 0) break;
+                if (getItem(*dict, palabra) == 0){
+                    printf("If Prueba 1\n");
+                    numero_palabras++;
+                    printf("If Prueba 2\n");
+                }
                 printf("Más pruebas 3\n");
                 addItem(dict, palabra, getItem(*dict, palabra)+1);
                 printf("Más pruebas 4\n");

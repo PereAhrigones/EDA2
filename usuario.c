@@ -185,13 +185,6 @@ void guardarValoracionesUsuario(const User_data* user) {
     printf("Las valoraciones del usuario se han guardado en el archivo.\n");
 }
 
-
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-
-#define MAX_USERNAME_LENGTH 50
-
 void initializeStack(Stack* stack) {
     stack->top = NULL;
 }

@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <windows.h>
 #include "main.h"
 
 User_data* encontrar_usuario(char username[], User_list* lista) {
@@ -15,7 +16,7 @@ User_data* encontrar_usuario(char username[], User_list* lista) {
 }
 
 timeline* leer_posts(User_list* lista){
-    FILE* fd = fopen("/Users/naiara/CLionProjects/EDA2/posts.txt", "r");//Esto tendría que poner posts, pero si pongo posts no se inicia el programa.
+    FILE* fd = fopen("C:\\Users\\senyo\\CLionProjects\\EDA2\\posts.txt", "r");//Esto tendría que poner posts, pero si pongo posts no se inicia el programa.
     if (fd == NULL){
         printf("\nError al abrir el archivo de posts.\n");
         return NULL;
@@ -43,9 +44,9 @@ timeline* leer_posts(User_list* lista){
 }
 
 void cargar_solicitudes_amistad(User_list* lista) {
-    FILE* fp = fopen("/Users/naiara/CLionProjects/EDA2/amistad.txt", "r");
+    FILE* fp = fopen("C:\\Users\\senyo\\CLionProjects\\EDA2\\amistad.txt", "r");
     if (fp == NULL) {
-        printf("Error al abrir el archivo.\n");
+        printf("Error al abrir el archivo de solicitudes.\n");
         return;
     }
 
@@ -85,7 +86,7 @@ void init_amigos(User_list *lista){
 void cargar_amigos(User_list *lista){
     FILE *fp = fopen("C:\\Users\\senyo\\CLionProjects\\EDA2\\amigos.txt", "r");
     if (fp == NULL) {
-        printf("Error al abrir el archivo.\n");
+        printf("Error al abrir el archivo de amigos.\n");
         return;
     }
     User_data *bueno;
@@ -118,11 +119,12 @@ notificaciones *init_queue(){
 }*/
 
 int main() {
+    SetConsoleOutputCP(65001);
     User_list* lista = ficherodatos();//Cargamos lo que está en el fichero de usuarios al empezar
     timeline* tl = leer_posts(lista);//Cargamos todos los posts
     cargar_solicitudes_amistad(lista);
     init_amigos(lista);
     cargar_amigos(lista);
-    // notificaciones *cola = init_queue();
+    //notificaciones *cola = init_queue();
     menu(lista, tl);//Antes del menú hay que cargar las cosas
 }

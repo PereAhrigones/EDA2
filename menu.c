@@ -33,7 +33,7 @@ void submenu_publicaciones_usuarios(User_data *other_user, timeline *tl){
 
 int datosfichero(User_list* lista) {//Aquí lo que sí hay que pasar como parametro es la estructura de la lista de usuario
 
-    FILE* fp = fopen("/Users/naiara/CLionProjects/EDA2/Usuarios.txt", "w");
+    FILE* fp = fopen("/Users/senyo/CLionProjects/EDA2/Usuarios.txt", "w");
     if (fp == NULL) {
         printf("Error al abrir el archivo.\n");
         return NO_FILE_FOUND;
@@ -49,7 +49,7 @@ int datosfichero(User_list* lista) {//Aquí lo que sí hay que pasar como parame
 
 User_list* ficherodatos() { //A la que hay algo en el archivo esto se muere (YA NO)
     FILE *fp;
-    fp = fopen("/Users/naiara/CLionProjects/EDA2/Usuarios.txt", "r");//Esto habría que cambiarlo para que se pudiera abrir en cualquier ordenador
+    fp = fopen("/Users/senyo/CLionProjects/EDA2/Usuarios.txt", "r");//Esto habría que cambiarlo para que se pudiera abrir en cualquier ordenador
     if (fp == NULL) {
         printf("Error al abrir el archivo.\n");
         return  NULL;
@@ -373,7 +373,6 @@ void menu(User_list* lista, timeline* tl) {
                                     User_data* user = encontrar_usuario(nombre, lista);
                                     if (user != NULL) {
                                         printf("\n--- Notificaciones ---\n");
-                                        guardarValoracionesUsuarios(lista_username);
                                     } else {
                                         printf("Usuario no encontrado.\n");
                                     }
@@ -394,11 +393,11 @@ void menu(User_list* lista, timeline* tl) {
                         if (encontrar_usuario(nombre, lista)->num_valoraciones == 0){
                             printf("Aún no tienes valoraciones.\n");
                         } else{
-                            printf("El resto de usuarios te han valorado con una nota media de: %.2f\n",
+                            printf("El resto de usuarios te han valorado con una nota media de: %f\n",
                                    encontrar_usuario(nombre, lista)->nota);
-                            printf("La nota más alta que te han dado ha sido un astronómico: %.2f\n",
+                            printf("La nota más alta que te han dado ha sido un astronómico: %f\n",
                                    encontrar_usuario(nombre, lista)->nota_max);
-                            printf("La nota más baja que te han dado ha sido un triste: %2.f\n",
+                            printf("La nota más baja que te han dado ha sido un triste: %f\n",
                                    encontrar_usuario(nombre, lista)->nota_min);
                         }
                         break;
@@ -491,9 +490,9 @@ void menu(User_list* lista, timeline* tl) {
                                         ultima = tl->last;
                                         while (flag == FALSE){
                                             for (int j = 0; j < num; j++) {//Aquí hay que actualizar ultima
-
                                                 printf("\n%s\n", ultima->contenido);
                                                 printf("- %s\n", ultima->username);
+                                                ultima = ultima->next;
                                             }
                                             char cont[MAX_POST_LENGHT];
                                             printf("Marca 0 si quieres salir. Cualquier otra cosa para continuar viendo más publicaciones.\n");
@@ -564,7 +563,7 @@ void menu(User_list* lista, timeline* tl) {
                                                     printf("\nNombre de usuario: %s\n", other_user->username);
                                                     printf("Email: %s\n", other_user->email);
                                                     printf("Ciudad de residencia: %s\n", other_user->city);
-                                                    printf("Año de nacimiento: \n", other_user->birth);
+                                                    printf("Año de nacimiento: %d\n", other_user->birth);
                                                     printf("Gustos: %s\t%s\t%s\t%s\t%s\n", other_user->likes[0], other_user->likes[1], other_user->likes[2], other_user->likes[3], other_user->likes[4]);
                                                     printf("Valoración media: %f\n", other_user->nota);
                                                     break;
