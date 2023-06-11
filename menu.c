@@ -214,7 +214,17 @@ int buscar_usuario(User_list *lista, char username[], char otro[]) {
 
 
 void menu(User_list* lista, timeline* tl) {
-
+    printf("\n");
+    printf("\n");
+    printf("                                 Bienvenido/a a                                   \n");
+    printf("  ______   _____     ______   ___  ___   ______    __     _    ______             \n");
+    printf(" |  ____| |  __ \\   / /  \\ \\  | |  | |  / /  \\ \\  |  \\ \\ | |  / /  \\ \\   \n");
+    printf(" | |__    | |  | |  | |__| |  | |__| |  | |__| |  |   \\ \\| |  | |__| |          \n");
+    printf(" |  __|   | |  | |  |  __  |  |  __  |  |  __  |  | .   `  |  |  __  |            \n");
+    printf(" | |____  | |__| |  | |  | |  | |  | |  | |  | |  | |\\ \\   |  | |  | |          \n");
+    printf(" |______| |____/ /  |_|  |_|  |_|  |_|  |_|  |_|  |_| \\ \\__|  |_|  |_|          \n");
+    printf("\n");
+    printf("\n");
     int login, flag = FALSE, num, num_palabras, cont_amigos;
     float nota = -1.0;
     char aceptacion;
