@@ -79,104 +79,74 @@ void limpiar_User_data(User_data* guardar) {
 }
 
 
-
-
-void borrar_lista_de_usuarios(User_list* lista) {
-
-    if (lista == NULL) {
-        return;
-    }
-    User_data* actual = lista->first;
-
-    while(actual!= NULL){
-        limpiar_User_data(actual);
-        actual = actual->next;
-
-    }
-    lista->first = NULL;
-    lista->last = NULL;
-    lista->size = 0 ;
+void initQueue(Queue* queue) {
+    queue->front = NULL;
+    queue->rear = NULL;
 }
 
-void initStack(Stack* stack) {
-    stack->top = NULL;
+int isQueueEmpty(Queue* queue) {
+    return (queue->front == NULL);
 }
 
-
-// Función para verificar si la pila está vacía
-int isStackEmpty(Stack* stack) {
-    return (stack->top == NULL);
-}
-
-
-void pushRequest(Stack* stack, const char* sender, const char* receiver) {
-    // Crear un nuevo nodo para la solicitud
+void enqueueRequest(Queue* queue, const char* sender, const char* receiver) {
     Friend_request* newRequest = (Friend_request*)malloc(sizeof(Friend_request));
     strcpy(newRequest->sender, sender);
     strcpy(newRequest->receiver, receiver);
+    newRequest->next = NULL;
 
-    if (stack->top == NULL){
-        newRequest->below = NULL;
-        stack->top = newRequest;
-    } else{
-        newRequest->below = stack->top;
-        stack->top = newRequest;
+    if (isQueueEmpty(queue)) {
+        queue->front = newRequest;
+        queue->rear = newRequest;
+    } else {
+        queue->rear->next = newRequest;
+        queue->rear = newRequest;
     }
 }
 
-Friend_request* popRequest(Stack* stack) {
-    if (isStackEmpty(stack)) {
-        printf("Error: la pila de solicitudes de amistad está vacía\n");
+Friend_request* dequeueRequest(Queue* queue) {
+    if (isQueueEmpty(queue)) {
         return NULL;
     }
 
-    // Obtener la solicitud de amistad en el top de la pila
-    Friend_request* topRequest = stack->top;
+    Friend_request* dequeuedRequest = queue->front;
+    queue->front = queue->front->next;
 
-    // Actualizar el top de la pila al siguiente nodo
-    stack->top = stack->top->below;
+    if (queue->front == NULL) {
+        queue->rear = NULL;
+    }
 
-    // Devolver la solicitud de amistad desempujada
-    return topRequest;
+    dequeuedRequest->next = NULL;
+    return dequeuedRequest;
 }
+void enviarSolicitudAmistad(User_list* lista, const char* nombre, const char* otro) {
+    User_data* usuarioActual = NULL;
+    User_data* usuarioDestino = NULL;
 
-void enviarSolicitudAmistad(Stack* stack, char usuarioActual[], char usuarioDestino[]) {
-    // Verificar si ya hay una solicitud pendiente o si ya son amigos
-    printf("Prueba0\n");
-    Friend_request* solicitudActual = stack->top;//Con esto se muere. Creo que es porque apunta a NULL aunque no tiene demasiado sentido.
-    printf("Prueba1\n");
-    while (solicitudActual != NULL) {
-        if (strcmp(solicitudActual->sender, usuarioActual) == 0 &&
-            strcmp(solicitudActual->receiver, usuarioDestino) == 0) {
-            printf("Ya has enviado una solicitud de amistad a %s\n", usuarioDestino);
+    User_data* current = lista->first;
+    while (current != NULL) {
+        if (strcmp(nombre, current->username) == 0) {
+            usuarioActual = current;
+        }
+        if (strcmp(otro, current->username) == 0) {
+            usuarioDestino = current;
+        }
+        current = current->next;
+    }
+
+    if (usuarioActual != NULL && usuarioDestino != NULL) {
+        FILE* file = fopen("/Users/naiara/CLionProjects/EDA2/amistad.txt", "a");
+        if (file == NULL) {
+            printf("Error al abrir el archivo de solicitudes.\n");
             return;
         }
-        solicitudActual = solicitudActual->below;
-    }
 
-    // Enviar solicitud de amistad
-    pushRequest(stack, usuarioActual, usuarioDestino);
-    printf("Se ha enviado una solicitude de amistad de %s a %s\n", usuarioActual, usuarioDestino);
+        fprintf(file, "%s %s\n", nombre, otro);
+        fclose(file);
+
+        printf("Solicitud de amistad enviada a %s y guardada en el archivo.\n", otro);
+    }
 }
 
-void guardar_amigos(User_list* lista){
-    FILE *fp = fopen("C:\\Users\\senyo\\CLionProjects\\EDA2\\amigos.txt", "w");
-    if (fp == NULL){
-        printf("Ha habido un error al actualizar la lista de amigos en la base de datos");
-        return;
-    }
-    User_data *actual = lista->first;
-    while (actual != NULL){
-        int i = 0;
-        fprintf(fp, "%s ", actual->username);
-        while (strcmp(actual->amigos[i], " ") != 0){
-            fprintf(fp, "%s ", actual->amigos[i]);
-            i++;
-        }
-        fprintf(fp, "\n");
-        actual = actual->next;
-    }
-}
 
 void imprimir_lista_amigos(User_data *usuario){
     int i = 0;
@@ -187,12 +157,67 @@ void imprimir_lista_amigos(User_data *usuario){
 }
 
 void valoracion(User_data* user, float nota_dada){
-
     if(nota_dada < user->nota_min) user->nota_min = nota_dada;
-
     if (nota_dada > user->nota_max ) user->nota_max = nota_dada;
-
     user->nota = (user->nota * user->num_valoraciones + nota_dada) / (user->num_valoraciones+1);
-
     user->num_valoraciones++;
+
+    guardarValoracionesUsuario(user); // Guardar las valoraciones en el archivo
+}
+
+void guardarValoracionesUsuario(const User_data* user) {
+    FILE* archivo;
+    archivo = fopen("/Users/naiara/CLionProjects/EDA2/Usuarios.txt", "a");
+
+    if (archivo == NULL) {
+        printf("Error al abrir el archivo.\n");
+        return;
+    }
+
+    fprintf(archivo, "%s\n", user->username);
+    fprintf(archivo, "%.2f\n", user->nota);
+    fprintf(archivo, "%.2f\n", user->nota_min);
+    fprintf(archivo, "%.2f\n", user->nota_max);
+    fprintf(archivo, "%d\n", user->num_valoraciones);
+    fprintf(archivo, "\n");
+
+    fclose(archivo);
+    printf("Las valoraciones del usuario se han guardado en el archivo.\n");
+}
+
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+#define MAX_USERNAME_LENGTH 50
+
+void initializeStack(Stack* stack) {
+    stack->top = NULL;
+}
+void push_2(Stack* stack, const Rating* rating) {
+    Node* newNode = (Node*)malloc(sizeof(Node));
+    newNode->rating = *rating;
+    newNode->next = stack->top;
+    stack->top = newNode;
+}
+
+void pop(Stack* stack) {
+    if (stack->top == NULL) {
+        printf("La pila está vacía.\n");
+        return;
+    }
+
+    Node* temp = stack->top;
+    stack->top = stack->top->next;
+    free(temp);
+}
+
+void guardarValoracionesUsuarios(User_list* lista) {
+    FILE *archivo;
+    archivo = fopen("/Users/naiara/CLionProjects/EDA2/Usuarios.txt", "w");
+    if (archivo == NULL) {
+        printf("Error al abrir el archivo.\n");
+        return;
+    }
 }

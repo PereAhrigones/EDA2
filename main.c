@@ -1,24 +1,23 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <windows.h>
 #include "main.h"
 
-User_data* encontrar_usuario(char username[], User_list *lista){
-    User_data *element = lista->first;
-    while (element != NULL) {
-        if (strcmp(username, element->username) == 0) {
-            return element;
+User_data* encontrar_usuario(char username[], User_list* lista) {
+    User_data* elemento = lista->first;
+    while (elemento != NULL) {
+        if (strcmp(username, elemento->username) == 0) {
+            return elemento;
         }
-        element = element->next;
+        elemento = elemento->next;
     }
     return NULL;
 }
 
 timeline* leer_posts(User_list* lista){
-    FILE* fd = fopen("C:\\Users\\senyo\\CLionProjects\\EDA2\\posts.txt", "r");//Esto tendría que poner posts, pero si pongo posts no se inicia el programa.
+    FILE* fd = fopen("/Users/naiara/CLionProjects/EDA2/posts.txt", "r");//Esto tendría que poner posts, pero si pongo posts no se inicia el programa.
     if (fd == NULL){
-        printf("\nError al abrir el archivo.\n");
+        printf("\nError al abrir el archivo de posts.\n");
         return NULL;
     }
     char user[MAX_USERNAME_LENGTH];
@@ -43,23 +42,35 @@ timeline* leer_posts(User_list* lista){
     return tl;
 }
 
-void cargar_solicitudes_amistad(User_list* lista){
-    FILE *fp = fopen("C:\\Users\\senyo\\CLionProjects\\EDA2\\amistad.txt", "r");
+void cargar_solicitudes_amistad(User_list* lista) {
+    FILE* fp = fopen("/Users/naiara/CLionProjects/EDA2/amistad.txt", "r");
     if (fp == NULL) {
         printf("Error al abrir el archivo.\n");
         return;
     }
-    char solicitante[MAX_USERNAME_LENGTH], solicitado[MAX_USERNAME_LENGTH];
-    if (fscanf(fp, "%s %s", solicitante, solicitado) == 2){
-        pushRequest(encontrar_usuario(solicitado, lista)->solicitudes, solicitante, solicitado);
-    } else{
-        printf("\nSe ha producido un error al intentar leer el archivo.\n");
+
+    char solicitante[MAX_USERNAME_LENGTH];
+    char solicitado[MAX_USERNAME_LENGTH];
+
+    while (fscanf(fp, "%s %s", solicitante, solicitado) == 2) {
+        // Agregar la solicitud de amistad a la estructura de datos
+        User_data* usuarioActual = encontrar_usuario(solicitante, lista);
+        User_data* usuarioDestino = encontrar_usuario(solicitado, lista);
+
+        if (usuarioActual != NULL && usuarioDestino != NULL) {
+            if (usuarioDestino->solicitudes == NULL) {
+                usuarioDestino->solicitudes = (Queue*)malloc(sizeof(Queue));
+                initQueue(usuarioDestino->solicitudes);
+            }
+
+            enqueueRequest(usuarioDestino->solicitudes, solicitante, solicitado);
+        }
     }
-    while (fscanf(fp, "%s %s", solicitante, solicitado) == 2){
-        pushRequest(encontrar_usuario(solicitado, lista)->solicitudes, solicitante, solicitado);
-    }
+
     fclose(fp);
 }
+
+
 
 void init_amigos(User_list *lista){
     User_data *actual = lista->first;
@@ -107,12 +118,11 @@ notificaciones *init_queue(){
 }*/
 
 int main() {
-    SetConsoleOutputCP(65001);
     User_list* lista = ficherodatos();//Cargamos lo que está en el fichero de usuarios al empezar
     timeline* tl = leer_posts(lista);//Cargamos todos los posts
     cargar_solicitudes_amistad(lista);
     init_amigos(lista);
     cargar_amigos(lista);
-   // notificaciones *cola = init_queue();
+    // notificaciones *cola = init_queue();
     menu(lista, tl);//Antes del menú hay que cargar las cosas
 }

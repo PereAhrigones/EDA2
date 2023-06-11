@@ -1,7 +1,3 @@
-//
-// Created by senyo on 26/4/2023.
-//
-
 #ifndef EDA2_MAIN_H
 #define EDA2_MAIN_H
 #include "usuario.h"
@@ -14,7 +10,9 @@ timeline* leer_posts();
 void cargar_solicitudes_amistad(User_list* lista);
 void init_amigos(User_list *lista);
 void cargar_amigos(User_list *lista);
-notificaciones *init_queue();
+void initQueue(Queue* queue);
+
+
 #include "menu.h"
 int main();
 

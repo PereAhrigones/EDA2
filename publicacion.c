@@ -51,7 +51,7 @@ int isFull(notificaciones* lista){//Falta comprobar.
 }
 */
 int postsfichero(timeline *tl){
-    FILE *fp = fopen("C:\\Users\\senyo\\CLionProjects\\EDA2\\posts.txt", "w");
+    FILE *fp = fopen("/Users/naiara/CLionProjects/EDA2/posts.txt", "w");
     if (fp == NULL){
         printf("Error al abrir el archivo.\n");
         return NO_FILE_FOUND;
@@ -201,31 +201,38 @@ diccionario *create_array_dict(diccionario *dict, int tamaño){
     return *array;
 }
 
-void show_recent_posts_from_user(char user[], timeline* tl, int n){
-    publicacion *post;
-    post = tl->last;
-    if (n == -1) n = 999;
-    int i = 0;
-    while (post != NULL && i < n){
-        if (strcmp(user, post->username) == 0){
-            printf("%s\n", post->contenido);
-            printf("- %s\n\n", post->username);
-            i++;
+void show_last_post_from_user(char user[], timeline* tl) {
+    publicacion *post = tl->first;
+    publicacion *lastPost = NULL;
+
+    while (post != NULL) {
+        if (strcmp(user, post->username) == 0) {
+            lastPost = post;
         }
-        post = post->prev;
+        post = post->next;
+    }
+
+    if (lastPost != NULL) {
+        printf("  2%s\n", lastPost->contenido);
+        printf("- %s\n\n", lastPost->username);
     }
 }
 
-void show_old_posts_from_user(char user[], timeline* tl, int n){
-    publicacion *post;
-    post = tl->first;
-    if (n == -1) n = 999;
-    int i = 0;
-    while (post != NULL && i < n){
-        if (strcmp(user, post->username) == 0){
-            printf("%s\n", post->contenido);
-            printf("- %s\n\n", post->username);
-            i++;
+
+
+
+
+
+
+void show_old_posts_from_user(char user[], timeline* tl) {
+    publicacion *post = tl->first;
+    while (post != NULL) {
+        if (strcmp(user, post->username) == 0) {
+            if (post->next != NULL) {
+                printf("- %s\n\n", post->username);
+                printf("  -%s\n", post->contenido);
+
+            }
         }
         post = post->next;
     }

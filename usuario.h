@@ -23,16 +23,31 @@
 #define MAX_LIKES 5
 #define MAX_AMIGOS 50
 
+typedef struct {
+    char username[MAX_USERNAME_LENGTH];
+    float rating;
+} Rating;
+
+typedef struct _Node {
+    Rating rating;
+    struct _Node* next;
+} Node;
+
+typedef struct {
+    Node* top;
+} Stack;
+
 
 typedef struct _friend_request {
     char sender[MAX_USERNAME_LENGTH];
     char receiver[MAX_USERNAME_LENGTH];
-    struct _friend_request* below;
+    struct _friend_request* next;
 } Friend_request;
 
-typedef struct _stack {
-    Friend_request* top;
-} Stack;
+typedef struct _queue {
+    Friend_request* front;
+    Friend_request* rear;
+} Queue;
 
 typedef struct _data{
     char username[MAX_USERNAME_LENGTH];
@@ -47,7 +62,8 @@ typedef struct _data{
     float nota_min;
     int num_valoraciones;
     char amigos[MAX_AMIGOS][MAX_USERNAME_LENGTH];
-    Stack *solicitudes; //Esto hay que verlo
+    Queue *solicitudes;
+    Stack *notificaciones;
     struct _data* next;
     struct _data* prev;
 }User_data;
@@ -66,14 +82,17 @@ void push(User_list* lista, char nombre_usuario[], char correo[], char contrase√
 void limpiar_User_data(User_data* guardar);
 int buscar_usuario(User_list* lista, char algo[], char otro[]);// Tengo que mirar como estan declaradas las cosas en el otro proyecto
 void borrar_lista_de_usuarios(User_list* lista);
-void initStack(Stack* stack);
-int isStackEmpty(Stack* stack);
-void pushRequest(Stack* stack, const char* sender, const char* receiver);
-Friend_request* popRequest(Stack* stack);
 void guardar_amigos(User_list* lista);
 void imprimir_lista_amigos(User_data *usuario);
+void enviarSolicitudAmistad(User_list* lista, const char* nombre, const char* otro);
+void initQueue(Queue* queue);
+void enqueueRequest(Queue* queue, const char* sender, const char* receiver);
+int isQueueEmpty(Queue* queue);
+Friend_request* dequeueRequest(Queue* queue);
+void push_2(Stack* stack, const Rating* rating);
+void initializeStack(Stack* stack);
+void mostrarNotificacion(Stack* stack);
+void guardarValoracionesUsuarios(User_list* lista);
 void valoracion(User_data* user, float nota_dada);
-void enviarSolicitudAmistad(Stack* stack, char usuarioActual[], char usuarioDestino[]);
-
-
+void guardarValoracionesUsuario(const User_data* user);
 #endif //EDA2_USUARIO_H

@@ -1,8 +1,4 @@
 
-//
-// Created by senyo on 26/4/2023.
-//
-
 #include "menu.h"
 #include <string.h>
 #include <stdlib.h>
@@ -14,21 +10,17 @@ void submenu_publicaciones_usuarios(User_data *other_user, timeline *tl){
     while (flag == FALSE){
         int submenu;
         int num_public;
-        printf("1. Ver las publicaciones más recientes (1)\n");
-        printf("2. Ver las publicaciones más antiguas (2)\n");
+        printf("1. Ver la publicación más reciente (1)\n");
+        printf("2. Ver todas las publicaciones (2)\n");
         printf("0. Volver (0)\n");
         scanf("%d", &submenu);
 
         switch (submenu) {
             case 1:
-                printf("Selecciona cuantas publicaciones quieres ver (si quieres ver todas escribe \"-1\":\n");
-                scanf("%d", &num_public);
-                show_recent_posts_from_user(other_user->username, tl, num_public);
+                show_last_post_from_user(other_user->username, tl);
                 break;
             case 2:
-                printf("Selecciona cuantas publicaciones quieres ver (si quieres ver todas escribe \"-1\":\n");
-                scanf("%d", &num_public);
-                show_old_posts_from_user(other_user->username, tl, num_public);
+                show_old_posts_from_user(other_user->username, tl);
                 break;
             case 0:
                 flag = TRUE;
@@ -37,12 +29,11 @@ void submenu_publicaciones_usuarios(User_data *other_user, timeline *tl){
                 printf("Por favor elija una de las opciones disponibles.\n");
         }
     }
-
 }
 
 int datosfichero(User_list* lista) {//Aquí lo que sí hay que pasar como parametro es la estructura de la lista de usuario
 
-    FILE* fp = fopen("C:\\Users\\senyo\\CLionProjects\\EDA2\\Usuarios.txt", "w");
+    FILE* fp = fopen("/Users/naiara/CLionProjects/EDA2/Usuarios.txt", "w");
     if (fp == NULL) {
         printf("Error al abrir el archivo.\n");
         return NO_FILE_FOUND;
@@ -58,7 +49,7 @@ int datosfichero(User_list* lista) {//Aquí lo que sí hay que pasar como parame
 
 User_list* ficherodatos() { //A la que hay algo en el archivo esto se muere (YA NO)
     FILE *fp;
-    fp = fopen("C:\\Users\\senyo\\CLionProjects\\EDA2\\Usuarios.txt", "r");//Esto habría que cambiarlo para que se pudiera abrir en cualquier ordenador
+    fp = fopen("/Users/naiara/CLionProjects/EDA2/Usuarios.txt", "r");//Esto habría que cambiarlo para que se pudiera abrir en cualquier ordenador
     if (fp == NULL) {
         printf("Error al abrir el archivo.\n");
         return  NULL;
@@ -207,18 +198,18 @@ int buscar_usuario(User_list *lista, char username[], char otro[]) {
         }
     }
 
-        if (usuarioEncontrado == TRUE) {
-            if (contraseñaEncontrada == TRUE){
-                //printf("El usuario y la contraseña coinciden. Usuario encontrado.\n");
-                return USER_ALREADY_EXISTS;
-            } else {
-                //printf("Contraseña incorrecta.\n");
-                return USERNAME_ALREADY_EXISTS;
-            }
+    if (usuarioEncontrado == TRUE) {
+        if (contraseñaEncontrada == TRUE){
+            //printf("El usuario y la contraseña coinciden. Usuario encontrado.\n");
+            return USER_ALREADY_EXISTS;
         } else {
-            //printf("El usuario no coincide. Usuario no encontrado.\n");//Quitar los prints de aquí y ponerlos en otro lado porque como usamos esta función en varios sitios se printea cuando no toca
-            return USER_DOES_NOT_EXIST;
+            //printf("Contraseña incorrecta.\n");
+            return USERNAME_ALREADY_EXISTS;
         }
+    } else {
+        //printf("El usuario no coincide. Usuario no encontrado.\n");//Quitar los prints de aquí y ponerlos en otro lado porque como usamos esta función en varios sitios se printea cuando no toca
+        return USER_DOES_NOT_EXIST;
+    }
 }
 
 
@@ -297,6 +288,7 @@ void menu(User_list* lista, timeline* tl) {
                         printf("1. Ubicación del usuario (1) \n");
                         printf("2. Cambiar contraseña (2) \n");
                         printf("3. Gustos del usuario (3) \n");
+                        printf("4. Notificaciones (4) \n");
                         printf("0. Volver al menú principal (0) \n");
                         int perfil;
                         scanf("%d", &perfil);
@@ -308,6 +300,7 @@ void menu(User_list* lista, timeline* tl) {
                                 printf("1. Ubicación del usuario (1) \n");
                                 printf("2. Cambiar contraseña (2) \n");
                                 printf("3. Gustos del usuario (3) \n");
+                                printf("4. Notificaciones (4) \n");
                                 printf("0. Volver al menú principal (0) \n");
 
                                 scanf("%d", &perfil);
@@ -357,13 +350,13 @@ void menu(User_list* lista, timeline* tl) {
                                     print_gustos(encontrar_usuario(nombre, lista));
                                     int gustos_cambio = 0;
                                     char gusto[MAX_LIKE_LENGTH];
-                                    while (gustos_cambio < 1 || gustos_cambio > 5){
+                                    while (gustos_cambio < 1 || gustos_cambio > 5) {
                                         printf("Intoduzca que gusto desea cambiar (1-5):\n");
                                         scanf("%d", &gustos_cambio);
                                     }
                                     printf("Intoduzca su nuevo gusto:\n");
                                     scanf("%s", gusto);
-                                    strcpy(encontrar_usuario(nombre, lista)->likes[gustos_cambio-1], gusto);
+                                    strcpy(encontrar_usuario(nombre, lista)->likes[gustos_cambio - 1], gusto);
                                     check = datosfichero(lista);
                                     if (check == NO_FILE_FOUND) {
                                         printf("No se ha podido cambiar el gusto :(\n");
@@ -372,6 +365,20 @@ void menu(User_list* lista, timeline* tl) {
                                     }
                                     print_gustos(encontrar_usuario(nombre, lista));
                                     break;
+
+                                case 4: {
+                                    Stack notificationStack;
+                                    initializeStack(&notificationStack);
+
+                                    User_data* user = encontrar_usuario(nombre, lista);
+                                    if (user != NULL) {
+                                        printf("\n--- Notificaciones ---\n");
+                                        guardarValoracionesUsuarios(lista_username);
+                                    } else {
+                                        printf("Usuario no encontrado.\n");
+                                    }
+                                    break;
+                                }
 
                                 case 0:
                                     flag = TRUE;
@@ -387,11 +394,11 @@ void menu(User_list* lista, timeline* tl) {
                         if (encontrar_usuario(nombre, lista)->num_valoraciones == 0){
                             printf("Aún no tienes valoraciones.\n");
                         } else{
-                            printf("El resto de usuarios te han valorado con una nota media de: %f\n",
+                            printf("El resto de usuarios te han valorado con una nota media de: %.2f\n",
                                    encontrar_usuario(nombre, lista)->nota);
-                            printf("La nota más alta que te han dado ha sido un astronómico: %f\n",
+                            printf("La nota más alta que te han dado ha sido un astronómico: %.2f\n",
                                    encontrar_usuario(nombre, lista)->nota_max);
-                            printf("La nota más baja que te han dado ha sido un triste: %f\n",
+                            printf("La nota más baja que te han dado ha sido un triste: %2.f\n",
                                    encontrar_usuario(nombre, lista)->nota_min);
                         }
                         break;
@@ -399,38 +406,41 @@ void menu(User_list* lista, timeline* tl) {
                         submenu_publicaciones_usuarios(encontrar_usuario(nombre, lista), tl);
                         break;
                     case 4:
-                        while (flag == FALSE){
-                            solicitud_amistad = popRequest(encontrar_usuario(nombre, lista)->solicitudes);
-                            if (solicitud_amistad == NULL) break;
-                            printf("Tienes una solicitud de amistad de: %s\n", solicitud_amistad->sender);
+                        while (flag == FALSE) {
+                            Friend_request* solicitud_amistad = dequeueRequest(encontrar_usuario(nombre, lista)->solicitudes);
+                            if (solicitud_amistad == NULL) {
+                                printf("No tienes solicitudes de amistad.\n");
+                                break;
+                            } else {
+                                printf("Tienes una solicitud de amistad de: %s\n", solicitud_amistad->sender);
+                            }
 
-                            while (flag == FALSE){
+                            while (flag == FALSE) {
                                 printf("Escribe si quieres aceptar la solicitud de amistad (Y) o no (N).\n");
-                                scanf("%c", &aceptacion);
+                                scanf(" %c", &aceptacion);
                                 aceptacion = tolower(aceptacion);
-                                if (strcmp(&aceptacion, "y") == 0 || strcmp(&aceptacion, "n") == 0){
+                                if (aceptacion == 'y' || aceptacion == 'n') {
                                     flag = TRUE;
-                                    if (strcmp(&aceptacion, "y") == 0){
-                                        cont_amigos = 0;
-                                        while (strcmp(encontrar_usuario(nombre, lista)->amigos[cont_amigos], " ") != 0){
+                                    if (aceptacion == 'y') {
+                                        int cont_amigos = 0;
+                                        while (strcmp(encontrar_usuario(nombre, lista)->amigos[cont_amigos], " ") != 0) {
                                             cont_amigos++;
                                             if (cont_amigos == MAX_AMIGOS) break;
                                         }
-                                        if (cont_amigos != MAX_AMIGOS){
+                                        if (cont_amigos != MAX_AMIGOS) {
                                             strcpy(encontrar_usuario(nombre, lista)->amigos[cont_amigos], solicitud_amistad->sender);
-                                            printf("Se ha añadido correctamente a la lista de amigos\n");
-                                        } else{
+                                            printf("Se ha añadido correctamente a la lista de amigos.\n");
+                                        } else {
                                             printf("Lista de amigos llena.\n");
                                         }
-                                    } else{
+                                    } else {
                                         printf("Solicitud denegada.\n");
                                     }
                                 }
                             }
-                            flag = FALSE;
+                            flag = TRUE;
                         }
-                        guardar_amigos(lista);
-                        break;
+
                     case 5:
                         imprimir_lista_amigos(encontrar_usuario(nombre, lista));
                         break;
@@ -460,7 +470,7 @@ void menu(User_list* lista, timeline* tl) {
                             getchar(); // Consumir el carácter de nueva línea pendiente
 
                             while (strlen(sol) > MAX_POST_LENGHT) {
-                                printf("\nTu mensaje es demasiado largo. Redúcelo en %d caracteres.\n", strlen(sol) - MAX_POST_LENGHT);
+                                printf("\nTu mensaje es demasiado largo. Redúcelo en %lu caracteres.\n", strlen(sol) - MAX_POST_LENGHT);
                                 scanf(" %[^\n]",sol);
                                 getchar(); // Consumir el carácter de nueva línea pendiente
                             }
@@ -597,14 +607,15 @@ void menu(User_list* lista, timeline* tl) {
                                                     printf("Valoración media: %f\n", other_user->nota);
                                                     break;
                                                 case 2://El programa peta aquí.
-                                                    enviarSolicitudAmistad(encontrar_usuario(otro, lista)->solicitudes, nombre, otro);
+                                                    enviarSolicitudAmistad(lista, nombre, otro);
                                                     break;
                                                 case 3:
                                                     while (nota < 0 || nota > 5){
                                                         printf("¿Que valoración le das a este usuario? (0-5)\n");
                                                         scanf("%f", &nota);
                                                     }
-                                                    valoracion(other_user, nota);
+                                                    valoracion(nombre,nota);
+                                                    guardarValoracionesUsuario(nombre);
                                                     break;
                                                 case 4:
                                                     submenu_publicaciones_usuarios(other_user, tl);
@@ -654,7 +665,7 @@ void menu(User_list* lista, timeline* tl) {
                 for (int j = 0; j < lista->size; ++j) {
                     printf("%s\n", lista_username[j]);
                 }
-            break;
+                break;
 
             case 0:
                 flag = TRUE;
@@ -670,6 +681,7 @@ void menu(User_list* lista, timeline* tl) {
                 printf("Ingresa la opción deseada: \n");
 
                 scanf("%d", &login);
+
         }
     }
 }

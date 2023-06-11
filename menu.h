@@ -17,6 +17,8 @@ void guardar_gustos(User_list* lista,char username[MAX_USERNAME_LENGTH],char gus
 void create_user(User_list* lista); //Esto no va a ser void porque va a tener que devolver una estructura pero hasta que la creemos se queda así
 char** bubblesort(char arr[], int n);
 
+
+
 void menu(User_list* lista, timeline* tl);
 
 #endif //EDA2_MENU_H
